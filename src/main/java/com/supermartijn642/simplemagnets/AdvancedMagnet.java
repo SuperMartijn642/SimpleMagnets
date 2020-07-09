@@ -33,7 +33,7 @@ public class AdvancedMagnet extends MagnetItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn){
-        if(!playerIn.isShiftKeyDown())
+        if(!playerIn.isSneaking())
             return super.onItemRightClick(worldIn, playerIn, handIn);
         int slot = handIn == Hand.MAIN_HAND ? playerIn.inventory.currentItem : -1;
         if(!worldIn.isRemote){

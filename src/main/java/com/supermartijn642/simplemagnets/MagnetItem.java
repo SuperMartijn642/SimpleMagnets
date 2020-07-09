@@ -44,7 +44,7 @@ public abstract class MagnetItem extends Item {
         if(tag.contains("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVec().add(-r, -r, -r), entityIn.getPositionVec().add(r, r, r));
 
                 List<ItemEntity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area, item -> this.canPickupStack(tag, item.getItem()));
                 items.forEach(item -> item.setPosition(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ()));
@@ -52,7 +52,7 @@ public abstract class MagnetItem extends Item {
 
             if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof PlayerEntity){
                 int r = this.getRangeXp(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVec().add(-r, -r, -r), entityIn.getPositionVec().add(r, r, r));
 
                 PlayerEntity player = (PlayerEntity)entityIn;
                 List<ExperienceOrbEntity> orbs = worldIn.getEntitiesWithinAABB(EntityType.EXPERIENCE_ORB, area, orb -> true);
