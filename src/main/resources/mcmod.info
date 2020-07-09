@@ -1,0 +1,16 @@
+[
+{
+  "modid": "simplemagnets",
+  "name": "Simple Magnets",
+  "description": "Simple Magnets adds Magnets that pickup items around the player!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["SuperMartijn642"],
+  "credits": "",
+  "logoFile": "simplemagnets.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
