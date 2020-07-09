@@ -31,9 +31,9 @@ public abstract class MagnetItem extends Item {
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             if(active)
-                worldIn.playSound(null, playerIn.getPosX(),playerIn.getPosY(),playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS,0.4f,0.01f);
+                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
             else
-                worldIn.playSound(null, playerIn.getPosX(),playerIn.getPosY(),playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS,0.4f,0.9f);
+                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
         }
         return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
@@ -46,8 +46,8 @@ public abstract class MagnetItem extends Item {
                 int r = this.getRangeItems(tag);
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
 
-                List<ItemEntity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area, item -> this.canPickupStack(tag, item.getItem()));
-                items.forEach(item -> item.setPosition(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ()));
+                List<Entity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area, item -> item instanceof ItemEntity && this.canPickupStack(tag, ((ItemEntity)item).getItem()));
+                items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
             }
 
             if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof PlayerEntity){
@@ -55,9 +55,9 @@ public abstract class MagnetItem extends Item {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
 
                 PlayerEntity player = (PlayerEntity)entityIn;
-                List<ExperienceOrbEntity> orbs = worldIn.getEntitiesWithinAABB(EntityType.EXPERIENCE_ORB, area, orb -> true);
+                List<Entity> orbs = worldIn.getEntitiesWithinAABB(EntityType.EXPERIENCE_ORB, area, orb -> true);
                 orbs.forEach(orb -> {
-                    player.giveExperiencePoints(orb.getXpValue());
+                    player.giveExperiencePoints(((ExperienceOrbEntity)orb).getXpValue());
                     orb.remove();
                 });
             }
@@ -65,10 +65,13 @@ public abstract class MagnetItem extends Item {
     }
 
     protected abstract boolean canPickupItems(CompoundNBT tag);
+
     protected abstract boolean canPickupStack(CompoundNBT tag, ItemStack stack);
+
     protected abstract boolean canPickupXp(CompoundNBT tag);
 
     protected abstract int getRangeItems(CompoundNBT tag);
+
     protected abstract int getRangeXp(CompoundNBT tag);
 
     @Override
