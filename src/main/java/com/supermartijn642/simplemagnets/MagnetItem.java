@@ -31,9 +31,9 @@ public abstract class MagnetItem extends Item {
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             if(active)
-                worldIn.playSound(null, playerIn.getPosX(),playerIn.getPosY(),playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS,0.4f,0.01f);
+                worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
             else
-                worldIn.playSound(null, playerIn.getPosX(),playerIn.getPosY(),playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS,0.4f,0.9f);
+                worldIn.playSound(null, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
         }
         return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
@@ -65,10 +65,13 @@ public abstract class MagnetItem extends Item {
     }
 
     protected abstract boolean canPickupItems(CompoundNBT tag);
+
     protected abstract boolean canPickupStack(CompoundNBT tag, ItemStack stack);
+
     protected abstract boolean canPickupXp(CompoundNBT tag);
 
     protected abstract int getRangeItems(CompoundNBT tag);
+
     protected abstract int getRangeXp(CompoundNBT tag);
 
     @Override

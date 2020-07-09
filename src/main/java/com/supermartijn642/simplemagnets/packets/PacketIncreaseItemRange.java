@@ -1,7 +1,6 @@
 package com.supermartijn642.simplemagnets.packets;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
-import com.supermartijn642.simplemagnets.MagnetItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;

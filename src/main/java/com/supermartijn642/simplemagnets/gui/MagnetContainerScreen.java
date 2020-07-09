@@ -78,7 +78,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         if(this.rightItemButton.func_230449_g_())
             this.renderTooltip(matrixStack, true, "gui.advancedmagnet.items.increase", mouseX, mouseY);
         if(mouseX > this.guiLeft + 68 - 5 && mouseX < this.guiLeft + 68 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
-            this.renderTooltip(matrixStack, false, I18n.format("gui.advancedmagnet.items.range").replace("$number$","" + this.itemRange), mouseX, mouseY);
+            this.renderTooltip(matrixStack, false, I18n.format("gui.advancedmagnet.items.range").replace("$number$", "" + this.itemRange), mouseX, mouseY);
 
         if(this.xpCheckbox.func_230449_g_())
             this.renderTooltip(matrixStack, true, this.xpCheckbox.checked ? "gui.advancedmagnet.xp.on" : "gui.advancedmagnet.xp.off", mouseX, mouseY);
@@ -87,7 +87,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         if(this.rightXpButton.func_230449_g_())
             this.renderTooltip(matrixStack, true, "gui.advancedmagnet.xp.increase", mouseX, mouseY);
         if(mouseX > this.guiLeft + 162 - 5 && mouseX < this.guiLeft + 162 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
-            this.renderTooltip(matrixStack, false, I18n.format("gui.advancedmagnet.xp.range").replace("$number$","" + this.xpRange), mouseX, mouseY);
+            this.renderTooltip(matrixStack, false, I18n.format("gui.advancedmagnet.xp.range").replace("$number$", "" + this.xpRange), mouseX, mouseY);
 
         if(this.whitelistButton.func_230449_g_())
             this.renderTooltip(matrixStack, true, this.whitelistButton.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off", mouseX, mouseY);
@@ -118,12 +118,12 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.drawCenteredString(matrixStack, this.field_230704_d_, this.xSize / 2f, 6);
         this.drawString(matrixStack, this.playerInventory.getDisplayName(), 21, 102);
 
-        this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items"),53,26);
-        this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.xp"),147,26);
-        this.drawString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.filter"),8,68);
+        this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26);
+        this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26);
+        this.drawString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.filter"), 8, 68);
 
-        this.drawCenteredString(matrixStack, new StringTextComponent("" + this.itemRange),68,44);
-        this.drawCenteredString(matrixStack, new StringTextComponent("" + this.xpRange),162,44);
+        this.drawCenteredString(matrixStack, new StringTextComponent("" + this.itemRange), 68, 44);
+        this.drawCenteredString(matrixStack, new StringTextComponent("" + this.xpRange), 162, 44);
     }
 
     public CompoundNBT getTagOrClose(){

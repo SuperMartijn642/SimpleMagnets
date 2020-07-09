@@ -11,14 +11,13 @@ import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
 public class ArrowButton extends AbstractButton {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets","textures/arrow_buttons.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/arrow_buttons.png");
 
     private final boolean left;
     private final Runnable onPress;
@@ -46,7 +45,7 @@ public class ArrowButton extends AbstractButton {
         this.func_230441_a_(matrixStack, minecraft, mouseX, mouseY);
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY) {
+    private static void drawTexture(int x, int y, int textureX, int textureY){
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
         bufferbuilder.pos(x, y + 17, 0).tex(textureX / 22f, (textureY + 17) / 51f).endVertex();
