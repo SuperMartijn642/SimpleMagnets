@@ -1,0 +1,5 @@
+- white/blacklist
+- range items
+- enable items
+- range xp
+- enable xp
