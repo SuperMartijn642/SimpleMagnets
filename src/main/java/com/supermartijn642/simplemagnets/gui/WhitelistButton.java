@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class WhitelistButton extends AbstractButton {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets","textures/blacklist_button.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/blacklist_button.png");
 
     public boolean white = true;
     private final Runnable onPress;
@@ -46,7 +46,7 @@ public class WhitelistButton extends AbstractButton {
         this.renderBg(minecraft, mouseX, mouseY);
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY) {
+    private static void drawTexture(int x, int y, int textureX, int textureY){
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
         bufferbuilder.pos(x, y + 20, 0).tex(textureX / 40f, (textureY + 20) / 60f).endVertex();

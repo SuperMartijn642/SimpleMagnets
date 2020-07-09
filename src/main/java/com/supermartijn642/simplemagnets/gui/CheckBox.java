@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class CheckBox extends AbstractButton {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets","textures/checkmarkbox.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/checkmarkbox.png");
 
     private final Runnable onPress;
     public boolean checked;
@@ -46,7 +46,7 @@ public class CheckBox extends AbstractButton {
         this.renderBg(minecraft, mouseX, mouseY);
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY) {
+    private static void drawTexture(int x, int y, int textureX, int textureY){
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
         bufferbuilder.pos(x, y + 20, 0).tex(textureX / 40f, (textureY + 20) / 60f).endVertex();

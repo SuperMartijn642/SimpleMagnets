@@ -76,7 +76,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         if(this.rightItemButton.isHovered())
             this.renderTooltip(true, "gui.advancedmagnet.items.increase", mouseX, mouseY);
         if(mouseX > this.guiLeft + 68 - 5 && mouseX < this.guiLeft + 68 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
-            this.renderTooltip(false, new TranslationTextComponent("gui.advancedmagnet.items.range").getFormattedText().replace("$number$","" + this.itemRange), mouseX, mouseY);
+            this.renderTooltip(false, new TranslationTextComponent("gui.advancedmagnet.items.range").getFormattedText().replace("$number$", "" + this.itemRange), mouseX, mouseY);
 
         if(this.xpCheckbox.isHovered())
             this.renderTooltip(true, this.xpCheckbox.checked ? "gui.advancedmagnet.xp.on" : "gui.advancedmagnet.xp.off", mouseX, mouseY);
@@ -85,7 +85,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         if(this.rightXpButton.isHovered())
             this.renderTooltip(true, "gui.advancedmagnet.xp.increase", mouseX, mouseY);
         if(mouseX > this.guiLeft + 162 - 5 && mouseX < this.guiLeft + 162 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
-            this.renderTooltip(false, new TranslationTextComponent("gui.advancedmagnet.xp.range").getFormattedText().replace("$number$","" + this.xpRange), mouseX, mouseY);
+            this.renderTooltip(false, new TranslationTextComponent("gui.advancedmagnet.xp.range").getFormattedText().replace("$number$", "" + this.xpRange), mouseX, mouseY);
 
         if(this.whitelistButton.isHovered())
             this.renderTooltip(true, this.whitelistButton.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off", mouseX, mouseY);
@@ -116,12 +116,12 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.drawCenteredString(this.title, this.xSize / 2f, 6);
         this.drawString(this.playerInventory.getDisplayName(), 21, 102);
 
-        this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.items"),53,26);
-        this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.xp"),147,26);
-        this.drawString(new TranslationTextComponent("gui.advancedmagnet.filter"),8,68);
+        this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26);
+        this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26);
+        this.drawString(new TranslationTextComponent("gui.advancedmagnet.filter"), 8, 68);
 
-        this.drawCenteredString(new StringTextComponent("" + this.itemRange),68,44);
-        this.drawCenteredString(new StringTextComponent("" + this.xpRange),162,44);
+        this.drawCenteredString(new StringTextComponent("" + this.itemRange), 68, 44);
+        this.drawCenteredString(new StringTextComponent("" + this.xpRange), 162, 44);
     }
 
     public CompoundNBT getTagOrClose(){

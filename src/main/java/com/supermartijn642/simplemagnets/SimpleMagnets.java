@@ -57,6 +57,7 @@ public class SimpleMagnets {
             e.getRegistry().register(new BasicMagnet());
             e.getRegistry().register(new AdvancedMagnet());
         }
+
         @SubscribeEvent
         public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> e){
             e.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> new MagnetContainer(windowId, Minecraft.getInstance().player, data.readInt())).setRegistryName("container"));

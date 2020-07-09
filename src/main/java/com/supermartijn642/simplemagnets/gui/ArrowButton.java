@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class ArrowButton extends AbstractButton {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets","textures/arrow_buttons.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/arrow_buttons.png");
 
     private final boolean left;
     private final Runnable onPress;
@@ -43,7 +43,7 @@ public class ArrowButton extends AbstractButton {
         this.renderBg(minecraft, mouseX, mouseY);
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY) {
+    private static void drawTexture(int x, int y, int textureX, int textureY){
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
         bufferbuilder.pos(x, y + 17, 0).tex(textureX / 22f, (textureY + 17) / 51f).endVertex();
