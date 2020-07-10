@@ -51,7 +51,7 @@ public class SimpleMagnets {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
-    @Mod.EventBusSubscriber()
+    @Mod.EventBusSubscriber
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> e){
