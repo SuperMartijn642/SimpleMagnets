@@ -1,8 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.simplemagnets.integration.BaublesActive;
+import com.supermartijn642.simplemagnets.integration.BaublesInactive;
 import com.supermartijn642.simplemagnets.packets.*;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -27,6 +30,8 @@ public class SimpleMagnets {
 
     public static SimpleNetworkWrapper channel;
 
+    public static BaublesInactive baubles;
+
     @GameRegistry.ObjectHolder("simplemagnets:basicmagnet")
     public static Item basic_magnet;
     @GameRegistry.ObjectHolder("simplemagnets:advancedmagnet")
@@ -44,6 +49,8 @@ public class SimpleMagnets {
         channel.registerMessage(PacketDecreaseXpRange.class, PacketDecreaseXpRange.class, 5, Side.SERVER);
 
         channel.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist.class, 6, Side.SERVER);
+
+        baubles = Loader.isModLoaded("baubles") ? new BaublesActive() : new BaublesInactive();
     }
 
     @Mod.EventHandler
