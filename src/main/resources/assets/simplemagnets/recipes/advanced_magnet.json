@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "forge:ore_shaped",
   "pattern": [
     "GGL",
     "BED",
@@ -7,22 +7,27 @@
   ],
   "key": {
     "G": {
-      "tag": "forge:ingots/gold"
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
     },
     "L": {
-      "tag": "forge:gems/lapis"
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
     },
     "B": {
       "item": "simplemagnets:basicmagnet"
     },
     "E": {
-      "item": "minecraft:ender_eye"
+      "type": "forge:ore_dict",
+      "ore": "enderpearl"
     },
     "D": {
-      "tag": "forge:gems/diamond"
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     }
   },
   "result": {

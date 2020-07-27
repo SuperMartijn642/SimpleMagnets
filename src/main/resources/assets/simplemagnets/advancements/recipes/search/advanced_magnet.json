@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "simplemagnets:advanced_magnet"
+    ]
+  },
+  "criteria": {
+    "basic_magnet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplemagnets:basicmagnet"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "basic_magnet"
+    ]
+  ]
+}
