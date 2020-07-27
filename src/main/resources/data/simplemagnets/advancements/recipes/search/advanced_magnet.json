@@ -11,22 +11,15 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:gold_ingot"
+            "item": "simplemagnets:basicmagnet"
           }
         ]
-      }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "simplemagnets:advanced_magnet"
       }
     }
   },
   "requirements": [
     [
-      "gold",
-      "has_the_recipe"
+      "basic_magnet"
     ]
   ]
 }
