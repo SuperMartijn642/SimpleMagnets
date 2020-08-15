@@ -29,20 +29,20 @@ public class ArrowButton extends AbstractButton {
     }
 
     @Override
-    public void func_230930_b_(){
+    public void onPress(){
         this.onPress.run();
     }
 
     @Override
-    public void func_230431_b_(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
+    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
         Minecraft minecraft = Minecraft.getInstance();
         minecraft.getTextureManager().bindTexture(BUTTONS);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.field_230695_q_);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        drawTexture(this.field_230690_l_, this.field_230691_m_, this.left ? 11 : 0, (this.field_230693_o_ ? this.field_230692_n_ ? 1 : 0 : 2) * 17);
-        this.func_230441_a_(matrixStack, minecraft, mouseX, mouseY);
+        drawTexture(this.x, this.y, this.left ? 11 : 0, (this.active ? this.isHovered ? 1 : 0 : 2) * 17);
+        this.renderBg(matrixStack, minecraft, mouseX, mouseY);
     }
 
     private static void drawTexture(int x, int y, int textureX, int textureY){

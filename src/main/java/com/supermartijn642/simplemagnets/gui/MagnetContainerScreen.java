@@ -41,65 +41,65 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     }
 
     @Override
-    protected void func_231160_c_(){
+    protected void init(){
         CompoundNBT tag = this.getTagOrClose();
         if(tag == null)
             return;
 
-        super.func_231160_c_();
+        super.init();
 
-        this.itemCheckbox = this.func_230480_a_(new CheckBox(this.guiLeft + 19, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleItems())));
+        this.itemCheckbox = this.addButton(new CheckBox(this.guiLeft + 19, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleItems())));
         this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
 
-        this.leftItemButton = this.func_230480_a_(new ArrowButton(this.guiLeft + 45, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
+        this.leftItemButton = this.addButton(new ArrowButton(this.guiLeft + 45, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
 
-        this.rightItemButton = this.func_230480_a_(new ArrowButton(this.guiLeft + 78, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
+        this.rightItemButton = this.addButton(new ArrowButton(this.guiLeft + 78, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
 
-        this.xpCheckbox = this.func_230480_a_(new CheckBox(this.guiLeft + 113, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleXp())));
+        this.xpCheckbox = this.addButton(new CheckBox(this.guiLeft + 113, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleXp())));
         this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
 
-        this.leftXpButton = this.func_230480_a_(new ArrowButton(this.guiLeft + 139, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
+        this.leftXpButton = this.addButton(new ArrowButton(this.guiLeft + 139, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
 
-        this.rightXpButton = this.func_230480_a_(new ArrowButton(this.guiLeft + 172, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
+        this.rightXpButton = this.addButton(new ArrowButton(this.guiLeft + 172, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
 
-        this.whitelistButton = this.func_230480_a_(new WhitelistButton(this.guiLeft + 175, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleWhitelist())));
+        this.whitelistButton = this.addButton(new WhitelistButton(this.guiLeft + 175, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleWhitelist())));
         this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
     }
 
-    public void func_230430_a_(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
-        this.func_230446_a_(matrixStack);
-        super.func_230430_a_(matrixStack, mouseX, mouseY, partialTicks);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.func_230459_a_(matrixStack, mouseX, mouseY);
 
-        if(this.itemCheckbox.func_230449_g_())
+        if(this.itemCheckbox.isHovered())
             this.renderTooltip(matrixStack, true, this.itemCheckbox.checked ? "gui.advancedmagnet.items.on" : "gui.advancedmagnet.items.off", mouseX, mouseY);
-        if(this.leftItemButton.func_230449_g_())
+        if(this.leftItemButton.isHovered())
             this.renderTooltip(matrixStack, true, "gui.advancedmagnet.items.decrease", mouseX, mouseY);
-        if(this.rightItemButton.func_230449_g_())
+        if(this.rightItemButton.isHovered())
             this.renderTooltip(matrixStack, true, "gui.advancedmagnet.items.increase", mouseX, mouseY);
         if(mouseX > this.guiLeft + 68 - 5 && mouseX < this.guiLeft + 68 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
             this.renderTooltip(matrixStack, false, I18n.format("gui.advancedmagnet.items.range").replace("$number$", "" + this.itemRange), mouseX, mouseY);
 
-        if(this.xpCheckbox.func_230449_g_())
+        if(this.xpCheckbox.isHovered())
             this.renderTooltip(matrixStack, true, this.xpCheckbox.checked ? "gui.advancedmagnet.xp.on" : "gui.advancedmagnet.xp.off", mouseX, mouseY);
-        if(this.leftXpButton.func_230449_g_())
+        if(this.leftXpButton.isHovered())
             this.renderTooltip(matrixStack, true, "gui.advancedmagnet.xp.decrease", mouseX, mouseY);
-        if(this.rightXpButton.func_230449_g_())
+        if(this.rightXpButton.isHovered())
             this.renderTooltip(matrixStack, true, "gui.advancedmagnet.xp.increase", mouseX, mouseY);
         if(mouseX > this.guiLeft + 162 - 5 && mouseX < this.guiLeft + 162 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
             this.renderTooltip(matrixStack, false, I18n.format("gui.advancedmagnet.xp.range").replace("$number$", "" + this.xpRange), mouseX, mouseY);
 
-        if(this.whitelistButton.func_230449_g_())
+        if(this.whitelistButton.isHovered())
             this.renderTooltip(matrixStack, true, this.whitelistButton.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off", mouseX, mouseY);
     }
 
     @Override
-    public void func_231023_e_(){
+    public void tick(){
         CompoundNBT tag = this.getTagOrClose();
         if(tag == null)
             return;
 
-        super.func_231023_e_();
+        super.tick();
 
         this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
         this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
@@ -110,12 +110,12 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     }
 
     @Override
-    protected void func_230450_a_(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY){
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getInstance().getTextureManager().bindTexture(BACKGROUND);
-        this.func_238474_b_(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+        this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
-        this.drawCenteredString(matrixStack, this.field_230704_d_, this.xSize / 2f, 6);
+        this.drawCenteredString(matrixStack, this.title, this.xSize / 2f, 6);
         this.drawString(matrixStack, this.playerInventory.getDisplayName(), 21, 102);
 
         this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26);
@@ -135,19 +135,19 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     }
 
     public void drawCenteredString(MatrixStack matrixStack, ITextComponent text, float x, float y){
-        this.field_230712_o_.func_238422_b_(matrixStack, text, this.guiLeft + x - this.field_230712_o_.func_238414_a_(text) / 2f, this.guiTop + y, 4210752);
+        this.font.func_243248_b(matrixStack, text, this.guiLeft + x - this.font.func_238414_a_(text) / 2f, this.guiTop + y, 4210752);
     }
 
     public void drawString(MatrixStack matrixStack, ITextComponent text, float x, float y){
-        this.field_230712_o_.func_238422_b_(matrixStack, text, this.guiLeft + x, this.guiTop + y, 4210752);
+        this.font.func_243248_b(matrixStack, text, this.guiLeft + x, this.guiTop + y, 4210752);
     }
 
     public void renderTooltip(MatrixStack matrixStack, boolean translate, String string, int x, int y){
-        super.func_238652_a_(matrixStack, translate ? new TranslationTextComponent(string) : new StringTextComponent(string), x, y);
+        super.renderTooltip(matrixStack, translate ? new TranslationTextComponent(string) : new StringTextComponent(string), x, y);
     }
 
     @Override
-    protected void func_230451_b_(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_){
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y){
         // stop default text drawing
     }
 }
