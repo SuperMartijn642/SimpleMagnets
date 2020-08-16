@@ -35,7 +35,7 @@ public class AdvancedMagnet extends MagnetItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn){
         if(!playerIn.isShiftKeyDown())
             return super.onItemRightClick(worldIn, playerIn, handIn);
-        int slot = handIn == Hand.MAIN_HAND ? playerIn.inventory.currentItem : -1;
+        int slot = handIn == Hand.MAIN_HAND ? playerIn.inventory.currentItem : 40;
         if(!worldIn.isRemote){
             NetworkHooks.openGui((ServerPlayerEntity)playerIn, new INamedContainerProvider() {
                 @Override
