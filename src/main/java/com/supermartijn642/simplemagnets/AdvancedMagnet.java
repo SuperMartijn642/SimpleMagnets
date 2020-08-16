@@ -25,7 +25,7 @@ public class AdvancedMagnet extends MagnetItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn){
         if(!playerIn.isSneaking())
             return super.onItemRightClick(worldIn, playerIn, handIn);
-        int slot = handIn == EnumHand.MAIN_HAND ? playerIn.inventory.currentItem : -1;
+        int slot = handIn == EnumHand.MAIN_HAND ? playerIn.inventory.currentItem : 40;
         if(!worldIn.isRemote)
             playerIn.openGui(SimpleMagnets.instance, slot, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
