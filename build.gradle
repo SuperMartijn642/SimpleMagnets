@@ -56,6 +56,6 @@ processResources {
     }
 }
 
-sourceSets {
-    main { output.resourcesDir = output.classesDir }
-}
+//sourceSets {
+//    main { output.resourcesDir = output.classesDir }
+//}
