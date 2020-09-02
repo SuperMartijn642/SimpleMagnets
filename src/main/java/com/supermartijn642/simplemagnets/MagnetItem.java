@@ -67,8 +67,9 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
                 EntityPlayer player = (EntityPlayer)entityIn;
                 List<EntityXPOrb> orbs = worldIn.getEntitiesWithinAABB(EntityXPOrb.class, area);
                 orbs.forEach(orb -> {
-                    player.addExperience(orb.getXpValue());
-                    worldIn.removeEntity(orb);
+                    orb.delayBeforeCanPickup = 0;
+                    player.xpCooldown = 0;
+                    orb.onCollideWithPlayer(player);
                 });
             }
         }
