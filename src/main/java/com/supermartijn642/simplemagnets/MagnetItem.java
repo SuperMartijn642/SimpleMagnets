@@ -65,7 +65,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 EntityPlayer player = (EntityPlayer)entityIn;
-                List<EntityXPOrb> orbs = worldIn.getEntitiesWithinAABB(EntityXPOrb.class, area, orb -> true);
+                List<EntityXPOrb> orbs = worldIn.getEntitiesWithinAABB(EntityXPOrb.class, area);
                 orbs.forEach(orb -> {
                     player.addExperience(orb.getXpValue());
                     worldIn.removeEntity(orb);
