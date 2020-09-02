@@ -55,7 +55,7 @@ public abstract class MagnetItem extends Item {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVec().add(-r, -r, -r), entityIn.getPositionVec().add(r, r, r));
 
                 PlayerEntity player = (PlayerEntity)entityIn;
-                List<ExperienceOrbEntity> orbs = worldIn.getEntitiesWithinAABB(EntityType.EXPERIENCE_ORB, area, orb -> true);
+                List<ExperienceOrbEntity> orbs = worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, area);
                 orbs.forEach(orb -> {
                     player.giveExperiencePoints(orb.getXpValue());
                     orb.remove();
