@@ -56,9 +56,10 @@ public abstract class MagnetItem extends Item {
 
                 PlayerEntity player = (PlayerEntity)entityIn;
                 List<Entity> orbs = worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, area);
-                orbs.forEach(orb -> {
-                    player.giveExperiencePoints(((ExperienceOrbEntity)orb).getXpValue());
-                    orb.remove();
+                orbs.stream().map(ExperienceOrbEntity.class::cast).forEach(orb -> {
+                    orb.delayBeforeCanPickup = 0;
+                    player.xpCooldown = 0;
+                    orb.onCollideWithPlayer(player);
                 });
             }
         }
