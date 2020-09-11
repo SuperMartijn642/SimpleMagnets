@@ -46,7 +46,8 @@ public abstract class MagnetItem extends Item {
                 int r = this.getRangeItems(tag);
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
 
-                List<Entity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area, item -> item instanceof ItemEntity && this.canPickupStack(tag, ((ItemEntity)item).getItem()));
+                List<Entity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area, item ->
+                    item instanceof ItemEntity && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, ((ItemEntity)item).getItem()));
                 items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
             }
 
