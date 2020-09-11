@@ -48,6 +48,6 @@ description='''Simple Magnets adds Magnets that pickup items around the player!'
 [[dependencies.simplemagnets]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.2,1.17)"
+    versionRange="[1.16.2,1.16.3)"
     ordering="NONE"
     side="BOTH"
