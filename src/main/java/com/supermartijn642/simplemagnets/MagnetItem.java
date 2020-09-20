@@ -27,15 +27,19 @@ public abstract class MagnetItem extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn){
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if(!worldIn.isRemote){
+        toggleMagnet(playerIn, stack);
+        return new ActionResult<>(ActionResultType.SUCCESS, stack);
+    }
+
+    public static void toggleMagnet(PlayerEntity player, ItemStack stack){
+        if(!player.world.isRemote && stack.getItem() instanceof MagnetItem){
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             if(active)
-                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
             else
-                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
         }
-        return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
 
     @Override

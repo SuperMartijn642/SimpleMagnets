@@ -46,11 +46,12 @@ public class SimpleMagnets {
         CHANNEL.registerMessage(3, PacketToggleXp.class, PacketToggleXp::encode, PacketToggleXp::decode, PacketToggleXp::handle);
         CHANNEL.registerMessage(4, PacketIncreaseXpRange.class, PacketIncreaseXpRange::encode, PacketIncreaseXpRange::decode, PacketIncreaseXpRange::handle);
         CHANNEL.registerMessage(5, PacketDecreaseXpRange.class, PacketDecreaseXpRange::encode, PacketDecreaseXpRange::decode, PacketDecreaseXpRange::handle);
-
         CHANNEL.registerMessage(6, PacketToggleWhitelist.class, PacketToggleWhitelist::encode, PacketToggleWhitelist::decode, PacketToggleWhitelist::handle);
+        CHANNEL.registerMessage(7, PacketToggleMagnet.class, PacketToggleMagnet::encode, PacketToggleMagnet::decode, PacketToggleMagnet::handle);
     }
 
     public void init(FMLCommonSetupEvent e){
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::init);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerScreen);
     }
 
