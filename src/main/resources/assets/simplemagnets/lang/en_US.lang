@@ -16,3 +16,5 @@ gui.advancedmagnet.xp.decrease=Decrease Range
 gui.advancedmagnet.xp.range=Range ($number$x$number$x$number$ Blocks)
 gui.advancedmagnet.whitelist.on=Whitelist
 gui.advancedmagnet.whitelist.off=Blacklist
+keys.category.simplemagnets=Simple Magnets
+keys.simplemagnets.toggle=Toggle Magnet

@@ -35,17 +35,21 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn){
         ItemStack stack = playerIn.getHeldItem(handIn);
-        if(!worldIn.isRemote){
+        toggleMagnet(playerIn, stack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+    }
+
+    public static void toggleMagnet(EntityPlayer player, ItemStack stack){
+        if(!player.world.isRemote && stack.getItem() instanceof MagnetItem){
             NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
             boolean active = tag.hasKey("active") && tag.getBoolean("active");
             tag.setBoolean("active", !active);
             if(active)
-                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
             else
-                worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
             stack.setTagCompound(tag);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.supermartijn642.simplemagnets.integration;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**
@@ -13,6 +15,10 @@ public class BaublesInactive {
     }
 
     public <T> T getBaubleCapability(Capability<T> capability, Item item){
+        return null;
+    }
+
+    public ItemStack getMagnetStack(EntityPlayer player){
         return null;
     }
 }

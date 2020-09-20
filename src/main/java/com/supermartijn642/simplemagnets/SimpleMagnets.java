@@ -5,6 +5,7 @@ import com.supermartijn642.simplemagnets.integration.BaublesInactive;
 import com.supermartijn642.simplemagnets.packets.*;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -47,8 +48,8 @@ public class SimpleMagnets {
         channel.registerMessage(PacketToggleXp.class, PacketToggleXp.class, 3, Side.SERVER);
         channel.registerMessage(PacketIncreaseXpRange.class, PacketIncreaseXpRange.class, 4, Side.SERVER);
         channel.registerMessage(PacketDecreaseXpRange.class, PacketDecreaseXpRange.class, 5, Side.SERVER);
-
         channel.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist.class, 6, Side.SERVER);
+        channel.registerMessage(PacketToggleMagnet.class, PacketToggleMagnet.class, 7, Side.SERVER);
 
         baubles = Loader.isModLoaded("baubles") ? new BaublesActive() : new BaublesInactive();
     }
@@ -56,6 +57,9 @@ public class SimpleMagnets {
     @Mod.EventHandler
     public void init(FMLInitializationEvent e){
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+            ClientProxy.init();
     }
 
     @Mod.EventBusSubscriber
