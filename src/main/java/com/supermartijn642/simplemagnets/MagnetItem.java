@@ -61,7 +61,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 List<EntityItem> items = worldIn.getEntitiesWithinAABB(EntityItem.class, area,
-                    item -> item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()));
+                    item -> !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()));
                 items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
             }
 
