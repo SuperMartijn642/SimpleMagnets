@@ -1,6 +1,8 @@
 {
   "item.simplemagnets.basicmagnet": "Magnet",
   "item.simplemagnets.advancedmagnet": "Advanced Magnet",
+  "simplemagnets.basicmagnet.info": "Can pick up items and xp up to %d blocks away when activated",
+  "simplemagnets.advancedmagnet.info": "Can pick up items and xp up to %d blocks away when activated, items can be filtered",
   "gui.advancedmagnet.title": "Advanced Magnet",
   "gui.advancedmagnet.items": "Items",
   "gui.advancedmagnet.xp": "Experience",
