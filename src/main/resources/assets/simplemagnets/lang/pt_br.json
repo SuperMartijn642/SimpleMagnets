@@ -1,6 +1,8 @@
 {
   "item.simplemagnets.basicmagnet": "Íma",
   "item.simplemagnets.advancedmagnet": "Ímã Avançado",
+  "simplemagnets.basicmagnet.info": "Pode pegar itens e xp até %d blocos de distância quando ativado",
+  "simplemagnets.advancedmagnet.info": "Pode pegar itens e xp até %d blocos de distância quando ativado, os itens podem ser filtrados",
   "gui.advancedmagnet.title": "Ímã Avançado",
   "gui.advancedmagnet.items": "Itens",
   "gui.advancedmagnet.xp": "Experiência",
@@ -16,5 +18,7 @@
   "gui.advancedmagnet.xp.decrease": "Diminuir Alcance",
   "gui.advancedmagnet.xp.range": "Alcance ($number$x$number$x$number$ Blocos)",
   "gui.advancedmagnet.whitelist.on": "Lista Branca",
-  "gui.advancedmagnet.whitelist.off": "Lista Negra"
+  "gui.advancedmagnet.whitelist.off": "Lista Negra",
+  "keys.category.simplemagnets": "Simple Magnets",
+  "keys.simplemagnets.toggle": "Alternar ímã"
 }
