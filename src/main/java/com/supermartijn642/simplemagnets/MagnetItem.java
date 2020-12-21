@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -12,6 +13,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -117,4 +121,12 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing){
         return SimpleMagnets.baubles.isBaubleCapability(capability) ? SimpleMagnets.baubles.getBaubleCapability(capability, this) : null;
     }
+
+    @Override
+    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
+        tooltip.add(this.getTooltip().setStyle(new Style().setColor(TextFormatting.AQUA)).getFormattedText());
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    protected abstract ITextComponent getTooltip();
 }

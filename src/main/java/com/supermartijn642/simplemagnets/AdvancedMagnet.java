@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -65,6 +67,11 @@ public class AdvancedMagnet extends MagnetItem {
     @Override
     protected int getRangeXp(NBTTagCompound tag){
         return tag != null && tag.hasKey("xpRange") ? tag.getInteger("xpRange") : DEFAULT_RANGE;
+    }
+
+    @Override
+    protected ITextComponent getTooltip(){
+        return new TextComponentTranslation("simplemagnets.advancedmagnet.info", MAX_RANGE);
     }
 
 }
