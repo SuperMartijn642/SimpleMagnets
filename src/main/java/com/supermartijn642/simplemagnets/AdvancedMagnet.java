@@ -12,6 +12,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -85,6 +86,11 @@ public class AdvancedMagnet extends MagnetItem {
     @Override
     protected int getRangeXp(CompoundNBT tag){
         return tag.contains("xpRange") ? tag.getInt("xpRange") : DEFAULT_RANGE;
+    }
+
+    @Override
+    protected TextComponent getTooltip(){
+        return new TranslationTextComponent("simplemagnets.advancedmagnet.info", MAX_RANGE);
     }
 
 }
