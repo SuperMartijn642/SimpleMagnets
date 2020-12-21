@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -58,7 +59,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
         if(tag.hasKey("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
+                AxisAlignedBB area = createBox(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 List<EntityItem> items = worldIn.getEntitiesWithinAABB(EntityItem.class, area,
                     item -> !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()));
@@ -67,7 +68,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
 
             if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof EntityPlayer){
                 int r = this.getRangeXp(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
+                AxisAlignedBB area = createBox(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 EntityPlayer player = (EntityPlayer)entityIn;
                 List<EntityXPOrb> orbs = worldIn.getEntitiesWithinAABB(EntityXPOrb.class, area);
@@ -79,6 +80,10 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             }
         }
         stack.setTagCompound(tag);
+    }
+
+    private static AxisAlignedBB createBox(Vec3d pos1, Vec3d pos2){
+        return new AxisAlignedBB(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
     }
 
     protected abstract boolean canPickupItems(NBTTagCompound tag);
