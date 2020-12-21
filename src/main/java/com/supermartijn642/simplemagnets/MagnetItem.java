@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -11,6 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -84,4 +88,12 @@ public abstract class MagnetItem extends Item {
     public boolean hasEffect(ItemStack stack){
         return stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
     }
+
+    @Override
+    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
+        tooltip.add(this.getTooltip().mergeStyle(TextFormatting.AQUA));
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    protected abstract TextComponent getTooltip();
 }
