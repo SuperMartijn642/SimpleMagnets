@@ -1,11 +1,13 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.simplemagnets.packets.PacketItemInfo;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,6 +33,7 @@ import java.util.List;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
+@Mod.EventBusSubscriber
 public abstract class MagnetItem extends Item implements ICapabilityProvider {
     public MagnetItem(String registryName){
         super();
@@ -66,7 +73,10 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
                 AxisAlignedBB area = createBox(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 List<EntityItem> items = worldIn.getEntitiesWithinAABB(EntityItem.class, area,
-                    item -> !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()));
+                    item ->
+                        !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
+                            (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup())
+                );
                 items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
             }
 
@@ -129,4 +139,16 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     }
 
     protected abstract ITextComponent getTooltip();
+
+    @SubscribeEvent
+    public static void onItemToss(ItemTossEvent e){
+        if(e.getEntityItem() != null && !e.getEntityItem().world.isRemote && e.getPlayer() != null)
+            e.getEntityItem().getEntityData().setUniqueId("simplemagnets:throwerId", e.getPlayer().getUniqueID());
+    }
+
+    @SubscribeEvent
+    public static void onStartTracking(PlayerEvent.StartTracking e){
+        if(e.getTarget() instanceof EntityItem && !e.getEntityPlayer().world.isRemote && e.getTarget().getEntityData().hasKey("simplemagnets:throwerIdMost"))
+            SimpleMagnets.channel.sendTo(new PacketItemInfo((EntityItem)e.getTarget()), (EntityPlayerMP)e.getEntityPlayer());
+    }
 }

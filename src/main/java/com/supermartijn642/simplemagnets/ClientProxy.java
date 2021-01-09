@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.input.Keyboard;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -44,6 +43,10 @@ public class ClientProxy {
     public static void onKey(InputEvent.KeyInputEvent e){
         if(TOGGLE_MAGNET_KEY != null && TOGGLE_MAGNET_KEY.isPressed() && Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().currentScreen == null)
             SimpleMagnets.channel.sendToServer(new PacketToggleMagnet());
+    }
+
+    public static void queTask(Runnable task){
+        Minecraft.getMinecraft().addScheduledTask(task);
     }
 
 }
