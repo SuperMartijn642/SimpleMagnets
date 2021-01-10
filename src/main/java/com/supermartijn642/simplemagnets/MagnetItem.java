@@ -63,7 +63,7 @@ public abstract class MagnetItem extends Item {
 
                 List<ItemEntity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area,
                     item ->
-                        item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
+                        !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
                             (item.getThrowerId() == null || !item.getThrowerId().equals(entityIn.getUniqueID()) || !item.cannotPickup())
                 );
                 items.forEach(item -> item.setPosition(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ()));
