@@ -15,10 +15,6 @@ import net.minecraft.world.World;
  */
 public class AdvancedMagnet extends MagnetItem {
 
-    public static final int DEFAULT_RANGE = 8;
-    public static final int MIN_RANGE = 3;
-    public static final int MAX_RANGE = 11;
-
     public AdvancedMagnet(){
         super("advancedmagnet");
     }
@@ -61,17 +57,17 @@ public class AdvancedMagnet extends MagnetItem {
 
     @Override
     protected int getRangeItems(NBTTagCompound tag){
-        return tag != null && tag.hasKey("itemRange") ? tag.getInteger("itemRange") : DEFAULT_RANGE;
+        return tag != null && tag.hasKey("itemRange") ? tag.getInteger("itemRange") : SMConfig.advancedMagnetRange.get();
     }
 
     @Override
     protected int getRangeXp(NBTTagCompound tag){
-        return tag != null && tag.hasKey("xpRange") ? tag.getInteger("xpRange") : DEFAULT_RANGE;
+        return tag != null && tag.hasKey("xpRange") ? tag.getInteger("xpRange") : SMConfig.advancedMagnetRange.get();
     }
 
     @Override
     protected ITextComponent getTooltip(){
-        return new TextComponentTranslation("simplemagnets.advancedmagnet.info", MAX_RANGE);
+        return new TextComponentTranslation("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get());
     }
 
 }
