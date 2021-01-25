@@ -10,7 +10,6 @@ import net.minecraft.util.text.TextComponentTranslation;
  */
 public class BasicMagnet extends MagnetItem {
 
-    public static final int RANGE = 5;
 
     public BasicMagnet(){
         super("basicmagnet");
@@ -33,16 +32,16 @@ public class BasicMagnet extends MagnetItem {
 
     @Override
     protected int getRangeItems(NBTTagCompound tag){
-        return RANGE;
+        return SMConfig.basicMagnetRange.get();
     }
 
     @Override
     protected int getRangeXp(NBTTagCompound tag){
-        return RANGE;
+        return SMConfig.basicMagnetRange.get();
     }
 
     @Override
     protected ITextComponent getTooltip(){
-        return new TextComponentTranslation("simplemagnets.basicmagnet.info", RANGE);
+        return new TextComponentTranslation("simplemagnets.basicmagnet.info", SMConfig.basicMagnetRange.get());
     }
 }

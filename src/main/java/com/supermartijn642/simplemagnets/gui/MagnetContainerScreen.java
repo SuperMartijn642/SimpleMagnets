@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.*;
 import net.minecraft.client.Minecraft;
@@ -32,8 +33,8 @@ public class MagnetContainerScreen extends GuiContainer {
     private ArrowButton rightXpButton;
     private WhitelistButton whitelistButton;
 
-    private int itemRange = AdvancedMagnet.DEFAULT_RANGE;
-    private int xpRange = AdvancedMagnet.DEFAULT_RANGE;
+    private int itemRange = SMConfig.advancedMagnetRange.get();
+    private int xpRange = SMConfig.advancedMagnetRange.get();
 
     public MagnetContainerScreen(MagnetContainer container, InventoryPlayer inv){
         super(container);
@@ -109,8 +110,8 @@ public class MagnetContainerScreen extends GuiContainer {
         this.xpCheckbox.update(!(tag.hasKey("xp") && tag.getBoolean("xp")));
         this.whitelistButton.update(tag.hasKey("whitelist") && tag.getBoolean("whitelist"));
 
-        this.itemRange = tag.hasKey("itemRange") ? tag.getInteger("itemRange") : AdvancedMagnet.DEFAULT_RANGE;
-        this.xpRange = tag.hasKey("xpRange") ? tag.getInteger("xpRange") : AdvancedMagnet.DEFAULT_RANGE;
+        this.itemRange = tag.hasKey("itemRange") ? tag.getInteger("itemRange") : SMConfig.advancedMagnetRange.get();
+        this.xpRange = tag.hasKey("xpRange") ? tag.getInteger("xpRange") : SMConfig.advancedMagnetRange.get();
     }
 
     @Override

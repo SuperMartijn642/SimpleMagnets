@@ -2,13 +2,16 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
+        maven { url = 'https://plugins.gradle.org/m2'}
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'com.wynprice.cursemaven', name: 'CurseMaven', version: '2.1.4'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'com.wynprice.cursemaven'
 
 
 version = "1.0.11-mc1.12"
@@ -34,6 +37,9 @@ minecraft {
 }
 
 dependencies {
+    // config lib
+    provided 'curse.maven:supermartijn642s-config-lib:3176333'
+
     provided files("lib/Baubles-1.12-1.5.2-deobf.jar")
 }
 

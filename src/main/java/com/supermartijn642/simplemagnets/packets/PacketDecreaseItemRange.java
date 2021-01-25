@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets.packets;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.SMConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class PacketDecreaseItemRange implements IMessage, IMessageHandler<Packet
 
             if(stack.getItem() instanceof AdvancedMagnet){
                 NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-                tag.setInteger("itemRange", Math.max(AdvancedMagnet.MIN_RANGE, (tag.hasKey("itemRange") ? tag.getInteger("itemRange") : AdvancedMagnet.DEFAULT_RANGE) - 1));
+                tag.setInteger("itemRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (tag.hasKey("itemRange") ? tag.getInteger("itemRange") : SMConfig.advancedMagnetRange.get()) - 1));
                 stack.setTagCompound(tag);
             }
         }

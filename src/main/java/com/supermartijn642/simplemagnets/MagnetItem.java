@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.simplemagnets.packets.PacketItemInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -58,11 +60,17 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
             boolean active = tag.hasKey("active") && tag.getBoolean("active");
             tag.setBoolean("active", !active);
-            if(active)
-                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
-            else
-                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
-            stack.setTagCompound(tag);
+            if(active){
+                if(SMConfig.showToggleMessage.get())
+                    Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentTranslation("simplemagnets.magnets.toggle_message").setStyle(new Style().setColor(TextFormatting.YELLOW)).appendText(" ").appendSibling(new TextComponentTranslation("simplemagnets.magnets.toggle_message.off").setStyle(new Style().setColor(TextFormatting.RED))), true);
+                if(SMConfig.playToggleSound.get())
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
+            }else{
+                if(SMConfig.showToggleMessage.get())
+                    Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentTranslation("simplemagnets.magnets.toggle_message").setStyle(new Style().setColor(TextFormatting.YELLOW)).appendText(" ").appendSibling(new TextComponentTranslation("simplemagnets.magnets.toggle_message.on").setStyle(new Style().setColor(TextFormatting.GREEN))), true);
+                if(SMConfig.playToggleSound.get())
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
+            } stack.setTagCompound(tag);
         }
     }
 
