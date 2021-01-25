@@ -3,6 +3,7 @@ package com.supermartijn642.simplemagnets.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.*;
 import net.minecraft.client.Minecraft;
@@ -31,8 +32,8 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     private ArrowButton rightXpButton;
     private WhitelistButton whitelistButton;
 
-    private int itemRange = AdvancedMagnet.DEFAULT_RANGE;
-    private int xpRange = AdvancedMagnet.DEFAULT_RANGE;
+    private int itemRange = SMConfig.advancedMagnetRange.get();
+    private int xpRange = SMConfig.advancedMagnetRange.get();
 
     public MagnetContainerScreen(MagnetContainer container, PlayerInventory inv, ITextComponent title){
         super(container, inv, title);
@@ -105,8 +106,8 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
         this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
 
-        this.itemRange = tag.contains("itemRange") ? tag.getInt("itemRange") : AdvancedMagnet.DEFAULT_RANGE;
-        this.xpRange = tag.contains("xpRange") ? tag.getInt("xpRange") : AdvancedMagnet.DEFAULT_RANGE;
+        this.itemRange = tag.contains("itemRange") ? tag.getInt("itemRange") : SMConfig.advancedMagnetRange.get();
+        this.xpRange = tag.contains("xpRange") ? tag.getInt("xpRange") : SMConfig.advancedMagnetRange.get();
     }
 
     @Override
