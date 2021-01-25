@@ -24,10 +24,6 @@ import javax.annotation.Nullable;
  */
 public class AdvancedMagnet extends MagnetItem {
 
-    public static final int DEFAULT_RANGE = 8;
-    public static final int MIN_RANGE = 3;
-    public static final int MAX_RANGE = 11;
-
     public AdvancedMagnet(){
         super("advancedmagnet");
     }
@@ -80,17 +76,17 @@ public class AdvancedMagnet extends MagnetItem {
 
     @Override
     protected int getRangeItems(CompoundNBT tag){
-        return tag.contains("itemRange") ? tag.getInt("itemRange") : DEFAULT_RANGE;
+        return tag.contains("itemRange") ? tag.getInt("itemRange") : SMConfig.advancedMagnetRange.get();
     }
 
     @Override
     protected int getRangeXp(CompoundNBT tag){
-        return tag.contains("xpRange") ? tag.getInt("xpRange") : DEFAULT_RANGE;
+        return tag.contains("xpRange") ? tag.getInt("xpRange") : SMConfig.advancedMagnetRange.get();
     }
 
     @Override
     protected TextComponent getTooltip(){
-        return new TranslationTextComponent("simplemagnets.advancedmagnet.info", MAX_RANGE);
+        return new TranslationTextComponent("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get());
     }
 
 }
