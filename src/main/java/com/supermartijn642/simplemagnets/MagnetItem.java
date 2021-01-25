@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.simplemagnets.packets.PacketItemInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -14,9 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -48,10 +47,17 @@ public abstract class MagnetItem extends Item {
         if(!player.world.isRemote && stack.getItem() instanceof MagnetItem){
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
-            if(active)
-                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
-            else
-                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
+            if(active){
+                if(SMConfig.showToggleMessage.get())
+                    player.sendStatusMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").applyTextStyle(TextFormatting.YELLOW).appendText(" ").appendSibling(new TranslationTextComponent("simplemagnets.magnets.toggle_message.off").applyTextStyle(TextFormatting.RED)), true);
+                if(SMConfig.playToggleSound.get())
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
+            }else{
+                if(SMConfig.showToggleMessage.get())
+                    player.sendStatusMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").applyTextStyle(TextFormatting.YELLOW).appendText(" ").appendSibling(new TranslationTextComponent("simplemagnets.magnets.toggle_message.on").applyTextStyle(TextFormatting.GREEN)), true);
+                if(SMConfig.playToggleSound.get())
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
+            }
         }
     }
 

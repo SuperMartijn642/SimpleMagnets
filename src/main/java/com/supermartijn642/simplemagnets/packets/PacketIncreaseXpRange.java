@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets.packets;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.SMConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -29,7 +30,7 @@ public class PacketIncreaseXpRange {
             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
-                stack.getOrCreateTag().putInt("xpRange", Math.min(AdvancedMagnet.MAX_RANGE, (stack.getOrCreateTag().contains("xpRange") ? stack.getOrCreateTag().getInt("xpRange") : AdvancedMagnet.DEFAULT_RANGE) + 1));
+                stack.getOrCreateTag().putInt("xpRange", Math.min(SMConfig.advancedMagnetMaxRange.get(), (stack.getOrCreateTag().contains("xpRange") ? stack.getOrCreateTag().getInt("xpRange") : SMConfig.advancedMagnetRange.get()) + 1));
         }
     }
 }
