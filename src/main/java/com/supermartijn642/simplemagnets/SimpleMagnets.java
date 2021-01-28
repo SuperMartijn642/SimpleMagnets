@@ -49,6 +49,7 @@ public class SimpleMagnets {
         CHANNEL.registerMessage(6, PacketToggleWhitelist.class, PacketToggleWhitelist::encode, PacketToggleWhitelist::decode, PacketToggleWhitelist::handle);
         CHANNEL.registerMessage(7, PacketToggleMagnet.class, PacketToggleMagnet::encode, PacketToggleMagnet::decode, PacketToggleMagnet::handle);
         CHANNEL.registerMessage(8, PacketItemInfo.class, PacketItemInfo::encode, PacketItemInfo::decode, PacketItemInfo::handle);
+        CHANNEL.registerMessage(9,PacketToggleMagnetMessage.class, PacketToggleMagnetMessage::encode, PacketToggleMagnetMessage::decode, PacketToggleMagnetMessage::handle);
     }
 
     public void init(FMLCommonSetupEvent e){
