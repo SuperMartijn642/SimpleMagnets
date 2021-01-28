@@ -8,16 +8,17 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -59,17 +60,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
             boolean active = tag.hasKey("active") && tag.getBoolean("active");
             tag.setBoolean("active", !active);
-            if(active){
-                if(SMConfig.showToggleMessage.get())
-                    player.sendStatusMessage(new TextComponentTranslation("simplemagnets.magnets.toggle_message").setStyle(new Style().setColor(TextFormatting.YELLOW)).appendText(" ").appendSibling(new TextComponentTranslation("simplemagnets.magnets.toggle_message.off").setStyle(new Style().setColor(TextFormatting.RED))), true);
-                if(SMConfig.playToggleSound.get())
-                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
-            }else{
-                if(SMConfig.showToggleMessage.get())
-                    player.sendStatusMessage(new TextComponentTranslation("simplemagnets.magnets.toggle_message").setStyle(new Style().setColor(TextFormatting.YELLOW)).appendText(" ").appendSibling(new TextComponentTranslation("simplemagnets.magnets.toggle_message.on").setStyle(new Style().setColor(TextFormatting.GREEN))), true);
-                if(SMConfig.playToggleSound.get())
-                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
-            } stack.setTagCompound(tag);
+            stack.setTagCompound(tag);
         }
     }
 

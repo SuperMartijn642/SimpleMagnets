@@ -52,6 +52,7 @@ public class SimpleMagnets {
         channel.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist.class, 6, Side.SERVER);
         channel.registerMessage(PacketToggleMagnet.class, PacketToggleMagnet.class, 7, Side.SERVER);
         channel.registerMessage(PacketItemInfo.class, PacketItemInfo.class, 8, Side.CLIENT);
+        channel.registerMessage(PacketToggleMagnetMessage.class, PacketToggleMagnetMessage.class, 9, Side.CLIENT);
 
         baubles = Loader.isModLoaded("baubles") ? new BaublesActive() : new BaublesInactive();
     }
