@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.simplemagnets.packets.PacketItemInfo;
+import com.supermartijn642.simplemagnets.packets.PacketToggleMagnetMessage;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -12,12 +13,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,17 +51,8 @@ public abstract class MagnetItem extends Item {
         if(!player.world.isRemote && stack.getItem() instanceof MagnetItem){
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
-            if(active){
-                if(SMConfig.showToggleMessage.get())
-                    player.sendStatusMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").mergeStyle(TextFormatting.YELLOW).appendString(" ").append(new TranslationTextComponent("simplemagnets.magnets.toggle_message.off").mergeStyle(TextFormatting.RED)), true);
-                if(SMConfig.playToggleSound.get())
-                    player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
-            }else{
-                if(SMConfig.showToggleMessage.get())
-                    player.sendStatusMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").mergeStyle(TextFormatting.YELLOW).appendString(" ").append(new TranslationTextComponent("simplemagnets.magnets.toggle_message.on").mergeStyle(TextFormatting.GREEN)), true);
-                if(SMConfig.playToggleSound.get())
-                    player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
-            }
+            // let the client decide whether to show the toggle message and play a sound
+            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new PacketToggleMagnetMessage(active));
         }
     }
 
