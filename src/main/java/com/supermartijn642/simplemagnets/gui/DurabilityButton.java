@@ -15,17 +15,20 @@ import net.minecraft.util.text.StringTextComponent;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class ArrowButton extends AbstractButton {
+public class DurabilityButton extends AbstractButton {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/arrow_buttons.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/durability_button.png");
 
-    private final boolean left;
+    public boolean on = true;
     private final Runnable onPress;
 
-    public ArrowButton(int x, int y, boolean left, Runnable onPress){
-        super(x, y, 11, 17, new StringTextComponent(""));
-        this.left = left;
+    public DurabilityButton(int x, int y, Runnable onPress){
+        super(x, y, 20, 20, new StringTextComponent(""));
         this.onPress = onPress;
+    }
+
+    public void update(boolean on){
+        this.on = on;
     }
 
     @Override
@@ -41,17 +44,17 @@ public class ArrowButton extends AbstractButton {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        drawTexture(this.x, this.y, this.left ? 11 : 0, (this.active ? this.isHovered ? 1 : 0 : 2) * 17);
+        drawTexture(this.x, this.y, this.on ? 0 : 20, (this.active ? this.isHovered ? 1 : 0 : 2) * 20);
         this.renderBg(matrixStack, minecraft, mouseX, mouseY);
     }
 
     private static void drawTexture(int x, int y, int textureX, int textureY){
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(x, y + 17, 0).tex(textureX / 22f, (textureY + 17) / 51f).endVertex();
-        bufferbuilder.pos(x + 11, y + 17, 0).tex((textureX + 11) / 22f, (textureY + 17) / 51f).endVertex();
-        bufferbuilder.pos(x + 11, y, 0).tex((textureX + 11) / 22f, textureY / 51f).endVertex();
-        bufferbuilder.pos(x, y, 0).tex(textureX / 22f, textureY / 51f).endVertex();
+        bufferbuilder.pos(x, y + 20, 0).tex(textureX / 40f, (textureY + 20) / 60f).endVertex();
+        bufferbuilder.pos(x + 20, y + 20, 0).tex((textureX + 20) / 40f, (textureY + 20) / 60f).endVertex();
+        bufferbuilder.pos(x + 20, y, 0).tex((textureX + 20) / 40f, textureY / 60f).endVertex();
+        bufferbuilder.pos(x, y, 0).tex(textureX / 40f, textureY / 60f).endVertex();
         bufferbuilder.finishDrawing();
         RenderSystem.enableAlphaTest();
         WorldVertexBufferUploader.draw(bufferbuilder);

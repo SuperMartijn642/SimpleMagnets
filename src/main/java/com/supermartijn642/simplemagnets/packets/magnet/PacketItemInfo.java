@@ -1,4 +1,4 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.ClientProxy;
 import net.minecraft.entity.Entity;
