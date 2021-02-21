@@ -1,4 +1,4 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.MagnetItem;
 import net.minecraft.entity.player.PlayerEntity;

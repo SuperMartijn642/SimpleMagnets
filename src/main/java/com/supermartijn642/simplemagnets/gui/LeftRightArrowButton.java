@@ -11,14 +11,14 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class ArrowButton extends AbstractButton {
+public class LeftRightArrowButton extends AbstractButton {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/arrow_buttons.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/left_right_arrow_buttons.png");
 
     private final boolean left;
     private final Runnable onPress;
 
-    public ArrowButton(int x, int y, boolean left, Runnable onPress){
+    public LeftRightArrowButton(int x, int y, boolean left, Runnable onPress){
         super(x, y, 11, 17, "");
         this.left = left;
         this.onPress = onPress;
