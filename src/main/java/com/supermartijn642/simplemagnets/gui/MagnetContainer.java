@@ -47,14 +47,14 @@ public class MagnetContainer extends Container {
         // player
         for(int row = 0; row < 3; row++){
             for(int column = 0; column < 9; column++){
-                this.addSlotToContainer(new Slot(inventory, row * 9 + column + 9, 21 + 18 * column, 114 + 18 * row));
+                this.addSlotToContainer(new Slot(inventory, row * 9 + column + 9, 32 + 18 * column, 114 + 18 * row));
             }
         }
 
         // hot bar
         for(int column = 0; column < 9; column++){
             int index = column;
-            this.addSlotToContainer(new Slot(inventory, index, 21 + 18 * column, 172) {
+            this.addSlotToContainer(new Slot(inventory, index, 32 + 18 * column, 172) {
                 public boolean canTakeStack(EntityPlayer playerIn){
                     return index != MagnetContainer.this.slot;
                 }

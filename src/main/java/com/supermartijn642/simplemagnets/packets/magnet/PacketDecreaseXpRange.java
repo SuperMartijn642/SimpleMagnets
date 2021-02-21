@@ -1,6 +1,7 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.SMConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketToggleItems implements IMessage, IMessageHandler<PacketToggleItems,IMessage> {
+public class PacketDecreaseXpRange implements IMessage, IMessageHandler<PacketDecreaseXpRange,IMessage> {
 
     @Override
     public void fromBytes(ByteBuf buffer){
@@ -24,18 +25,17 @@ public class PacketToggleItems implements IMessage, IMessageHandler<PacketToggle
     }
 
     @Override
-    public IMessage onMessage(PacketToggleItems message, MessageContext ctx){
+    public IMessage onMessage(PacketDecreaseXpRange message, MessageContext ctx){
         EntityPlayer player = ctx.getServerHandler().player;
         if(player != null){
             ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet){
                 NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-                tag.setBoolean("items", !(tag.hasKey("items") && tag.getBoolean("items")));
+                tag.setInteger("xpRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (tag.hasKey("xpRange") ? tag.getInteger("xpRange") : SMConfig.advancedMagnetRange.get()) - 1));
                 stack.setTagCompound(tag);
             }
         }
         return null;
     }
-
 }

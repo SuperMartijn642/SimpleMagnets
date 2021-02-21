@@ -1,6 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.simplemagnets.packets.PacketItemInfo;
+import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -42,7 +42,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     public MagnetItem(String registryName){
         super();
         this.setRegistryName(registryName);
-        this.setUnlocalizedName(SimpleMagnets.MODID + ":" + registryName);
+        this.setUnlocalizedName(SimpleMagnets.MODID + "." + registryName);
 
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.SEARCH);

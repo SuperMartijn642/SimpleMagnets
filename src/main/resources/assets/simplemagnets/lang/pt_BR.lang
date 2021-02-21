@@ -1,5 +1,5 @@
-item.simplemagnets:basicmagnet.name=Íma
-item.simplemagnets:advancedmagnet.name=Ímã Avançado
+item.simplemagnets.basicmagnet.name=Íma
+item.simplemagnets.advancedmagnet.name=Ímã Avançado
 simplemagnets.basicmagnet.info=Pode pegar itens e xp até %d blocos de distância quando ativado
 simplemagnets.advancedmagnet.info=Pode pegar itens e xp até %d blocos de distância quando ativado, os itens podem ser filtrados
 gui.advancedmagnet.title=Ímã Avançado

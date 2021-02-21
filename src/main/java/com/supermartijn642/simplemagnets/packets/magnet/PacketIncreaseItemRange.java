@@ -1,4 +1,4 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketDecreaseItemRange implements IMessage, IMessageHandler<PacketDecreaseItemRange,IMessage> {
+public class PacketIncreaseItemRange implements IMessage, IMessageHandler<PacketIncreaseItemRange,IMessage> {
 
     @Override
     public void fromBytes(ByteBuf buffer){
@@ -25,14 +25,14 @@ public class PacketDecreaseItemRange implements IMessage, IMessageHandler<Packet
     }
 
     @Override
-    public IMessage onMessage(PacketDecreaseItemRange message, MessageContext ctx){
+    public IMessage onMessage(PacketIncreaseItemRange message, MessageContext ctx){
         EntityPlayer player = ctx.getServerHandler().player;
         if(player != null){
             ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet){
                 NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-                tag.setInteger("itemRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (tag.hasKey("itemRange") ? tag.getInteger("itemRange") : SMConfig.advancedMagnetRange.get()) - 1));
+                tag.setInteger("itemRange", Math.min(SMConfig.advancedMagnetMaxRange.get(), (tag.hasKey("itemRange") ? tag.getInteger("itemRange") : SMConfig.advancedMagnetRange.get()) + 1));
                 stack.setTagCompound(tag);
             }
         }

@@ -36,11 +36,28 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+}
+
 dependencies {
     // config lib
-    provided 'curse.maven:supermartijn642s-config-lib:3176333'
+    provided 'curse.maven:supermartijn642s-config-lib:3211007'
 
+    // Baubles
     provided files("lib/Baubles-1.12-1.5.2-deobf.jar")
+
+    // JEI
+    compile "mezz.jei:jei_1.12.2:4.16.1.301"
 }
 
 processResources {
@@ -62,6 +79,6 @@ processResources {
     }
 }
 
-//sourceSets {
-//    main { output.resourcesDir = output.classesDir }
-//}
+sourceSets {
+    main { output.resourcesDir = output.classesDir }
+}

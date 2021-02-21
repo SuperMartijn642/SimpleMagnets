@@ -11,14 +11,14 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class ArrowButton extends GuiButton implements Pressable {
+public class LeftRightArrowButton extends GuiButton implements Pressable {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/arrow_buttons.png");
+    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/left_right_arrow_buttons.png");
 
     private final boolean left;
     private final Runnable onPress;
 
-    public ArrowButton(int buttonId, int x, int y, boolean left, Runnable onPress){
+    public LeftRightArrowButton(int buttonId, int x, int y, boolean left, Runnable onPress){
         super(buttonId, x, y, 11, 17, "");
         this.left = left;
         this.onPress = onPress;

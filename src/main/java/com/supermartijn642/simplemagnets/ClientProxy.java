@@ -1,10 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.simplemagnets.packets.PacketToggleMagnet;
+import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -33,6 +34,8 @@ public class ClientProxy {
     public static void registerModels(ModelRegistryEvent e){
         ModelLoader.setCustomModelResourceLocation(SimpleMagnets.basic_magnet, 0, new ModelResourceLocation(SimpleMagnets.basic_magnet.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(SimpleMagnets.advanced_magnet, 0, new ModelResourceLocation(SimpleMagnets.advanced_magnet.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SimpleMagnets.basic_demagnetization_coil), 0, new ModelResourceLocation(SimpleMagnets.basic_demagnetization_coil.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SimpleMagnets.advanced_demagnetization_coil), 0, new ModelResourceLocation(SimpleMagnets.advanced_demagnetization_coil.getRegistryName(), "inventory"));
     }
 
     public static EntityPlayer getPlayer(){

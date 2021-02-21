@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "RGR",
+    "GBG"
+  ],
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "dustGlowstone"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "B": {
+      "item": "simplemagnets:basic_demagnetization_coil"
+    }
+  },
+  "result": {
+    "item": "simplemagnets:advanced_demagnetization_coil"
+  }
+}
