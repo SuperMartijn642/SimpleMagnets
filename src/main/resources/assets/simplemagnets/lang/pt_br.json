@@ -29,7 +29,7 @@
   "gui.simplemagnets.demagnetization_coil.range.decrease": "Diminuir Alcance",
   "gui.simplemagnets.demagnetization_coil.range": "Alcance ($number$x$number$x$number$ Blocos)",
   "keys.category.simplemagnets": "Simple Magnets",
-  "keys.simplemagnets.toggle": "Alternar ímã"
+  "keys.simplemagnets.toggle": "Alternar ímã",
   "simplemagnets.magnets.toggle_message": "Magnet:",
   "simplemagnets.magnets.toggle_message.on": "Ligado",
   "simplemagnets.magnets.toggle_message.off": "Desligado"
