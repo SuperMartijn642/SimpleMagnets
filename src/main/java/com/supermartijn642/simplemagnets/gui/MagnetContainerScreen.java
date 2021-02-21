@@ -122,7 +122,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.blit(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
         this.drawCenteredString(this.title, this.xSize / 2f, 6);
-        this.drawString(this.playerInventory.getDisplayName(), 21, 102);
+        this.drawString(this.playerInventory.getDisplayName(), 32, 102);
 
         this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26);
         this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26);
