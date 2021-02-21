@@ -1,4 +1,4 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
@@ -13,13 +13,13 @@ import java.util.function.Supplier;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketDecreaseItemRange {
+public class PacketIncreaseXpRange {
 
     public void encode(PacketBuffer buffer){
     }
 
-    public static PacketDecreaseItemRange decode(PacketBuffer buffer){
-        return new PacketDecreaseItemRange();
+    public static PacketIncreaseXpRange decode(PacketBuffer buffer){
+        return new PacketIncreaseXpRange();
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier){
@@ -30,7 +30,7 @@ public class PacketDecreaseItemRange {
             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
-                stack.getOrCreateTag().putInt("itemRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (stack.getOrCreateTag().contains("itemRange") ? stack.getOrCreateTag().getInt("itemRange") : SMConfig.advancedMagnetRange.get()) - 1));
+                stack.getOrCreateTag().putInt("xpRange", Math.min(SMConfig.advancedMagnetMaxRange.get(), (stack.getOrCreateTag().contains("xpRange") ? stack.getOrCreateTag().getInt("xpRange") : SMConfig.advancedMagnetRange.get()) + 1));
         }
     }
 }

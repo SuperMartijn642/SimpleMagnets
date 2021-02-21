@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "simplemagnets:advanced_magnet"
+      "simplemagnets:basic_demagnetization_coil"
     ]
   },
   "criteria": {
-    "magnet": {
+    "iron": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "simplemagnets:basicmagnet"
+            "item": "minecraft:iron_ingot"
           }
         ]
       }
@@ -19,7 +19,7 @@
   },
   "requirements": [
     [
-      "magnet"
+      "iron"
     ]
   ]
 }

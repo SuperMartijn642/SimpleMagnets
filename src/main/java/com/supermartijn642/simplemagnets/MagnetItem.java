@@ -1,7 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.simplemagnets.packets.PacketItemInfo;
-import com.supermartijn642.simplemagnets.packets.PacketToggleMagnetMessage;
+import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
+import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -65,8 +65,7 @@ public abstract class MagnetItem extends Item {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
 
                 List<ItemEntity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area,
-                    item ->
-                        !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
+                    item -> !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
                             (item.getThrowerId() == null || !item.getThrowerId().equals(entityIn.getUniqueID()) || !item.cannotPickup())
                 );
                 items.forEach(item -> item.setPosition(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ()));

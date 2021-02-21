@@ -1,6 +1,7 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.SMConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -12,13 +13,13 @@ import java.util.function.Supplier;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketToggleItems {
+public class PacketDecreaseItemRange {
 
     public void encode(PacketBuffer buffer){
     }
 
-    public static PacketToggleItems decode(PacketBuffer buffer){
-        return new PacketToggleItems();
+    public static PacketDecreaseItemRange decode(PacketBuffer buffer){
+        return new PacketDecreaseItemRange();
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier){
@@ -29,8 +30,7 @@ public class PacketToggleItems {
             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
-                stack.getOrCreateTag().putBoolean("items", !(stack.getOrCreateTag().contains("items") && stack.getOrCreateTag().getBoolean("items")));
+                stack.getOrCreateTag().putInt("itemRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (stack.getOrCreateTag().contains("itemRange") ? stack.getOrCreateTag().getInt("itemRange") : SMConfig.advancedMagnetRange.get()) - 1));
         }
     }
-
 }

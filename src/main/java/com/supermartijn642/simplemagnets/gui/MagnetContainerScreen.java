@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
-import com.supermartijn642.simplemagnets.packets.*;
+import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,19 +23,20 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     private final ResourceLocation BACKGROUND = new ResourceLocation("simplemagnets", "textures/screen.png");
 
     private CheckBox itemCheckbox;
-    private ArrowButton leftItemButton;
-    private ArrowButton rightItemButton;
+    private LeftRightArrowButton leftItemButton;
+    private LeftRightArrowButton rightItemButton;
     private CheckBox xpCheckbox;
-    private ArrowButton leftXpButton;
-    private ArrowButton rightXpButton;
+    private LeftRightArrowButton leftXpButton;
+    private LeftRightArrowButton rightXpButton;
     private WhitelistButton whitelistButton;
+    private DurabilityButton durabilityButton;
 
     private int itemRange = SMConfig.advancedMagnetRange.get();
     private int xpRange = SMConfig.advancedMagnetRange.get();
 
     public MagnetContainerScreen(MagnetContainer container, PlayerInventory inv, ITextComponent title){
         super(container, inv, title);
-        this.xSize = 202;
+        this.xSize = 224;
         this.ySize = 196;
     }
 
@@ -50,19 +51,22 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.itemCheckbox = this.addButton(new CheckBox(this.guiLeft + 19, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleItems())));
         this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
 
-        this.leftItemButton = this.addButton(new ArrowButton(this.guiLeft + 45, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
+        this.leftItemButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 45, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
 
-        this.rightItemButton = this.addButton(new ArrowButton(this.guiLeft + 78, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
+        this.rightItemButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 78, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
 
         this.xpCheckbox = this.addButton(new CheckBox(this.guiLeft + 113, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleXp())));
         this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
 
-        this.leftXpButton = this.addButton(new ArrowButton(this.guiLeft + 139, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
+        this.leftXpButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 139, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
 
-        this.rightXpButton = this.addButton(new ArrowButton(this.guiLeft + 172, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
+        this.rightXpButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 172, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
 
-        this.whitelistButton = this.addButton(new WhitelistButton(this.guiLeft + 175, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleWhitelist())));
+        this.whitelistButton = this.addButton(new WhitelistButton(this.guiLeft + 175, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetWhitelist())));
         this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
+
+        this.durabilityButton = this.addButton(new DurabilityButton(this.guiLeft + 197, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetDurability())));
+        this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
     }
 
     public void render(int mouseX, int mouseY, float partialTicks){
@@ -90,6 +94,8 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
 
         if(this.whitelistButton.isHovered())
             this.renderTooltip(true, this.whitelistButton.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off", mouseX, mouseY);
+        if(this.durabilityButton.isHovered())
+            this.renderTooltip(true, "gui.simplemagnets.demagnetization_coil.durability." + (this.durabilityButton.on ? "on" : "off"), mouseX, mouseY);
     }
 
     @Override
@@ -103,6 +109,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
         this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
         this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
+        this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
 
         this.itemRange = tag.contains("itemRange") ? tag.getInt("itemRange") : SMConfig.advancedMagnetRange.get();
         this.xpRange = tag.contains("xpRange") ? tag.getInt("xpRange") : SMConfig.advancedMagnetRange.get();

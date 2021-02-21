@@ -50,14 +50,14 @@ public class MagnetContainer extends Container {
         // player
         for(int row = 0; row < 3; row++){
             for(int column = 0; column < 9; column++){
-                this.addSlot(new Slot(inventory, row * 9 + column + 9, 21 + 18 * column, 114 + 18 * row));
+                this.addSlot(new Slot(inventory, row * 9 + column + 9, 32 + 18 * column, 114 + 18 * row));
             }
         }
 
         // hot bar
         for(int column = 0; column < 9; column++){
             int index = column;
-            this.addSlot(new Slot(inventory, index, 21 + 18 * column, 172) {
+            this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
                 public boolean canTakeStack(PlayerEntity playerIn){
                     return index != MagnetContainer.this.slot;
                 }
@@ -91,7 +91,7 @@ public class MagnetContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index){
+    public ItemStack transferStackInSlot(PlayerEntity player, int index){
         if(index < 9){
             CompoundNBT tag = this.getTagOrClose();
             if(tag != null){
