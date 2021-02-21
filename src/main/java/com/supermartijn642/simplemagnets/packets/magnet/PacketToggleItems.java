@@ -1,4 +1,4 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,13 +12,13 @@ import java.util.function.Supplier;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketToggleWhitelist {
+public class PacketToggleItems {
 
     public void encode(PacketBuffer buffer){
     }
 
-    public static PacketToggleWhitelist decode(PacketBuffer buffer){
-        return new PacketToggleWhitelist();
+    public static PacketToggleItems decode(PacketBuffer buffer){
+        return new PacketToggleItems();
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier){
@@ -29,7 +29,8 @@ public class PacketToggleWhitelist {
             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
-                stack.getOrCreateTag().putBoolean("whitelist", !(stack.getOrCreateTag().contains("whitelist") && stack.getOrCreateTag().getBoolean("whitelist")));
+                stack.getOrCreateTag().putBoolean("items", !(stack.getOrCreateTag().contains("items") && stack.getOrCreateTag().getBoolean("items")));
         }
     }
+
 }
