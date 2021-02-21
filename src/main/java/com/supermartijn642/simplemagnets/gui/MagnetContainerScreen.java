@@ -128,7 +128,7 @@ public class MagnetContainerScreen extends GuiContainer {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
         this.drawCenteredString(new TextComponentTranslation("gui.advancedmagnet.title"), this.xSize / 2, 6);
-        this.drawString(this.playerInventory.getDisplayName(), 21, 102);
+        this.drawString(this.playerInventory.getDisplayName(), 32, 102);
 
         this.drawCenteredString(new TextComponentTranslation("gui.advancedmagnet.items"), 53, 26);
         this.drawCenteredString(new TextComponentTranslation("gui.advancedmagnet.xp"), 147, 26);
