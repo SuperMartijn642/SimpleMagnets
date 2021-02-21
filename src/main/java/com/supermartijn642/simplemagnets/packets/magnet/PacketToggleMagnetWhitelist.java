@@ -1,7 +1,6 @@
-package com.supermartijn642.simplemagnets.packets;
+package com.supermartijn642.simplemagnets.packets.magnet;
 
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
-import com.supermartijn642.simplemagnets.SMConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -13,13 +12,13 @@ import java.util.function.Supplier;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketIncreaseItemRange {
+public class PacketToggleMagnetWhitelist {
 
     public void encode(PacketBuffer buffer){
     }
 
-    public static PacketIncreaseItemRange decode(PacketBuffer buffer){
-        return new PacketIncreaseItemRange();
+    public static PacketToggleMagnetWhitelist decode(PacketBuffer buffer){
+        return new PacketToggleMagnetWhitelist();
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier){
@@ -30,7 +29,7 @@ public class PacketIncreaseItemRange {
             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
-                stack.getOrCreateTag().putInt("itemRange", Math.min(SMConfig.advancedMagnetMaxRange.get(), (stack.getOrCreateTag().contains("itemRange") ? stack.getOrCreateTag().getInt("itemRange") : SMConfig.advancedMagnetRange.get()) + 1));
+                stack.getOrCreateTag().putBoolean("whitelist", !(stack.getOrCreateTag().contains("whitelist") && stack.getOrCreateTag().getBoolean("whitelist")));
         }
     }
 }

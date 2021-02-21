@@ -58,10 +58,11 @@ public class AdvancedMagnet extends MagnetItem {
     @Override
     protected boolean canPickupStack(CompoundNBT tag, ItemStack stack){
         boolean whitelist = tag.contains("whitelist") && tag.getBoolean("whitelist");
+        boolean filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         for(int slot = 0; slot < 9; slot++){
             if(tag.contains("filter" + slot)){
                 ItemStack stack1 = ItemStack.read(tag.getCompound("filter" + slot));
-                boolean equal = ItemStack.areItemsEqual(stack, stack1) && ItemStack.areItemStackTagsEqual(stack, stack1);
+                boolean equal = ItemStack.areItemsEqual(stack, stack1) && (!filterDurability || ItemStack.areItemStackTagsEqual(stack, stack1));
                 if(equal)
                     return whitelist;
             }
