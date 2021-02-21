@@ -124,7 +124,7 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
         this.drawCenteredString(matrixStack, this.title, this.xSize / 2f, 6);
-        this.drawString(matrixStack, this.playerInventory.getDisplayName(), 21, 102);
+        this.drawString(matrixStack, this.playerInventory.getDisplayName(), 32, 102);
 
         this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26);
         this.drawCenteredString(matrixStack, new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26);
