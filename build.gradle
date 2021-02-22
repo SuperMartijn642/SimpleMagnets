@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.wynprice.cursemaven'
 
 
-version = "1.1.0-mc1.12"
+version = "1.1.1-mc1.12"
 group = "com.supermartijn642.simplemagnets" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "simplemagnets"
 
