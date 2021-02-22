@@ -30,14 +30,17 @@ public class DemagnetizationCoilAreaHighlighter {
 
         World world = Minecraft.getMinecraft().world;
         BlockPos pos = e.getTarget().getBlockPos();
-        TileEntity tile = world.getTileEntity(pos);
-        if(tile instanceof DemagnetizationCoilTile){
-            EntityPlayer player = e.getPlayer();
-            float partialTicks = e.getPartialTicks();
-            double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
-            double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
-            double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
-            drawBoundingBox(new Vec3d(x, y, z), pos, (DemagnetizationCoilTile)tile);
+        // Jup, pos can be null here even though its a non null return type
+        if(pos != null){
+            TileEntity tile = world.getTileEntity(pos);
+            if(tile instanceof DemagnetizationCoilTile){
+                EntityPlayer player = e.getPlayer();
+                float partialTicks = e.getPartialTicks();
+                double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
+                double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
+                double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+                drawBoundingBox(new Vec3d(x, y, z), pos, (DemagnetizationCoilTile)tile);
+            }
         }
     }
 
