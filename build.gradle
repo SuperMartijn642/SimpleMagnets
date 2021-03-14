@@ -97,6 +97,9 @@ dependencies {
     // Config Lib
     compile fg.deobf("curse.maven:supermartijn642s-config-lib:3211010")
 
+    // Core Lib
+    compile fg.deobf("curse.maven:supermartijn642s-core-lib:3235055")
+
     // Curios
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.4")
     compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.4:api")
