@@ -1,26 +1,27 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
+import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import java.util.function.Function;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-public class CheckBox extends AbstractButton {
+public class CheckBox extends AbstractButtonWidget implements IHoverTextWidget {
 
     private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/checkmarkbox.png");
 
-    private final Runnable onPress;
     public boolean checked;
+    private final Function<Boolean,String> translationKey;
 
-    public CheckBox(int x, int y, Runnable onPress){
-        super(x, y, 17, 17, "");
-        this.onPress = onPress;
+    public CheckBox(int x, int y, Function<Boolean,String> translationKey, Runnable onPress){
+        super(x, y, 17, 17, onPress);
+        this.translationKey = translationKey;
     }
 
     public void update(boolean checked){
@@ -28,30 +29,18 @@ public class CheckBox extends AbstractButton {
     }
 
     @Override
-    public void onPress(){
-        this.onPress.run();
+    public void render(int mouseX, int mouseY, float partialTicks){
+        ScreenUtils.bindTexture(BUTTONS);
+        ScreenUtils.drawTexture(this.x, this.y - 3, this.width + 3, this.height + 3, this.checked ? 0 : 0.5f, (this.active ? this.hovered ? 1 : 0 : 2) / 3f, 0.5f, 1 / 3f);
     }
 
     @Override
-    public void renderButton(int mouseX, int mouseY, float partialTicks){
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(BUTTONS);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        drawTexture(this.x, this.y - 3, this.checked ? 0 : 20, (this.active ? this.isHovered ? 1 : 0 : 2) * 20);
-        this.renderBg(minecraft, mouseX, mouseY);
+    public ITextComponent getHoverText(){
+        return new TranslationTextComponent(this.translationKey.apply(this.checked));
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY){
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(x, y + 20, 0).tex(textureX / 40f, (textureY + 20) / 60f).endVertex();
-        bufferbuilder.pos(x + 20, y + 20, 0).tex((textureX + 20) / 40f, (textureY + 20) / 60f).endVertex();
-        bufferbuilder.pos(x + 20, y, 0).tex((textureX + 20) / 40f, textureY / 60f).endVertex();
-        bufferbuilder.pos(x, y, 0).tex(textureX / 40f, textureY / 60f).endVertex();
-        tessellator.draw();
+    @Override
+    protected ITextComponent getNarrationMessage(){
+        return this.getHoverText();
     }
 }

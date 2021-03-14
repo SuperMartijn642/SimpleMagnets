@@ -1,26 +1,23 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
+import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class WhitelistButton extends AbstractButton {
+public class WhitelistButton extends AbstractButtonWidget implements IHoverTextWidget {
 
     private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/blacklist_button.png");
 
     public boolean white = true;
-    private final Runnable onPress;
 
     public WhitelistButton(int x, int y, Runnable onPress){
-        super(x, y, 20, 20, "");
-        this.onPress = onPress;
+        super(x, y, 20, 20, onPress);
     }
 
     public void update(boolean white){
@@ -28,30 +25,18 @@ public class WhitelistButton extends AbstractButton {
     }
 
     @Override
-    public void onPress(){
-        this.onPress.run();
+    public void render(int mouseX, int mouseY, float partialTicks){
+        ScreenUtils.bindTexture(BUTTONS);
+        ScreenUtils.drawTexture(this.x, this.y, this.width, this.height, this.white ? 0 : 0.5f, (this.active ? this.hovered ? 1 : 0 : 2) / 3f, 0.5f, 1 / 3f);
     }
 
     @Override
-    public void renderButton(int mouseX, int mouseY, float partialTicks){
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(BUTTONS);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        drawTexture(this.x, this.y, this.white ? 0 : 20, (this.active ? this.isHovered ? 1 : 0 : 2) * 20);
-        this.renderBg(minecraft, mouseX, mouseY);
+    public ITextComponent getHoverText(){
+        return new TranslationTextComponent(this.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off");
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY){
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(x, y + 20, 0).tex(textureX / 40f, (textureY + 20) / 60f).endVertex();
-        bufferbuilder.pos(x + 20, y + 20, 0).tex((textureX + 20) / 40f, (textureY + 20) / 60f).endVertex();
-        bufferbuilder.pos(x + 20, y, 0).tex((textureX + 20) / 40f, textureY / 60f).endVertex();
-        bufferbuilder.pos(x, y, 0).tex(textureX / 40f, textureY / 60f).endVertex();
-        tessellator.draw();
+    @Override
+    protected ITextComponent getNarrationMessage(){
+        return this.getHoverText();
     }
 }

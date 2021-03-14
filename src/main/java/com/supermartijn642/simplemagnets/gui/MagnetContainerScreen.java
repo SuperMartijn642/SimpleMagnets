@@ -1,12 +1,11 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.supermartijn642.core.gui.ItemBaseContainerScreen;
+import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,7 +17,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
+public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContainer> {
 
     private final ResourceLocation BACKGROUND = new ResourceLocation("simplemagnets", "textures/screen.png");
 
@@ -35,67 +34,42 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     private int xpRange = SMConfig.advancedMagnetRange.get();
 
     public MagnetContainerScreen(MagnetContainer container, PlayerInventory inv, ITextComponent title){
-        super(container, inv, title);
-        this.xSize = 224;
-        this.ySize = 196;
+        super(container, title);
     }
 
     @Override
-    protected void init(){
-        CompoundNBT tag = this.getTagOrClose();
-        if(tag == null)
-            return;
-
-        super.init();
-
-        this.itemCheckbox = this.addButton(new CheckBox(this.guiLeft + 19, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleItems())));
-        this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
-
-        this.leftItemButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 45, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
-
-        this.rightItemButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 78, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
-
-        this.xpCheckbox = this.addButton(new CheckBox(this.guiLeft + 113, this.guiTop + 39, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleXp())));
-        this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
-
-        this.leftXpButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 139, this.guiTop + 39, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
-
-        this.rightXpButton = this.addButton(new LeftRightArrowButton(this.guiLeft + 172, this.guiTop + 39, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
-
-        this.whitelistButton = this.addButton(new WhitelistButton(this.guiLeft + 175, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetWhitelist())));
-        this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
-
-        this.durabilityButton = this.addButton(new DurabilityButton(this.guiLeft + 197, this.guiTop + 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetDurability())));
-        this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
+    protected int sizeX(ItemStack stack){
+        return 224;
     }
 
-    public void render(int mouseX, int mouseY, float partialTicks){
-        this.renderBackground();
-        super.render(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    @Override
+    protected int sizeY(ItemStack stack){
+        return 196;
+    }
 
-        if(this.itemCheckbox.isHovered())
-            this.renderTooltip(true, this.itemCheckbox.checked ? "gui.advancedmagnet.items.on" : "gui.advancedmagnet.items.off", mouseX, mouseY);
-        if(this.leftItemButton.isHovered())
-            this.renderTooltip(true, "gui.advancedmagnet.items.decrease", mouseX, mouseY);
-        if(this.rightItemButton.isHovered())
-            this.renderTooltip(true, "gui.advancedmagnet.items.increase", mouseX, mouseY);
-        if(mouseX > this.guiLeft + 68 - 5 && mouseX < this.guiLeft + 68 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
-            this.renderTooltip(false, new TranslationTextComponent("gui.advancedmagnet.items.range").getFormattedText().replace("$number$", "" + this.itemRange), mouseX, mouseY);
+    @Override
+    protected void addWidgets(ItemStack stack){
+        CompoundNBT tag = stack.getOrCreateTag();
 
-        if(this.xpCheckbox.isHovered())
-            this.renderTooltip(true, this.xpCheckbox.checked ? "gui.advancedmagnet.xp.on" : "gui.advancedmagnet.xp.off", mouseX, mouseY);
-        if(this.leftXpButton.isHovered())
-            this.renderTooltip(true, "gui.advancedmagnet.xp.decrease", mouseX, mouseY);
-        if(this.rightXpButton.isHovered())
-            this.renderTooltip(true, "gui.advancedmagnet.xp.increase", mouseX, mouseY);
-        if(mouseX > this.guiLeft + 162 - 5 && mouseX < this.guiLeft + 162 + 5 && mouseY > this.guiTop + 44 - 5 && mouseY < this.guiTop + 44 + 5)
-            this.renderTooltip(false, new TranslationTextComponent("gui.advancedmagnet.xp.range").getFormattedText().replace("$number$", "" + this.xpRange), mouseX, mouseY);
+        this.itemCheckbox = this.addWidget(new CheckBox(19, 39, checked -> checked ? "gui.advancedmagnet.items.on" : "gui.advancedmagnet.items.off", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleItems())));
+        this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
 
-        if(this.whitelistButton.isHovered())
-            this.renderTooltip(true, this.whitelistButton.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off", mouseX, mouseY);
-        if(this.durabilityButton.isHovered())
-            this.renderTooltip(true, "gui.simplemagnets.demagnetization_coil.durability." + (this.durabilityButton.on ? "on" : "off"), mouseX, mouseY);
+        this.leftItemButton = this.addWidget(new LeftRightArrowButton(45, 39, true, "gui.advancedmagnet.items.decrease", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
+
+        this.rightItemButton = this.addWidget(new LeftRightArrowButton(78, 39, false, "gui.advancedmagnet.items.increase", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
+
+        this.xpCheckbox = this.addWidget(new CheckBox(113, 39, checked -> checked ? "gui.advancedmagnet.xp.on" : "gui.advancedmagnet.xp.off", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleXp())));
+        this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
+
+        this.leftXpButton = this.addWidget(new LeftRightArrowButton(139, 39, true, "gui.advancedmagnet.xp.decrease", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
+
+        this.rightXpButton = this.addWidget(new LeftRightArrowButton(172, 39, false, "gui.advancedmagnet.xp.increase", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
+
+        this.whitelistButton = this.addWidget(new WhitelistButton(175, 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetWhitelist())));
+        this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
+
+        this.durabilityButton = this.addWidget(new DurabilityButton(197, 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetDurability())));
+        this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
     }
 
     @Override
@@ -116,41 +90,37 @@ public class MagnetContainerScreen extends ContainerScreen<MagnetContainer> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY){
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(BACKGROUND);
-        this.blit(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+    protected void renderBackground(int mouseX, int mouseY, ItemStack object){
+        ScreenUtils.bindTexture(BACKGROUND);
+        ScreenUtils.drawTexture(0, 0, this.xSize, this.ySize);
+    }
 
-        this.drawCenteredString(this.title, this.xSize / 2f, 6);
-        this.drawString(this.playerInventory.getDisplayName(), 32, 102);
+    @Override
+    protected void renderForeground(int mouseX, int mouseY, ItemStack object){
+        ScreenUtils.drawCenteredString(this.font, this.title, this.xSize / 2f, 6, 4210752);
+        ScreenUtils.drawString(this.font, this.playerInventory.getDisplayName(), 32, 102, 4210752);
 
-        this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26);
-        this.drawCenteredString(new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26);
-        this.drawString(new TranslationTextComponent("gui.advancedmagnet.filter"), 8, 68);
+        ScreenUtils.drawCenteredString(this.font, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26, 4210752);
+        ScreenUtils.drawCenteredString(this.font, new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26, 4210752);
+        ScreenUtils.drawString(this.font, new TranslationTextComponent("gui.advancedmagnet.filter"), 8, 68, 4210752);
 
-        this.drawCenteredString(new StringTextComponent("" + this.itemRange), 68, 44);
-        this.drawCenteredString(new StringTextComponent("" + this.xpRange), 162, 44);
+        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("" + this.itemRange), 68, 44, 4210752);
+        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("" + this.xpRange), 162, 44, 4210752);
+    }
+
+    @Override
+    protected void renderTooltips(int mouseX, int mouseY, ItemStack stack){
+        if(mouseX > 68 - 5 && mouseX < 68 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
+            this.renderTooltip(new TranslationTextComponent("gui.advancedmagnet.items.range", this.itemRange).getFormattedText(), mouseX, mouseY);
+
+        if(mouseX > 162 - 5 && mouseX < 162 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
+            this.renderTooltip(new TranslationTextComponent("gui.advancedmagnet.xp.range", this.xpRange).getFormattedText(), mouseX, mouseY);
     }
 
     public CompoundNBT getTagOrClose(){
-        ItemStack stack = this.container.player.inventory.getStackInSlot(this.container.slot);
+        ItemStack stack = this.getObjectOrClose();
         if(stack.getItem() instanceof AdvancedMagnet)
             return stack.getOrCreateTag();
-        this.container.player.closeScreen();
         return null;
-    }
-
-    public void drawCenteredString(ITextComponent text, float x, float y){
-        String s = text.getFormattedText();
-        this.font.drawString(s, this.guiLeft + x - this.font.getStringWidth(s) / 2f, this.guiTop + y, 4210752);
-    }
-
-    public void drawString(ITextComponent text, float x, float y){
-        String s = text.getFormattedText();
-        this.font.drawString(s, this.guiLeft + x, this.guiTop + y, 4210752);
-    }
-
-    public void renderTooltip(boolean translate, String string, int x, int y){
-        super.renderTooltip(translate ? new TranslationTextComponent(string).getFormattedText() : string, x, y);
     }
 }
