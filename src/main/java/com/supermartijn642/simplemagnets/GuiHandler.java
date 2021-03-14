@@ -4,6 +4,7 @@ import com.supermartijn642.simplemagnets.gui.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -32,7 +33,7 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z){
         if(ID != 99)
-            return new MagnetContainerScreen(new MagnetContainer(player, ID), player.inventory);
+            return new MagnetContainerScreen(new MagnetContainer(player, ID), player.inventory, new TextComponentTranslation("gui.advancedmagnet.title"));
         BlockPos pos = new BlockPos(x, y, z);
         TileEntity tile = world.getTileEntity(pos);
         return

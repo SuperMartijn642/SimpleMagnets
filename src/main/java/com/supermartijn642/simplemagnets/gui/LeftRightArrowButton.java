@@ -1,53 +1,41 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
+import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class LeftRightArrowButton extends GuiButton implements Pressable {
+public class LeftRightArrowButton extends AbstractButtonWidget implements IHoverTextWidget {
 
     private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/left_right_arrow_buttons.png");
 
     private final boolean left;
-    private final Runnable onPress;
+    private final String translationKey;
 
-    public LeftRightArrowButton(int buttonId, int x, int y, boolean left, Runnable onPress){
-        super(buttonId, x, y, 11, 17, "");
+    public LeftRightArrowButton(int x, int y, boolean left, String translationKey, Runnable onPress){
+        super(x, y, 11, 17, onPress);
         this.left = left;
-        this.onPress = onPress;
+        this.translationKey = translationKey;
     }
 
     @Override
-    public void onPress(){
-        this.onPress.run();
+    protected ITextComponent getNarrationMessage(){
+        return this.getHoverText();
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks){
-        this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-        Minecraft.getMinecraft().getTextureManager().bindTexture(BUTTONS);
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        drawTexture(this.x, this.y, this.left ? 11 : 0, (this.enabled ? this.hovered ? 1 : 0 : 2) * 17);
+    public ITextComponent getHoverText(){
+        return new TextComponentTranslation(this.translationKey);
     }
 
-    private static void drawTexture(int x, int y, int textureX, int textureY){
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(x, y + 17, 0).tex(textureX / 22f, (textureY + 17) / 51f).endVertex();
-        bufferbuilder.pos(x + 11, y + 17, 0).tex((textureX + 11) / 22f, (textureY + 17) / 51f).endVertex();
-        bufferbuilder.pos(x + 11, y, 0).tex((textureX + 11) / 22f, textureY / 51f).endVertex();
-        bufferbuilder.pos(x, y, 0).tex(textureX / 22f, textureY / 51f).endVertex();
-        tessellator.draw();
+    @Override
+    public void render(int mouseX, int mouseY, float partialTicks){
+        ScreenUtils.bindTexture(BUTTONS);
+        ScreenUtils.drawTexture(this.x, this.y, this.width, this.height, this.left ? 0.5f : 0, (this.active ? this.hovered ? 1 : 0 : 2) / 3f, 0.5f, 1 / 3f);
     }
 }

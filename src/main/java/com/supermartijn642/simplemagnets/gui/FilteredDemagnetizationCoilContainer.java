@@ -20,9 +20,9 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
     }
 
     @Override
-    protected void addSlots(DemagnetizationCoilTile tile){
+    protected void addSlots(EntityPlayer player, DemagnetizationCoilTile tile){
         for(int i = 0; i < 9; i++)
-            this.addSlotToContainer(new SlotItemHandler(this.itemHandler(), i, 8 + i * 18, 90) {
+            this.addSlot(new SlotItemHandler(this.itemHandler(), i, 8 + i * 18, 90) {
                 @Override
                 public boolean canTakeStack(EntityPlayer playerIn){
                     return false;
@@ -33,7 +33,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
     @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
         if(slotId >= 0 && slotId < 9){
-            DemagnetizationCoilTile tile = this.getTileOrClose();
+            DemagnetizationCoilTile tile = this.getObjectOrClose();
             if(tile != null){
                 if(player.inventory.getItemStack().isEmpty())
                     tile.filter.set(slotId, ItemStack.EMPTY);
@@ -51,7 +51,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index){
         if(index >= 0 && index < 9){
-            DemagnetizationCoilTile tile = this.getTileOrClose();
+            DemagnetizationCoilTile tile = this.getObjectOrClose();
             if(tile != null){
                 if(player.inventory.getItemStack().isEmpty())
                     tile.filter.set(index, ItemStack.EMPTY);
@@ -74,7 +74,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
                     firstEmpty = i;
             }
             if(!contains && firstEmpty != -1){
-                DemagnetizationCoilTile tile = this.getTileOrClose();
+                DemagnetizationCoilTile tile = this.getObjectOrClose();
                 if(tile != null){
                     ItemStack stack = this.getSlot(index).getStack().copy();
                     stack.setCount(1);
@@ -90,7 +90,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
             @Nonnull
             @Override
             public ItemStack getStackInSlot(int slot){
-                DemagnetizationCoilTile tile = FilteredDemagnetizationCoilContainer.this.getTileOrClose();
+                DemagnetizationCoilTile tile = FilteredDemagnetizationCoilContainer.this.getObjectOrClose();
                 return tile == null ? ItemStack.EMPTY : tile.filter.get(slot);
             }
         };

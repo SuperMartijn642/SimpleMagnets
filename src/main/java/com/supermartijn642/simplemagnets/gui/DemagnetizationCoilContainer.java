@@ -14,6 +14,6 @@ public class DemagnetizationCoilContainer extends BaseDemagnetizationCoilContain
     }
 
     @Override
-    protected void addSlots(DemagnetizationCoilTile tile){
+    protected void addSlots(EntityPlayer playerEntity, DemagnetizationCoilTile demagnetizationCoilTile){
     }
 }

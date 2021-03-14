@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
+import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -61,6 +62,8 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             boolean active = tag.hasKey("active") && tag.getBoolean("active");
             tag.setBoolean("active", !active);
             stack.setTagCompound(tag);
+            // let the client decide whether to show the toggle message and play a sound
+            SimpleMagnets.channel.sendTo(new PacketToggleMagnetMessage(active), (EntityPlayerMP)player);
         }
     }
 

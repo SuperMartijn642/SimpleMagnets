@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.gui.ItemBaseContainer;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,9 +16,8 @@ import javax.annotation.Nonnull;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-public class MagnetContainer extends Container {
+public class MagnetContainer extends ItemBaseContainer {
 
-    public EntityPlayer player;
     public final int slot;
     private final ItemStackHandler itemHandler = new ItemStackHandler(9) {
         @Nonnull
@@ -30,15 +29,19 @@ public class MagnetContainer extends Container {
     };
 
     public MagnetContainer(EntityPlayer player, int slot){
-        this.player = player;
+        super(player, slot);
         this.slot = slot;
 
-        this.addSlots(player.inventory);
+        this.addSlots();
     }
 
-    private void addSlots(InventoryPlayer inventory){
+    @Override
+    protected void addSlots(EntityPlayer player, ItemStack stack){
+        InventoryPlayer inventory = player.inventory;
+
         for(int column = 0; column < 9; column++)
-            this.addSlotToContainer(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
+            this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
+                @Override
                 public boolean canTakeStack(EntityPlayer playerIn){
                     return false;
                 }
@@ -47,14 +50,14 @@ public class MagnetContainer extends Container {
         // player
         for(int row = 0; row < 3; row++){
             for(int column = 0; column < 9; column++){
-                this.addSlotToContainer(new Slot(inventory, row * 9 + column + 9, 32 + 18 * column, 114 + 18 * row));
+                this.addSlot(new Slot(inventory, row * 9 + column + 9, 32 + 18 * column, 114 + 18 * row));
             }
         }
 
         // hot bar
         for(int column = 0; column < 9; column++){
             int index = column;
-            this.addSlotToContainer(new Slot(inventory, index, 32 + 18 * column, 172) {
+            this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
                 public boolean canTakeStack(EntityPlayer playerIn){
                     return index != MagnetContainer.this.slot;
                 }
@@ -88,7 +91,7 @@ public class MagnetContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index){
+    public ItemStack transferStackInSlot(EntityPlayer player, int index){
         if(index < 9){
             NBTTagCompound tag = this.getTagOrClose();
             if(tag != null){
@@ -125,13 +128,12 @@ public class MagnetContainer extends Container {
     }
 
     public NBTTagCompound getTagOrClose(){
-        ItemStack stack = this.player.inventory.getStackInSlot(this.slot);
+        ItemStack stack = this.getObjectOrClose();
         if(stack.getItem() instanceof AdvancedMagnet){
-            NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-            stack.setTagCompound(tag);
-            return tag;
+            if(!stack.hasTagCompound())
+                stack.setTagCompound(new NBTTagCompound());
+            return stack.getTagCompound();
         }
-        this.player.closeScreen();
         return null;
     }
 }
