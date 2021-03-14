@@ -29,7 +29,7 @@ public class SimpleMagnets {
     public static final String MODID = "simplemagnets";
     public static final String NAME = "Simple Magnets";
     public static final String VERSION = "1.1.1";
-    public static final String DEPENDENCIES = "required-after:forge@[14.23.5.2779,);required-after:supermartijn642configlib@[1.0.5,)";
+    public static final String DEPENDENCIES = "required-after:forge@[14.23.5.2779,);required-after:supermartijn642configlib@[1.0.5,);required-after:supermartijn642corelib@[1.0.0,1.1.0)";
 
     @Mod.Instance
     public static SimpleMagnets instance;
