@@ -73,18 +73,6 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
         this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
     }
 
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
-
-        if(mouseX > 68 - 5 && mouseX < 68 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
-            this.renderTooltip(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items.range", this.itemRange), mouseX, mouseY);
-
-        if(mouseX > 162 - 5 && mouseX < 162 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
-            this.renderTooltip(matrixStack, new TranslationTextComponent("gui.advancedmagnet.xp.range", this.xpRange), mouseX, mouseY);
-    }
-
     @Override
     public void tick(){
         CompoundNBT tag = this.getTagOrClose();
@@ -123,6 +111,11 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
 
     @Override
     protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY, ItemStack stack){
+        if(mouseX > 68 - 5 && mouseX < 68 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
+            this.renderTooltip(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items.range", this.itemRange), mouseX, mouseY);
+
+        if(mouseX > 162 - 5 && mouseX < 162 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
+            this.renderTooltip(matrixStack, new TranslationTextComponent("gui.advancedmagnet.xp.range", this.xpRange), mouseX, mouseY);
     }
 
     public CompoundNBT getTagOrClose(){
