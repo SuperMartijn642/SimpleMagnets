@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'com.wynprice.cursemaven'
 
-version = "1.1.6-mc1.12"
+version = "1.1.2-mc1.12"
 group = "com.supermartijn642.simplemagnets" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "simplemagnets"
 
@@ -87,6 +87,6 @@ dependencies {
     compile files("lib/Baubles-1.12-1.5.2-deobf.jar")
 }
 
-sourceSets {
-    main { output.resourcesDir = output.classesDir }
-}
+//sourceSets {
+//    main { output.resourcesDir = output.classesDir }
+//}
