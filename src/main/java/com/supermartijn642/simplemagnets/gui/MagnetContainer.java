@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.gui.ItemBaseContainer;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,9 +17,8 @@ import javax.annotation.Nonnull;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-public class MagnetContainer extends Container {
+public class MagnetContainer extends ItemBaseContainer {
 
-    public PlayerEntity player;
     public final int slot;
     private final ItemStackHandler itemHandler = new ItemStackHandler(9) {
         @Nonnull
@@ -31,14 +30,16 @@ public class MagnetContainer extends Container {
     };
 
     public MagnetContainer(int id, PlayerEntity player, int slot){
-        super(SimpleMagnets.container, id);
-        this.player = player;
+        super(SimpleMagnets.container, id, player, slot);
         this.slot = slot;
 
-        this.addSlots(player.inventory);
+        this.addSlots();
     }
 
-    private void addSlots(PlayerInventory inventory){
+    @Override
+    protected void addSlots(PlayerEntity player, ItemStack stack){
+        PlayerInventory inventory = player.inventory;
+
         for(int column = 0; column < 9; column++)
             this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
                 @Override
@@ -128,10 +129,9 @@ public class MagnetContainer extends Container {
     }
 
     public CompoundNBT getTagOrClose(){
-        ItemStack stack = this.player.inventory.getStackInSlot(this.slot);
+        ItemStack stack = this.getObjectOrClose();
         if(stack.getItem() instanceof AdvancedMagnet)
             return stack.getOrCreateTag();
-        this.player.closeScreen();
         return null;
     }
 }
