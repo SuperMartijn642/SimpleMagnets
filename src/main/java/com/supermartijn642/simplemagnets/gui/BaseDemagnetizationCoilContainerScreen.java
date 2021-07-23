@@ -1,11 +1,13 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.TileEntityBaseContainerScreen;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -13,7 +15,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemagnetizationCoilContainer> extends TileEntityBaseContainerScreen<DemagnetizationCoilTile,T> {
 
     public BaseDemagnetizationCoilContainerScreen(T container, String title){
-        super(container, new TranslationTextComponent(title));
+        super(container, new TranslatableComponent(title));
     }
 
     @Override
@@ -27,7 +29,7 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
     }
 
     @Override
-    public void tick(){
+    protected void containerTick(@Nonnull DemagnetizationCoilTile blockEntity){
         DemagnetizationCoilTile tile = this.getObjectOrClose();
         if(tile == null)
             return;
@@ -41,7 +43,7 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
     protected abstract String getBackground();
 
     @Override
-    protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, DemagnetizationCoilTile object){
+    protected void renderBackground(PoseStack matrixStack, int mouseX, int mouseY, DemagnetizationCoilTile object){
         ScreenUtils.bindTexture(new ResourceLocation("simplemagnets", "textures/" + this.getBackground()));
         ScreenUtils.drawTexture(matrixStack, 0, 0, this.sizeX(), this.sizeY());
     }

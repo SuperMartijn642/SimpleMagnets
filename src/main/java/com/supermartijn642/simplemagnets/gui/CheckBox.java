@@ -1,12 +1,12 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
 import com.supermartijn642.core.gui.widget.IHoverTextWidget;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Function;
 
@@ -30,18 +30,18 @@ public class CheckBox extends AbstractButtonWidget implements IHoverTextWidget {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks){
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks){
         ScreenUtils.bindTexture(BUTTONS);
         ScreenUtils.drawTexture(matrixStack, this.x, this.y - 3, this.width + 3, this.height + 3, this.checked ? 0 : 0.5f, (this.active ? this.hovered ? 1 : 0 : 2) / 3f, 0.5f, 1 / 3f);
     }
 
     @Override
-    public ITextComponent getHoverText(){
-        return new TranslationTextComponent(this.translationKey.apply(this.checked));
+    public Component getHoverText(){
+        return new TranslatableComponent(this.translationKey.apply(this.checked));
     }
 
     @Override
-    protected ITextComponent getNarrationMessage(){
+    protected Component getNarrationMessage(){
         return this.getHoverText();
     }
 }

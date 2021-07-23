@@ -2,54 +2,58 @@ package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.simplemagnets.gui.DemagnetizationCoilContainer;
 import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContainer;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**
  * Created 2/19/2021 by SuperMartijn642
  */
-public class DemagnetizationCoilBlock extends Block {
+public class DemagnetizationCoilBlock extends Block implements EntityBlock {
 
     private static final VoxelShape[] SHAPES;
 
     static{
         SHAPES = new VoxelShape[Direction.values().length];
-        SHAPES[Direction.DOWN.get3DDataValue()] = VoxelShapes.or(
+        SHAPES[Direction.DOWN.get3DDataValue()] = Shapes.or(
             Block.box(7, 10.5, 7, 9, 11, 9),
             Block.box(4.5, 0, 4.5, 11.5, 1, 11.5),
             Block.box(6.5, 2, 6.5, 9.5, 10.5, 9.5),
@@ -63,7 +67,7 @@ public class DemagnetizationCoilBlock extends Block {
             Block.box(5.5, 4, 5.5, 10.5, 5, 10.5),
             Block.box(5.5, 6, 5.5, 10.5, 7, 10.5)
         );
-        SHAPES[Direction.UP.get3DDataValue()] = VoxelShapes.or(
+        SHAPES[Direction.UP.get3DDataValue()] = Shapes.or(
             Block.box(7, 5, 7, 9, 5.5, 9),
             Block.box(4.5, 15, 4.5, 11.5, 16, 11.5),
             Block.box(6.5, 5.5, 6.5, 9.5, 14, 9.5),
@@ -77,7 +81,7 @@ public class DemagnetizationCoilBlock extends Block {
             Block.box(5.5, 11, 5.5, 10.5, 12, 10.5),
             Block.box(5.5, 9, 5.5, 10.5, 10, 10.5)
         );
-        SHAPES[Direction.NORTH.get3DDataValue()] = VoxelShapes.or(
+        SHAPES[Direction.NORTH.get3DDataValue()] = Shapes.or(
             Block.box(7, 7, 10.5, 9, 9, 11),
             Block.box(4.5, 4.5, 0, 11.5, 11.5, 1),
             Block.box(6.5, 6.5, 2, 9.5, 9.5, 10.5),
@@ -91,7 +95,7 @@ public class DemagnetizationCoilBlock extends Block {
             Block.box(5.5, 5.5, 4, 10.5, 10.5, 5),
             Block.box(5.5, 5.5, 6, 10.5, 10.5, 7)
         );
-        SHAPES[Direction.EAST.get3DDataValue()] = VoxelShapes.or(
+        SHAPES[Direction.EAST.get3DDataValue()] = Shapes.or(
             Block.box(5, 7, 7, 5.5, 9, 9),
             Block.box(15, 4.5, 4.5, 16, 11.5, 11.5),
             Block.box(5.5, 6.5, 6.5, 14, 9.5, 9.5),
@@ -105,7 +109,7 @@ public class DemagnetizationCoilBlock extends Block {
             Block.box(11, 5.5, 5.5, 12, 10.5, 10.5),
             Block.box(9, 5.5, 5.5, 10, 10.5, 10.5)
         );
-        SHAPES[Direction.SOUTH.get3DDataValue()] = VoxelShapes.or(
+        SHAPES[Direction.SOUTH.get3DDataValue()] = Shapes.or(
             Block.box(7, 7, 5, 9, 9, 5.5),
             Block.box(4.5, 4.5, 15, 11.5, 11.5, 16),
             Block.box(6.5, 6.5, 5.5, 9.5, 9.5, 14),
@@ -119,7 +123,7 @@ public class DemagnetizationCoilBlock extends Block {
             Block.box(5.5, 5.5, 11, 10.5, 10.5, 12),
             Block.box(5.5, 5.5, 9, 10.5, 10.5, 10)
         );
-        SHAPES[Direction.WEST.get3DDataValue()] = VoxelShapes.or(
+        SHAPES[Direction.WEST.get3DDataValue()] = Shapes.or(
             Block.box(10.5, 7, 7, 11, 9, 9),
             Block.box(0, 4.5, 4.5, 1, 11.5, 11.5),
             Block.box(2, 6.5, 6.5, 10.5, 9.5, 9.5),
@@ -139,9 +143,9 @@ public class DemagnetizationCoilBlock extends Block {
 
     private final Supplier<Integer> maxRange;
     private final Supplier<Boolean> hasFilter;
-    private final Supplier<? extends DemagnetizationCoilTile> tileSupplier;
+    private final BiFunction<BlockPos, BlockState, ? extends DemagnetizationCoilTile> tileSupplier;
 
-    public DemagnetizationCoilBlock(String registryName, Supplier<Integer> maxRange, Supplier<Boolean> hasFilter, Supplier<? extends DemagnetizationCoilTile> tileSupplier){
+    public DemagnetizationCoilBlock(String registryName, Supplier<Integer> maxRange, Supplier<Boolean> hasFilter, BiFunction<BlockPos, BlockState, ? extends DemagnetizationCoilTile> tileSupplier){
         super(Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).harvestTool(ToolType.PICKAXE).harvestLevel(0).requiresCorrectToolForDrops().strength(3.0F, 5.0F).sound(SoundType.METAL));
         this.setRegistryName(registryName);
         this.maxRange = maxRange;
@@ -152,56 +156,61 @@ public class DemagnetizationCoilBlock extends Block {
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit){
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit){
         if(!worldIn.isClientSide)
-            NetworkHooks.openGui((ServerPlayerEntity)player, new INamedContainerProvider() {
+            NetworkHooks.openGui((ServerPlayer)player, new MenuProvider() {
                 @Override
-                public ITextComponent getDisplayName(){
-                    return new StringTextComponent("");
+                public Component getDisplayName(){
+                    return new TextComponent("");
                 }
 
                 @Nullable
                 @Override
-                public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player){
+                public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player){
                     return DemagnetizationCoilBlock.this.hasFilter.get() ?
                         new FilteredDemagnetizationCoilContainer(id, player, pos) :
                         new DemagnetizationCoilContainer(id, player, pos);
                 }
             }, pos);
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
+    public void appendHoverText(ItemStack stack, BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn){
         if(this.hasFilter.get())
-            tooltip.add(new TranslationTextComponent("simplemagnets.demagnetization_coil.info.filtered", this.maxRange.get()).withStyle(TextFormatting.AQUA));
+            tooltip.add(new TranslatableComponent("simplemagnets.demagnetization_coil.info.filtered", this.maxRange.get()).withStyle(ChatFormatting.AQUA));
         else
-            tooltip.add(new TranslationTextComponent("simplemagnets.demagnetization_coil.info.no_filter", this.maxRange.get()).withStyle(TextFormatting.AQUA));
+            tooltip.add(new TranslatableComponent("simplemagnets.demagnetization_coil.info.no_filter", this.maxRange.get()).withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context){
+    public BlockState getStateForPlacement(BlockPlaceContext context){
         return this.defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context){
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context){
         return SHAPES[state.getValue(FACING).get3DDataValue()];
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state){
-        return true;
-    }
-
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world){
-        return this.tileSupplier.get();
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block,BlockState> builder){
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> builder){
         builder.add(FACING);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state){
+        return this.tileSupplier.apply(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> blockEntityType){
+        return (world2, pos, state2, entity) -> {
+            if(entity instanceof DemagnetizationCoilTile)
+                ((DemagnetizationCoilTile)entity).tick();
+        };
     }
 }

@@ -2,10 +2,10 @@ package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -16,48 +16,47 @@ import javax.annotation.Nonnull;
  */
 public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoilContainer {
 
-    public FilteredDemagnetizationCoilContainer(int id, PlayerEntity player, BlockPos pos){
+    public FilteredDemagnetizationCoilContainer(int id, Player player, BlockPos pos){
         super(SimpleMagnets.filtered_demagnetization_coil_container, id, player, pos, 224, 206, true);
     }
 
     @Override
-    protected void addSlots(PlayerEntity player, DemagnetizationCoilTile tile){
+    protected void addSlots(Player player, DemagnetizationCoilTile tile){
         for(int i = 0; i < 9; i++)
             this.addSlot(new SlotItemHandler(this.itemHandler(), i, 8 + i * 18, 90) {
                 @Override
-                public boolean mayPickup(PlayerEntity playerIn){
+                public boolean mayPickup(Player playerIn){
                     return false;
                 }
             });
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player){
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player){
         if(slotId >= 0 && slotId < 9){
             DemagnetizationCoilTile tile = this.getObjectOrClose();
             if(tile != null){
-                if(player.inventory.getCarried().isEmpty())
+                if(this.getCarried().isEmpty())
                     tile.filter.set(slotId, ItemStack.EMPTY);
                 else{
-                    ItemStack stack = player.inventory.getCarried().copy();
+                    ItemStack stack = this.getCarried().copy();
                     stack.setCount(1);
                     tile.filter.set(slotId, stack);
                 }
             }
-            return ItemStack.EMPTY;
         }
-        return super.clicked(slotId, dragType, clickTypeIn, player);
+        super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index){
+    public ItemStack quickMoveStack(Player playerIn, int index){
         if(index >= 0 && index < 9){
             DemagnetizationCoilTile tile = this.getObjectOrClose();
             if(tile != null){
-                if(player.inventory.getCarried().isEmpty())
+                if(this.getCarried().isEmpty())
                     tile.filter.set(index, ItemStack.EMPTY);
                 else{
-                    ItemStack stack = player.inventory.getCarried().copy();
+                    ItemStack stack = this.getCarried().copy();
                     stack.setCount(1);
                     tile.filter.set(index, stack);
                 }

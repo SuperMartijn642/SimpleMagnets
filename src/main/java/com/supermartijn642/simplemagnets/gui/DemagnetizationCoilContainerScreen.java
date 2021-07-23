@@ -1,12 +1,12 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
@@ -32,7 +32,7 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     }
 
     @Override
-    protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY, DemagnetizationCoilTile tile){
+    protected void renderTooltips(PoseStack matrixStack, int mouseX, int mouseY, DemagnetizationCoilTile tile){
     }
 
     @Override
@@ -45,15 +45,15 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     }
 
     @Override
-    protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, DemagnetizationCoilTile tile){
+    protected void renderForeground(PoseStack matrixStack, int mouseX, int mouseY, DemagnetizationCoilTile tile){
         ScreenUtils.drawCenteredString(matrixStack, this.font, this.title, this.imageWidth / 2f, 6, 4210752);
 
-        ScreenUtils.drawString(matrixStack, this.font, new TranslationTextComponent("gui.simplemagnets.demagnetization_coil.range", (tile.rangeX - 1) * 2 + 1, (tile.rangeY - 1) * 2 + 1, (tile.rangeZ - 1) * 2 + 1), 8, 26, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("x:"), 19, 51, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("" + tile.rangeX), 33, 52, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("y:"), 72, 51, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("" + tile.rangeY), 86, 52, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("z:"), 125, 51, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("" + tile.rangeZ), 139, 52, 4210752);
+        ScreenUtils.drawString(matrixStack, this.font, new TranslatableComponent("gui.simplemagnets.demagnetization_coil.range", (tile.rangeX - 1) * 2 + 1, (tile.rangeY - 1) * 2 + 1, (tile.rangeZ - 1) * 2 + 1), 8, 26, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("x:"), 19, 51, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("" + tile.rangeX), 33, 52, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("y:"), 72, 51, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("" + tile.rangeY), 86, 52, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("z:"), 125, 51, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("" + tile.rangeZ), 139, 52, 4210752);
     }
 }

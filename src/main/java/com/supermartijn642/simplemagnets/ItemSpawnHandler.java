@@ -1,8 +1,8 @@
 package com.supermartijn642.simplemagnets;
 
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,7 +21,7 @@ public class ItemSpawnHandler {
 
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
 
-    private static ItemSpawnHandler getInstance(World world){
+    private static ItemSpawnHandler getInstance(Level world){
         return world.isClientSide ? CLIENT : SERVER;
     }
 
@@ -34,7 +34,7 @@ public class ItemSpawnHandler {
         handler.tiles.get(tile.getLevel().dimension()).add(new WeakReference<>(tile));
     }
 
-    private final HashMap<RegistryKey<World>,List<WeakReference<DemagnetizationCoilTile>>> tiles = new HashMap<>();
+    private final HashMap<ResourceKey<Level>,List<WeakReference<DemagnetizationCoilTile>>> tiles = new HashMap<>();
 
     @SubscribeEvent
     public static void onEntitySpawn(EntityJoinWorldEvent e){

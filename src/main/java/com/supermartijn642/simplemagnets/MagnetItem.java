@@ -2,31 +2,31 @@ package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import java.util.List;
 
@@ -35,50 +35,51 @@ import java.util.List;
  */
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class MagnetItem extends Item {
+
     public MagnetItem(String registryName){
-        super(new Properties().tab(ItemGroup.TAB_SEARCH).stacksTo(1));
+        super(new Properties().tab(CreativeModeTab.TAB_SEARCH).stacksTo(1));
         this.setRegistryName(registryName);
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn){
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn){
         ItemStack stack = playerIn.getItemInHand(handIn);
         toggleMagnet(playerIn, stack);
-        return new ActionResult<>(ActionResultType.SUCCESS, stack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
-    public static void toggleMagnet(PlayerEntity player, ItemStack stack){
+    public static void toggleMagnet(Player player, ItemStack stack){
         if(!player.level.isClientSide && stack.getItem() instanceof MagnetItem){
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             // let the client decide whether to show the toggle message and play a sound
-            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new PacketToggleMagnetMessage(active));
+            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new PacketToggleMagnetMessage(active));
         }
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected){
-        CompoundNBT tag = stack.getOrCreateTag();
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected){
+        CompoundTag tag = stack.getOrCreateTag();
         if(tag.contains("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
+                AABB area = new AABB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
 
                 List<ItemEntity> items = worldIn.getEntities(EntityType.ITEM, area,
                     item -> !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
-                            (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay())
+                        (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay())
                 );
                 items.forEach(item -> item.setPos(entityIn.getX(), entityIn.getY(), entityIn.getZ()));
             }
 
-            if(!worldIn.isClientSide && this.canPickupXp(tag) && entityIn instanceof PlayerEntity){
+            if(!worldIn.isClientSide && this.canPickupXp(tag) && entityIn instanceof Player){
                 int r = this.getRangeXp(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
+                AABB area = new AABB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
 
-                PlayerEntity player = (PlayerEntity)entityIn;
-                List<ExperienceOrbEntity> orbs = worldIn.getEntitiesOfClass(ExperienceOrbEntity.class, area);
+                Player player = (Player)entityIn;
+                List<ExperienceOrb> orbs = worldIn.getEntitiesOfClass(ExperienceOrb.class, area);
                 orbs.forEach(orb -> {
-                    orb.throwTime = 0;
+                    orb.invulnerableTime = 0;
                     player.takeXpDelay = 0;
                     orb.playerTouch(player);
                 });
@@ -86,15 +87,15 @@ public abstract class MagnetItem extends Item {
         }
     }
 
-    protected abstract boolean canPickupItems(CompoundNBT tag);
+    protected abstract boolean canPickupItems(CompoundTag tag);
 
-    protected abstract boolean canPickupStack(CompoundNBT tag, ItemStack stack);
+    protected abstract boolean canPickupStack(CompoundTag tag, ItemStack stack);
 
-    protected abstract boolean canPickupXp(CompoundNBT tag);
+    protected abstract boolean canPickupXp(CompoundTag tag);
 
-    protected abstract int getRangeItems(CompoundNBT tag);
+    protected abstract int getRangeItems(CompoundTag tag);
 
-    protected abstract int getRangeXp(CompoundNBT tag);
+    protected abstract int getRangeXp(CompoundTag tag);
 
     @Override
     public boolean isFoil(ItemStack stack){
@@ -103,16 +104,16 @@ public abstract class MagnetItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        tooltip.add(this.getTooltip().withStyle(TextFormatting.AQUA));
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
+        tooltip.add(this.getTooltip().withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
-    protected abstract TextComponent getTooltip();
+    protected abstract BaseComponent getTooltip();
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
         if(!e.getPlayer().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrower() != null)
-            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)e.getPlayer()), new PacketItemInfo((ItemEntity)e.getTarget()));
+            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)e.getPlayer()), new PacketItemInfo((ItemEntity)e.getTarget()));
     }
 }

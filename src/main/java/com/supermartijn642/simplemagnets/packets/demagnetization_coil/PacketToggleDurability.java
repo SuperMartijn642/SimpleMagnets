@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets.packets.demagnetization_coil;
 
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
@@ -14,16 +14,16 @@ public class PacketToggleDurability extends DemagnetizationCoilPacket {
         super(pos);
     }
 
-    public PacketToggleDurability(PacketBuffer buffer){
+    public PacketToggleDurability(FriendlyByteBuf buffer){
         super(buffer);
     }
 
-    public static PacketToggleDurability decode(PacketBuffer buffer){
+    public static PacketToggleDurability decode(FriendlyByteBuf buffer){
         return new PacketToggleDurability(buffer);
     }
 
     @Override
-    protected void handle(PlayerEntity player, World world, DemagnetizationCoilTile tile){
+    protected void handle(Player player, Level world, DemagnetizationCoilTile tile){
         tile.filterDurability = !tile.filterDurability;
         tile.dataChanged();
     }

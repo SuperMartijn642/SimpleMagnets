@@ -1,16 +1,16 @@
 package com.supermartijn642.simplemagnets;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -19,17 +19,19 @@ import java.util.List;
 /**
  * Created 2/19/2021 by SuperMartijn642
  */
-public class DemagnetizationCoilTile extends TileEntity implements ITickableTileEntity {
+public class DemagnetizationCoilTile extends BlockEntity {
 
     public static class BasicDemagnetizationCoilTile extends DemagnetizationCoilTile {
-        public BasicDemagnetizationCoilTile(){
-            super(SimpleMagnets.basic_demagnetization_coil_tile, SMConfig.basicCoilMinRange.get(), SMConfig.basicCoilMaxRange.get(), SMConfig.basicCoilRange.get(), SMConfig.basicCoilFilter.get());
+
+        public BasicDemagnetizationCoilTile(BlockPos pos, BlockState state){
+            super(SimpleMagnets.basic_demagnetization_coil_tile, pos, state, SMConfig.basicCoilMinRange.get(), SMConfig.basicCoilMaxRange.get(), SMConfig.basicCoilRange.get(), SMConfig.basicCoilFilter.get());
         }
     }
 
     public static class AdvancedDemagnetizationCoilTile extends DemagnetizationCoilTile {
-        public AdvancedDemagnetizationCoilTile(){
-            super(SimpleMagnets.advanced_demagnetization_coil_tile, SMConfig.advancedCoilMinRange.get(), SMConfig.advancedCoilMaxRange.get(), SMConfig.advancedCoilRange.get(), SMConfig.advancedCoilFilter.get());
+
+        public AdvancedDemagnetizationCoilTile(BlockPos pos, BlockState state){
+            super(SimpleMagnets.advanced_demagnetization_coil_tile, pos, state, SMConfig.advancedCoilMinRange.get(), SMConfig.advancedCoilMaxRange.get(), SMConfig.advancedCoilRange.get(), SMConfig.advancedCoilFilter.get());
         }
     }
 
@@ -43,8 +45,8 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
     public boolean filterDurability = true; // nbt in 1.14+
     private boolean dataChanged;
 
-    public DemagnetizationCoilTile(TileEntityType<?> tileEntityType, int minRange, int maxRange, int range, boolean hasFilter){
-        super(tileEntityType);
+    public DemagnetizationCoilTile(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state, int minRange, int maxRange, int range, boolean hasFilter){
+        super(tileEntityType, pos, state);
         this.minRange = minRange;
         this.maxRange = maxRange;
         this.rangeX = this.rangeY = this.rangeZ = range;
@@ -53,9 +55,8 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
             this.filter.add(ItemStack.EMPTY);
     }
 
-    @Override
     public void tick(){
-        AxisAlignedBB area = this.getArea();
+        AABB area = this.getArea();
 
         List<ItemEntity> affectedItems = this.level.getEntities(EntityType.ITEM, area,
             item -> item.isAlive() && this.shouldEffectItem(item.getItem())
@@ -67,8 +68,8 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
         });
     }
 
-    public AxisAlignedBB getArea(){
-        return new AxisAlignedBB(this.worldPosition).inflate(this.rangeX - 1, this.rangeY - 1, this.rangeZ - 1);
+    public AABB getArea(){
+        return new AABB(this.worldPosition).inflate(this.rangeX - 1, this.rangeY - 1, this.rangeZ - 1);
     }
 
     public boolean shouldEffectItem(ItemStack stack){
@@ -114,19 +115,19 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
         }
     }
 
-    private CompoundNBT getChangedData(){
+    private CompoundTag getChangedData(){
         return this.dataChanged ? this.getData() : null;
     }
 
-    private CompoundNBT getData(){
-        CompoundNBT tag = new CompoundNBT();
+    private CompoundTag getData(){
+        CompoundTag tag = new CompoundTag();
         tag.putInt("rangeX", this.rangeX);
         tag.putInt("rangeY", this.rangeY);
         tag.putInt("rangeZ", this.rangeZ);
         if(this.hasFilter){
             for(int i = 0; i < 9; i++){
                 if(!this.filter.get(i).isEmpty())
-                    tag.put("filter" + i, this.filter.get(i).save(new CompoundNBT()));
+                    tag.put("filter" + i, this.filter.get(i).save(new CompoundTag()));
             }
             tag.putBoolean("filterWhitelist", this.filterWhitelist);
             tag.putBoolean("filterDurability", this.filterDurability);
@@ -134,7 +135,7 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
         return tag;
     }
 
-    private void handleData(CompoundNBT tag){
+    private void handleData(CompoundTag tag){
         if(tag.contains("rangeX"))
             this.rangeX = tag.getInt("rangeX");
         if(tag.contains("rangeY"))
@@ -150,34 +151,34 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound){
+    public CompoundTag save(CompoundTag compound){
         super.save(compound);
         compound.put("data", this.getData());
         return compound;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compound){
-        super.load(state, compound);
+    public void load(CompoundTag compound){
+        super.load(compound);
         if(compound.contains("data"))
             this.handleData(compound.getCompound("data"));
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket(){
-        CompoundNBT tag = this.getChangedData();
-        return tag == null || tag.isEmpty() ? null : new SUpdateTileEntityPacket(this.worldPosition, 0, tag);
+    public ClientboundBlockEntityDataPacket getUpdatePacket(){
+        CompoundTag tag = this.getChangedData();
+        return tag == null || tag.isEmpty() ? null : new ClientboundBlockEntityDataPacket(this.worldPosition, 0, tag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt){
         this.handleData(pkt.getTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag(){
-        CompoundNBT tag = super.getUpdateTag();
+    public CompoundTag getUpdateTag(){
+        CompoundTag tag = super.getUpdateTag();
         tag.put("data", this.getData());
         return tag;
     }
