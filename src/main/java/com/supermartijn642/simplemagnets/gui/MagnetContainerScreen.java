@@ -93,13 +93,13 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
     @Override
     protected void renderBackground(MatrixStack matrixStack, int mouseX, int mouseY, ItemStack object){
         ScreenUtils.bindTexture(BACKGROUND);
-        ScreenUtils.drawTexture(matrixStack, 0, 0, this.xSize, this.ySize);
+        ScreenUtils.drawTexture(matrixStack, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
     protected void renderForeground(MatrixStack matrixStack, int mouseX, int mouseY, ItemStack object){
-        ScreenUtils.drawCenteredString(matrixStack, this.font, this.title, this.xSize / 2f, 6, 4210752);
-        ScreenUtils.drawString(matrixStack, this.font, this.playerInventory.getDisplayName(), 32, 102, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, this.title, this.imageWidth / 2f, 6, 4210752);
+        ScreenUtils.drawString(matrixStack, this.font, this.inventory.getDisplayName(), 32, 102, 4210752);
 
         ScreenUtils.drawCenteredString(matrixStack, this.font, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26, 4210752);
         ScreenUtils.drawCenteredString(matrixStack, this.font, new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26, 4210752);

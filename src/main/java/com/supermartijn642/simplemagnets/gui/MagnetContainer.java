@@ -25,7 +25,7 @@ public class MagnetContainer extends ItemBaseContainer {
         @Override
         public ItemStack getStackInSlot(int slot){
             CompoundNBT tag = MagnetContainer.this.getTagOrClose();
-            return (tag != null && tag.contains("filter" + slot)) ? ItemStack.read(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
+            return (tag != null && tag.contains("filter" + slot)) ? ItemStack.of(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
         }
     };
 
@@ -43,7 +43,7 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++)
             this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
                 @Override
-                public boolean canTakeStack(PlayerEntity playerIn){
+                public boolean mayPickup(PlayerEntity playerIn){
                     return false;
                 }
             });
@@ -59,7 +59,7 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++){
             int index = column;
             this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
-                public boolean canTakeStack(PlayerEntity playerIn){
+                public boolean mayPickup(PlayerEntity playerIn){
                     return index != MagnetContainer.this.slot;
                 }
             });
@@ -67,49 +67,49 @@ public class MagnetContainer extends ItemBaseContainer {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn){
+    public boolean stillValid(PlayerEntity playerIn){
         return true;
     }
 
     @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player){
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player){
         if(clickTypeIn == ClickType.SWAP && dragType == this.slot)
             return ItemStack.EMPTY;
         if(slotId < 9 && slotId >= 0){
             CompoundNBT tag = this.getTagOrClose();
             if(tag != null){
-                if(player.inventory.getItemStack().isEmpty())
+                if(player.inventory.getCarried().isEmpty())
                     tag.remove("filter" + slotId);
                 else{
-                    ItemStack stack = player.inventory.getItemStack().copy();
+                    ItemStack stack = player.inventory.getCarried().copy();
                     stack.setCount(1);
-                    tag.put("filter" + slotId, stack.write(new CompoundNBT()));
+                    tag.put("filter" + slotId, stack.save(new CompoundNBT()));
                 }
             }
             return ItemStack.EMPTY;
         }
-        return super.slotClick(slotId, dragType, clickTypeIn, player);
+        return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index){
+    public ItemStack quickMoveStack(PlayerEntity player, int index){
         if(index < 9){
             CompoundNBT tag = this.getTagOrClose();
             if(tag != null){
-                if(player.inventory.getItemStack().isEmpty())
+                if(player.inventory.getCarried().isEmpty())
                     tag.remove("filter" + index);
                 else{
-                    ItemStack stack = player.inventory.getItemStack().copy();
+                    ItemStack stack = player.inventory.getCarried().copy();
                     stack.setCount(1);
-                    tag.put("filter" + index, stack.write(new CompoundNBT()));
+                    tag.put("filter" + index, stack.save(new CompoundNBT()));
                 }
             }
-        }else if(!this.getSlot(index).getStack().isEmpty()){
+        }else if(!this.getSlot(index).getItem().isEmpty()){
             boolean contains = false;
             int firstEmpty = -1;
             for(int i = 0; i < 9; i++){
                 ItemStack stack = this.itemHandler.getStackInSlot(i);
-                if(ItemStack.areItemsEqual(stack, this.getSlot(index).getStack()) && ItemStack.areItemStackTagsEqual(stack, this.getSlot(index).getStack())){
+                if(ItemStack.isSame(stack, this.getSlot(index).getItem()) && ItemStack.tagMatches(stack, this.getSlot(index).getItem())){
                     contains = true;
                     break;
                 }
@@ -119,9 +119,9 @@ public class MagnetContainer extends ItemBaseContainer {
             if(!contains && firstEmpty != -1){
                 CompoundNBT tag = this.getTagOrClose();
                 if(tag != null){
-                    ItemStack stack = this.getSlot(index).getStack().copy();
+                    ItemStack stack = this.getSlot(index).getItem().copy();
                     stack.setCount(1);
-                    tag.put("filter" + firstEmpty, stack.write(new CompoundNBT()));
+                    tag.put("filter" + firstEmpty, stack.save(new CompoundNBT()));
                 }
             }
         }

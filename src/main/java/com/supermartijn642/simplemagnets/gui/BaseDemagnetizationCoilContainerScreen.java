@@ -18,12 +18,12 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
 
     @Override
     protected int sizeX(DemagnetizationCoilTile demagnetizationCoilTile){
-        return this.container.width;
+        return this.menu.width;
     }
 
     @Override
     protected int sizeY(DemagnetizationCoilTile demagnetizationCoilTile){
-        return this.container.height;
+        return this.menu.height;
     }
 
     @Override
