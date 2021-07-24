@@ -15,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
@@ -74,12 +76,8 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
     }
 
     @Override
-    public void containerTick(){
-        CompoundTag tag = this.getTagOrClose();
-        if(tag == null)
-            return;
-
-        super.tick();
+    protected void containerTick(@Nonnull ItemStack stack){
+        CompoundTag tag = stack.getOrCreateTag();
 
         this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
         this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));

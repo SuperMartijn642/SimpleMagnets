@@ -36,10 +36,6 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     }
 
     @Override
-    protected void tick(DemagnetizationCoilTile tile){
-    }
-
-    @Override
     protected String getBackground(){
         return "demagnetization_coil_screen.png";
     }

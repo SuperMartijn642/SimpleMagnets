@@ -42,7 +42,7 @@ public class FilteredDemagnetizationCoilContainerScreen extends BaseDemagnetizat
     }
 
     @Override
-    protected void tick(DemagnetizationCoilTile tile){
+    protected void containerTick(DemagnetizationCoilTile tile){
         this.whitelistButton.update(tile.filterWhitelist);
         this.durabilityButton.update(tile.filterDurability);
     }

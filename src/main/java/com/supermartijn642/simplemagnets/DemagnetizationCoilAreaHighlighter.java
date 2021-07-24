@@ -1,7 +1,5 @@
 package com.supermartijn642.simplemagnets;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -30,7 +28,7 @@ public class DemagnetizationCoilAreaHighlighter {
     public static final RenderType RENDER_TYPE;
 
     static{
-        RenderType.CompositeState state = RenderType.CompositeState.builder().setTransparencyState(RenderTypeExtension.getTranslucentTransparency()).createCompositeState(true);
+        RenderType.CompositeState state = RenderType.CompositeState.builder().setShaderState(RenderTypeExtension.getShaderState()).setTransparencyState(RenderTypeExtension.getTranslucentTransparency()).setCullState(RenderTypeExtension.getCullState()).createCompositeState(true);
         RENDER_TYPE = RenderType.create("demagnetization_coil_highlight", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true, state);
     }
 
@@ -55,19 +53,17 @@ public class DemagnetizationCoilAreaHighlighter {
     }
 
     private static void drawBoundingBox(PoseStack matrixStack, MultiBufferSource buffer, BlockPos pos, DemagnetizationCoilTile tile){
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        RenderSystem.disableTexture();
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthFunc(515);
-        RenderSystem.depthMask(true);
+//        RenderSystem.enableBlend();
+//        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+//        RenderSystem.enableDepthTest();
+//        RenderSystem.depthFunc(515);
+//        RenderSystem.depthMask(true);
 
         VertexConsumer builder = buffer.getBuffer(RENDER_TYPE);
         float red = Math.abs(pos.getX() % 255) / 255f, green = Math.abs(pos.getY() % 255) / 255f, blue = Math.abs(pos.getZ() % 255) / 255f;
         renderSides(matrixStack, builder, tile.getArea(), red, green, blue, 0.2F);
 
-        RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
+//        RenderSystem.disableBlend();
     }
 
     private static void renderSides(PoseStack stack, VertexConsumer builder, AABB pos, float red, float green, float blue, float alpha){
@@ -119,6 +115,14 @@ public class DemagnetizationCoilAreaHighlighter {
 
         public static TransparencyStateShard getTranslucentTransparency(){
             return RenderStateShard.TRANSLUCENT_TRANSPARENCY;
+        }
+
+        public static ShaderStateShard getShaderState(){
+            return RenderStateShard.POSITION_COLOR_SHADER;
+        }
+
+        public static CullStateShard getCullState(){
+            return RenderStateShard.NO_CULL;
         }
     }
 }

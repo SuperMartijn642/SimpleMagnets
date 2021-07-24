@@ -7,8 +7,6 @@ import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nonnull;
-
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
@@ -27,18 +25,6 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
     protected int sizeY(DemagnetizationCoilTile demagnetizationCoilTile){
         return this.menu.height;
     }
-
-    @Override
-    protected void containerTick(@Nonnull DemagnetizationCoilTile blockEntity){
-        DemagnetizationCoilTile tile = this.getObjectOrClose();
-        if(tile == null)
-            return;
-
-        super.tick();
-        this.tick(tile);
-    }
-
-    protected abstract void tick(DemagnetizationCoilTile tile);
 
     protected abstract String getBackground();
 
