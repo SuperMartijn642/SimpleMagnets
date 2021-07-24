@@ -4,14 +4,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.8+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.9+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
-version = '1.1.2-mc1.17'
+version = '1.1.2b-mc1.17'
 group = 'com.supermartijn642.simplemagnets' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'simplemagnets'
 
@@ -75,17 +75,20 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+    flatDir {
+        dir 'lib'
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.1'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.2'
 
     // Core Lib
     compileOnly fg.deobf('curse.maven:supermartijn642s-core-lib-454372:3397774')
-    runtimeOnly fg.deobf('curse.maven:supermartijn642s-core-lib-454372:3397774')
+//    runtimeOnly fg.deobf('curse.maven:supermartijn642s-core-lib-454372:3397774')
     // Config Lib
     compileOnly fg.deobf('curse.maven:supermartijn642s-config-lib-438332:3397561')
-    runtimeOnly fg.deobf('curse.maven:supermartijn642s-config-lib-438332:3397561')
+//    runtimeOnly fg.deobf('curse.maven:supermartijn642s-config-lib-438332:3397561')
 
     // Curios
     compileOnly fg.deobf("curse.maven:curios-309927:3343065")
