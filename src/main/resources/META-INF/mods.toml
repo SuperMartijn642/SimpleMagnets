@@ -51,14 +51,14 @@ description='''Simple Magnets adds Magnets that pickup items around the player!'
     versionRange="[1.17,1.18)"
     ordering="NONE"
     side="BOTH"
- Add a dependency on SuperMartijn642's Config Lib
+# Add a dependency on SuperMartijn642's Config Lib
 [[dependencies.simplemagnets]]
     modId="supermartijn642configlib"
     mandatory=true
     versionRange="[1.0.8,)"
     ordering="NONE"
     side="BOTH"
- Add a dependency on SuperMartijn642's Core Lib
+# Add a dependency on SuperMartijn642's Core Lib
 [[dependencies.simplemagnets]]
     modId="supermartijn642corelib"
     mandatory=true
