@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 public class PacketItemInfo {
 
-    private static final Field PICKUP_DELAY = ObfuscationReflectionHelper.findField(ItemEntity.class, "pickupDelay");
+    private static final Field PICKUP_DELAY = ObfuscationReflectionHelper.findField(ItemEntity.class, "f_31986_");
 
     private int target;
     private UUID thrower;
