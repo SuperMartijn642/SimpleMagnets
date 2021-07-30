@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.9+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.15+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -81,7 +81,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.2'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
 
     // Core Lib
     compileOnly fg.deobf('curse.maven:supermartijn642s-core-lib-454372:3397774')
