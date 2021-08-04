@@ -91,8 +91,5 @@ dependencies {
 //    runtimeOnly fg.deobf('curse.maven:supermartijn642s-config-lib-438332:3397561')
 
     // Curios
-    compileOnly fg.deobf("curse.maven:curios-309927:3343065")
-
-    // Block Renderer
-//    runtimeOnly fg.deobf("curse.maven:block-renderer-380456:3294692")
+    implementation fg.deobf('curse.maven:curios-309927:3412602')
 }

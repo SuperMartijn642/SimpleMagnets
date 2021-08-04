@@ -4,9 +4,15 @@ import com.supermartijn642.simplemagnets.MagnetItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
@@ -46,18 +52,18 @@ public class PacketToggleMagnet {
     }
 
     private static ItemStack findCuriosStack(Player player){ // TODO
-//        if(ModList.get().isLoaded("curios")){
-//            ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY).orElse(null);
-//            if(handler != null){
-//                for(IDynamicStackHandler stackHandler : handler.getCurios().values().stream().map(ICurioStacksHandler::getStacks).collect(Collectors.toSet())){
-//                    for(int slot = 0; slot < stackHandler.getSlots(); slot++){
-//                        ItemStack stack = stackHandler.getStackInSlot(slot);
-//                        if(stack.getItem() instanceof MagnetItem)
-//                            return stack;
-//                    }
-//                }
-//            }
-//        }
+        if(ModList.get().isLoaded("curios")){
+            ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY).orElse(null);
+            if(handler != null){
+                for(IDynamicStackHandler stackHandler : handler.getCurios().values().stream().map(ICurioStacksHandler::getStacks).collect(Collectors.toSet())){
+                    for(int slot = 0; slot < stackHandler.getSlots(); slot++){
+                        ItemStack stack = stackHandler.getStackInSlot(slot);
+                        if(stack.getItem() instanceof MagnetItem)
+                            return stack;
+                    }
+                }
+            }
+        }
 
         return null;
     }
