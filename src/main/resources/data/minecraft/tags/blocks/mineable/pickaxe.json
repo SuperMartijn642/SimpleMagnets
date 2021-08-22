@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "simplemagets:basic_demagnetization_coil",
+    "simplemagets:advanced_demagnetization_coil"
+  ]
+}

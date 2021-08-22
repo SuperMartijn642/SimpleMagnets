@@ -36,7 +36,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -143,10 +142,10 @@ public class DemagnetizationCoilBlock extends Block implements EntityBlock {
 
     private final Supplier<Integer> maxRange;
     private final Supplier<Boolean> hasFilter;
-    private final BiFunction<BlockPos, BlockState, ? extends DemagnetizationCoilTile> tileSupplier;
+    private final BiFunction<BlockPos,BlockState,? extends DemagnetizationCoilTile> tileSupplier;
 
-    public DemagnetizationCoilBlock(String registryName, Supplier<Integer> maxRange, Supplier<Boolean> hasFilter, BiFunction<BlockPos, BlockState, ? extends DemagnetizationCoilTile> tileSupplier){
-        super(Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).harvestTool(ToolType.PICKAXE).harvestLevel(0).requiresCorrectToolForDrops().strength(3.0F, 5.0F).sound(SoundType.METAL));
+    public DemagnetizationCoilBlock(String registryName, Supplier<Integer> maxRange, Supplier<Boolean> hasFilter, BiFunction<BlockPos,BlockState,? extends DemagnetizationCoilTile> tileSupplier){
+        super(Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(3.0F, 5.0F).sound(SoundType.METAL));
         this.setRegistryName(registryName);
         this.maxRange = maxRange;
         this.hasFilter = hasFilter;

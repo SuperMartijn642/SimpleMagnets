@@ -81,12 +81,12 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.25'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.40'
 
     // Core Lib
-    implementation fg.deobf('curse.maven:supermartijn642s-core-lib-454372:3397774')
+    implementation fg.deobf('curse.maven:supermartijn642s-core-lib-454372:3413424')
     // Config Lib
-    implementation fg.deobf('curse.maven:supermartijn642s-config-lib-438332:3397561')
+    implementation fg.deobf('curse.maven:supermartijn642s-config-lib-438332:3413940')
 
     // Curios
     implementation fg.deobf('curse.maven:curios-309927:3412602')
