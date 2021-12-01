@@ -168,7 +168,7 @@ public class DemagnetizationCoilTile extends BlockEntity {
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket(){
         CompoundTag tag = this.getChangedData();
-        return tag == null || tag.isEmpty() ? null : new ClientboundBlockEntityDataPacket(this.worldPosition, 0, tag);
+        return tag == null || tag.isEmpty() ? null : ClientboundBlockEntityDataPacket.create(this, entity -> tag);
     }
 
     @Override

@@ -41,12 +41,12 @@ public class DemagnetizationCoilAreaHighlighter {
         BlockPos pos = e.getTarget().getBlockPos();
         BlockEntity tile = world.getBlockEntity(pos);
         if(tile instanceof DemagnetizationCoilTile){
-            PoseStack matrixStack = e.getMatrix();
+            PoseStack matrixStack = e.getPoseStack();
             matrixStack.pushPose();
-            Vec3 playerPos = e.getInfo().getPosition();
+            Vec3 playerPos = e.getCamera().getPosition();
             matrixStack.translate(-playerPos.x, -playerPos.y, -playerPos.z);
 
-            drawBoundingBox(matrixStack, e.getBuffers(), pos, (DemagnetizationCoilTile)tile);
+            drawBoundingBox(matrixStack, e.getMultiBufferSource(), pos, (DemagnetizationCoilTile)tile);
 
             matrixStack.popPose();
         }
