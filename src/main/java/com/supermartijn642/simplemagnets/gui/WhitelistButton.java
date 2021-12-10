@@ -1,12 +1,12 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
 import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
@@ -33,7 +33,7 @@ public class WhitelistButton extends AbstractButtonWidget implements IHoverTextW
 
     @Override
     public ITextComponent getHoverText(){
-        return new TranslationTextComponent(this.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off");
+        return TextComponents.translation(this.white ? "gui.advancedmagnet.whitelist.on" : "gui.advancedmagnet.whitelist.off").get();
     }
 
     @Override

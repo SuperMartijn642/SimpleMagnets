@@ -1,35 +1,35 @@
 package com.supermartijn642.simplemagnets.packets.magnet;
 
+import com.supermartijn642.core.network.BasePacket;
+import com.supermartijn642.core.network.PacketContext;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketToggleMagnet {
+public class PacketToggleMagnet implements BasePacket {
 
-    public void encode(PacketBuffer buffer){
+    @Override
+    public void write(PacketBuffer buffer){
     }
 
-    public static PacketToggleMagnet decode(PacketBuffer buffer){
-        return new PacketToggleMagnet();
+    @Override
+    public void read(PacketBuffer buffer){
     }
 
-    public void handle(Supplier<NetworkEvent.Context> contextSupplier){
-        contextSupplier.get().setPacketHandled(true);
-
-        PlayerEntity player = contextSupplier.get().getSender();
+    @Override
+    public void handle(PacketContext context){
+        PlayerEntity player = context.getSendingPlayer();
         if(player != null){
             ItemStack stack = findStack(player);
             if(stack != null && !stack.isEmpty())
@@ -67,5 +67,4 @@ public class PacketToggleMagnet {
 
         return null;
     }
-
 }

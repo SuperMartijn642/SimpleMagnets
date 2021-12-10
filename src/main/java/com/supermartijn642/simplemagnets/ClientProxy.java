@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.simplemagnets.gui.*;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -23,10 +23,6 @@ public class ClientProxy {
         MinecraftForge.EVENT_BUS.addListener(ClientProxy::onKey);
     }
 
-    public static PlayerEntity getPlayer(){
-        return Minecraft.getInstance().player;
-    }
-
     public static void registerScreen(){
         ScreenManager.register(SimpleMagnets.container, MagnetContainerScreen::new);
         ScreenManager.register(SimpleMagnets.demagnetization_coil_container, (ScreenManager.IScreenFactory<DemagnetizationCoilContainer,DemagnetizationCoilContainerScreen>)(container, inventory, title) -> new DemagnetizationCoilContainerScreen(container));
@@ -34,7 +30,7 @@ public class ClientProxy {
     }
 
     public static void onKey(InputEvent.KeyInputEvent e){
-        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.consumeClick() && Minecraft.getInstance().level != null && Minecraft.getInstance().screen == null)
+        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.consumeClick() && ClientUtils.getWorld() != null && Minecraft.getInstance().screen == null)
             SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnet());
     }
 

@@ -1,36 +1,36 @@
 package com.supermartijn642.simplemagnets.packets.magnet;
 
+import com.supermartijn642.core.network.BasePacket;
+import com.supermartijn642.core.network.PacketContext;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketIncreaseItemRange {
+public class PacketIncreaseItemRange implements BasePacket {
 
-    public void encode(PacketBuffer buffer){
+    @Override
+    public void write(PacketBuffer buffer){
     }
 
-    public static PacketIncreaseItemRange decode(PacketBuffer buffer){
-        return new PacketIncreaseItemRange();
+    @Override
+    public void read(PacketBuffer buffer){
     }
 
-    public void handle(Supplier<NetworkEvent.Context> contextSupplier){
-        contextSupplier.get().setPacketHandled(true);
-
-        PlayerEntity player = contextSupplier.get().getSender();
+    @Override
+    public void handle(PacketContext context){
+        PlayerEntity player = context.getSendingPlayer();
         if(player != null){
             ItemStack stack = player.getItemInHand(Hand.MAIN_HAND);
-
-            if(stack.getItem() instanceof AdvancedMagnet)
+            if(stack.getItem() instanceof AdvancedMagnet){
                 stack.getOrCreateTag().putInt("itemRange", Math.min(SMConfig.advancedMagnetMaxRange.get(), (stack.getOrCreateTag().contains("itemRange") ? stack.getOrCreateTag().getInt("itemRange") : SMConfig.advancedMagnetRange.get()) + 1));
+                player.setItemInHand(Hand.MAIN_HAND, stack);
+            }
         }
     }
 }

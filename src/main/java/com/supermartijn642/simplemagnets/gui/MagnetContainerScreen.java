@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ItemBaseContainerScreen;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 /**
@@ -101,12 +101,12 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
         ScreenUtils.drawCenteredString(matrixStack, this.font, this.title, this.imageWidth / 2f, 6, 4210752);
         ScreenUtils.drawString(matrixStack, this.font, this.inventory.getDisplayName(), 32, 102, 4210752);
 
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26, 4210752);
-        ScreenUtils.drawString(matrixStack, this.font, new TranslationTextComponent("gui.advancedmagnet.filter"), 8, 68, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.translation("gui.advancedmagnet.items").get(), 53, 26, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.translation("gui.advancedmagnet.xp").get(), 147, 26, 4210752);
+        ScreenUtils.drawString(matrixStack, this.font, TextComponents.translation("gui.advancedmagnet.filter").get(), 8, 68, 4210752);
 
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("" + this.itemRange), 68, 44, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new StringTextComponent("" + this.xpRange), 162, 44, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.number(this.itemRange).get(), 68, 44, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.number(this.xpRange).get(), 162, 44, 4210752);
     }
 
     @Override
