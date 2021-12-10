@@ -100,8 +100,8 @@ public class SimpleMagnets {
         public static void onItemRegistry(final RegistryEvent.Register<Item> e){
             e.getRegistry().register(new BasicMagnet());
             e.getRegistry().register(new AdvancedMagnet());
-            e.getRegistry().register(new BlockItem(basic_demagnetization_coil, new Item.Properties().group(ItemGroup.SEARCH)).setRegistryName(basic_demagnetization_coil.getRegistryName()));
-            e.getRegistry().register(new BlockItem(advanced_demagnetization_coil, new Item.Properties().group(ItemGroup.SEARCH)).setRegistryName(advanced_demagnetization_coil.getRegistryName()));
+            e.getRegistry().register(new BlockItem(basic_demagnetization_coil, new Item.Properties().tab(ItemGroup.TAB_SEARCH)).setRegistryName(basic_demagnetization_coil.getRegistryName()));
+            e.getRegistry().register(new BlockItem(advanced_demagnetization_coil, new Item.Properties().tab(ItemGroup.TAB_SEARCH)).setRegistryName(advanced_demagnetization_coil.getRegistryName()));
         }
 
         @SubscribeEvent
@@ -112,8 +112,8 @@ public class SimpleMagnets {
 
         @SubscribeEvent
         public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> e){
-            e.getRegistry().register(TileEntityType.Builder.create(DemagnetizationCoilTile.BasicDemagnetizationCoilTile::new, basic_demagnetization_coil).build(null).setRegistryName("basic_demagnetization_coil_tile"));
-            e.getRegistry().register(TileEntityType.Builder.create(DemagnetizationCoilTile.AdvancedDemagnetizationCoilTile::new, advanced_demagnetization_coil).build(null).setRegistryName("advanced_demagnetization_coil_tile"));
+            e.getRegistry().register(TileEntityType.Builder.of(DemagnetizationCoilTile.BasicDemagnetizationCoilTile::new, basic_demagnetization_coil).build(null).setRegistryName("basic_demagnetization_coil_tile"));
+            e.getRegistry().register(TileEntityType.Builder.of(DemagnetizationCoilTile.AdvancedDemagnetizationCoilTile::new, advanced_demagnetization_coil).build(null).setRegistryName("advanced_demagnetization_coil_tile"));
         }
 
         @SubscribeEvent

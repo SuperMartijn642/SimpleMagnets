@@ -26,7 +26,7 @@ public class PacketToggleMagnetWhitelist {
 
         PlayerEntity player = contextSupplier.get().getSender();
         if(player != null){
-            ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+            ItemStack stack = player.getItemInHand(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
                 stack.getOrCreateTag().putBoolean("whitelist", !(stack.getOrCreateTag().contains("whitelist") && stack.getOrCreateTag().getBoolean("whitelist")));

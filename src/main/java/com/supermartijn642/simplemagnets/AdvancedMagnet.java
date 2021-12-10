@@ -29,15 +29,15 @@ public class AdvancedMagnet extends MagnetItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn){
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn){
         if(!playerIn.isShiftKeyDown())
-            return super.onItemRightClick(worldIn, playerIn, handIn);
-        int slot = handIn == Hand.MAIN_HAND ? playerIn.inventory.currentItem : 40;
-        if(!worldIn.isRemote){
+            return super.use(worldIn, playerIn, handIn);
+        int slot = handIn == Hand.MAIN_HAND ? playerIn.inventory.selected : 40;
+        if(!worldIn.isClientSide){
             NetworkHooks.openGui((ServerPlayerEntity)playerIn, new INamedContainerProvider() {
                 @Override
                 public ITextComponent getDisplayName(){
-                    return playerIn.getHeldItem(handIn).hasDisplayName() ? playerIn.getHeldItem(handIn).getDisplayName() : new TranslationTextComponent("gui.advancedmagnet.title");
+                    return playerIn.getItemInHand(handIn).hasCustomHoverName() ? playerIn.getItemInHand(handIn).getHoverName() : new TranslationTextComponent("gui.advancedmagnet.title");
                 }
 
                 @Nullable
@@ -47,7 +47,7 @@ public class AdvancedMagnet extends MagnetItem {
                 }
             }, data -> data.writeInt(slot));
         }
-        return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+        return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
     }
 
     @Override
@@ -61,8 +61,8 @@ public class AdvancedMagnet extends MagnetItem {
         boolean filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         for(int slot = 0; slot < 9; slot++){
             if(tag.contains("filter" + slot)){
-                ItemStack stack1 = ItemStack.read(tag.getCompound("filter" + slot));
-                boolean equal = ItemStack.areItemsEqual(stack, stack1) && (!filterDurability || ItemStack.areItemStackTagsEqual(stack, stack1));
+                ItemStack stack1 = ItemStack.of(tag.getCompound("filter" + slot));
+                boolean equal = ItemStack.isSame(stack, stack1) && (!filterDurability || ItemStack.tagMatches(stack, stack1));
                 if(equal)
                     return whitelist;
             }

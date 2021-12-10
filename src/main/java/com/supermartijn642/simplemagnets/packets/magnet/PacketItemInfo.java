@@ -17,15 +17,15 @@ import java.util.function.Supplier;
  */
 public class PacketItemInfo {
 
-    private static final Field PICKUP_DELAY = ObfuscationReflectionHelper.findField(ItemEntity.class, "field_145804_b");
+    private static final Field PICKUP_DELAY = ObfuscationReflectionHelper.findField(ItemEntity.class, "pickupDelay");
 
     private int target;
     private UUID thrower;
     private int pickupDelay;
 
     public PacketItemInfo(ItemEntity itemEntity){
-        this.target = itemEntity.getEntityId();
-        this.thrower = itemEntity.getThrowerId();
+        this.target = itemEntity.getId();
+        this.thrower = itemEntity.getThrower();
         try{
             PICKUP_DELAY.setAccessible(true);
             this.pickupDelay = PICKUP_DELAY.getInt(itemEntity);
@@ -42,24 +42,24 @@ public class PacketItemInfo {
 
     public void encode(PacketBuffer buffer){
         buffer.writeInt(this.target);
-        buffer.writeUniqueId(this.thrower);
+        buffer.writeUUID(this.thrower);
         buffer.writeInt(this.pickupDelay);
     }
 
     public static PacketItemInfo decode(PacketBuffer buffer){
-        return new PacketItemInfo(buffer.readInt(), buffer.readUniqueId(), buffer.readInt());
+        return new PacketItemInfo(buffer.readInt(), buffer.readUUID(), buffer.readInt());
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier){
         contextSupplier.get().setPacketHandled(true);
 
         PlayerEntity player = ClientProxy.getPlayer();
-        if(player != null && player.world != null){
+        if(player != null && player.level != null){
             contextSupplier.get().enqueueWork(() -> {
-                Entity entity = player.world.getEntityByID(this.target);
+                Entity entity = player.level.getEntity(this.target);
                 if(entity instanceof ItemEntity){
-                    ((ItemEntity)entity).setThrowerId(this.thrower);
-                    ((ItemEntity)entity).setPickupDelay(this.pickupDelay);
+                    ((ItemEntity)entity).setThrower(this.thrower);
+                    ((ItemEntity)entity).setPickUpDelay(this.pickupDelay);
                 }
             });
         }

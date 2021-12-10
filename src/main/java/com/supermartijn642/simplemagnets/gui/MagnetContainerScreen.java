@@ -92,13 +92,13 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
     @Override
     protected void renderBackground(int mouseX, int mouseY, ItemStack object){
         ScreenUtils.bindTexture(BACKGROUND);
-        ScreenUtils.drawTexture(0, 0, this.xSize, this.ySize);
+        ScreenUtils.drawTexture(0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
     protected void renderForeground(int mouseX, int mouseY, ItemStack object){
-        ScreenUtils.drawCenteredString(this.font, this.title, this.xSize / 2f, 6, 4210752);
-        ScreenUtils.drawString(this.font, this.playerInventory.getDisplayName(), 32, 102, 4210752);
+        ScreenUtils.drawCenteredString(this.font, this.title, this.imageWidth / 2f, 6, 4210752);
+        ScreenUtils.drawString(this.font, this.inventory.getDisplayName(), 32, 102, 4210752);
 
         ScreenUtils.drawCenteredString(this.font, new TranslationTextComponent("gui.advancedmagnet.items"), 53, 26, 4210752);
         ScreenUtils.drawCenteredString(this.font, new TranslationTextComponent("gui.advancedmagnet.xp"), 147, 26, 4210752);
@@ -111,10 +111,10 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
     @Override
     protected void renderTooltips(int mouseX, int mouseY, ItemStack stack){
         if(mouseX > 68 - 5 && mouseX < 68 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
-            this.renderTooltip(new TranslationTextComponent("gui.advancedmagnet.items.range", this.itemRange).getFormattedText(), mouseX, mouseY);
+            this.renderTooltip(new TranslationTextComponent("gui.advancedmagnet.items.range", this.itemRange).getColoredString(), mouseX, mouseY);
 
         if(mouseX > 162 - 5 && mouseX < 162 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
-            this.renderTooltip(new TranslationTextComponent("gui.advancedmagnet.xp.range", this.xpRange).getFormattedText(), mouseX, mouseY);
+            this.renderTooltip(new TranslationTextComponent("gui.advancedmagnet.xp.range", this.xpRange).getColoredString(), mouseX, mouseY);
     }
 
     public CompoundNBT getTagOrClose(){

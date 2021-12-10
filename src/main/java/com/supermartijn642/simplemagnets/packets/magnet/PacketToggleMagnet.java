@@ -40,8 +40,8 @@ public class PacketToggleMagnet {
         if(stack != null && !stack.isEmpty() && stack.getItem() instanceof MagnetItem)
             return stack;
 
-        for(int slot = 0; slot < player.inventory.getSizeInventory(); slot++){
-            stack = player.inventory.getStackInSlot(slot);
+        for(int slot = 0; slot < player.inventory.getContainerSize(); slot++){
+            stack = player.inventory.getItem(slot);
             if(!stack.isEmpty() && stack.getItem() instanceof MagnetItem)
                 return stack;
         }
