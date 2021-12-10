@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
 import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.function.Function;
 
@@ -36,7 +36,7 @@ public class CheckBox extends AbstractButtonWidget implements IHoverTextWidget {
 
     @Override
     public ITextComponent getHoverText(){
-        return new TranslationTextComponent(this.translationKey.apply(this.checked));
+        return TextComponents.translation(this.translationKey.apply(this.checked)).get();
     }
 
     @Override
