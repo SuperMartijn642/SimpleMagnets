@@ -1,21 +1,21 @@
 package com.supermartijn642.simplemagnets.packets.magnet;
 
-import com.supermartijn642.simplemagnets.ClientProxy;
+import com.supermartijn642.core.ClientUtils;
+import com.supermartijn642.core.network.BasePacket;
+import com.supermartijn642.core.network.PacketContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 /**
  * Created 1/8/2021 by SuperMartijn642
  */
-public class PacketItemInfo {
+public class PacketItemInfo implements BasePacket {
 
     private static final Field PICKUP_DELAY = ObfuscationReflectionHelper.findField(ItemEntity.class, "f_31986_");
 
@@ -34,28 +34,28 @@ public class PacketItemInfo {
         }
     }
 
-    public PacketItemInfo(int target, UUID thrower, int pickupDelay){
-        this.target = target;
-        this.thrower = thrower;
-        this.pickupDelay = pickupDelay;
+    public PacketItemInfo(){
     }
 
-    public void encode(FriendlyByteBuf buffer){
+    @Override
+    public void write(FriendlyByteBuf buffer){
         buffer.writeInt(this.target);
         buffer.writeUUID(this.thrower);
         buffer.writeInt(this.pickupDelay);
     }
 
-    public static PacketItemInfo decode(FriendlyByteBuf buffer){
-        return new PacketItemInfo(buffer.readInt(), buffer.readUUID(), buffer.readInt());
+    @Override
+    public void read(FriendlyByteBuf buffer){
+        this.target = buffer.readInt();
+        this.thrower = buffer.readUUID();
+        this.pickupDelay = buffer.readInt();
     }
 
-    public void handle(Supplier<NetworkEvent.Context> contextSupplier){
-        contextSupplier.get().setPacketHandled(true);
-
-        Player player = ClientProxy.getPlayer();
+    @Override
+    public void handle(PacketContext context){
+        Player player = ClientUtils.getPlayer();
         if(player != null && player.level != null){
-            contextSupplier.get().enqueueWork(() -> {
+            context.queueTask(() -> {
                 Entity entity = player.level.getEntity(this.target);
                 if(entity instanceof ItemEntity){
                     ((ItemEntity)entity).setThrower(this.thrower);
@@ -64,5 +64,4 @@ public class PacketItemInfo {
             });
         }
     }
-
 }
