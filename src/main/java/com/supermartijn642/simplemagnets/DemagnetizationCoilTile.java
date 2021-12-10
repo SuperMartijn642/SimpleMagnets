@@ -57,7 +57,7 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
     public void tick(){
         AxisAlignedBB area = this.getArea();
 
-        List<Entity> affectedItems = this.world.getEntitiesWithinAABB(EntityType.ITEM, area,
+        List<Entity> affectedItems = this.level.getEntities(EntityType.ITEM, area,
             item -> item instanceof ItemEntity && item.isAlive() && this.shouldEffectItem(((ItemEntity)item).getItem())
         );
 
@@ -68,7 +68,7 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
     }
 
     public AxisAlignedBB getArea(){
-        return new AxisAlignedBB(this.pos).grow(this.rangeX - 1, this.rangeY - 1, this.rangeZ - 1);
+        return new AxisAlignedBB(this.worldPosition).inflate(this.rangeX - 1, this.rangeY - 1, this.rangeZ - 1);
     }
 
     public boolean shouldEffectItem(ItemStack stack){
@@ -79,8 +79,8 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
             return false;
         for(int i = 0; i < 9; i++){
             ItemStack filter = this.filter.get(i);
-            if(ItemStack.areItemsEqual(filter, stack) &&
-                (!this.filterDurability || ItemStack.areItemStackTagsEqual(filter, stack)))
+            if(ItemStack.isSame(filter, stack) &&
+                (!this.filterDurability || ItemStack.tagMatches(filter, stack)))
                 return this.filterWhitelist;
         }
         return !this.filterWhitelist;
@@ -108,9 +108,9 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
     }
 
     public void dataChanged(){
-        if(!this.world.isRemote){
+        if(!this.level.isClientSide){
             this.dataChanged = true;
-            this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 2);
         }
     }
 
@@ -126,7 +126,7 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
         if(this.hasFilter){
             for(int i = 0; i < 9; i++){
                 if(!this.filter.get(i).isEmpty())
-                    tag.put("filter" + i, this.filter.get(i).write(new CompoundNBT()));
+                    tag.put("filter" + i, this.filter.get(i).save(new CompoundNBT()));
             }
             tag.putBoolean("filterWhitelist", this.filterWhitelist);
             tag.putBoolean("filterDurability", this.filterDurability);
@@ -143,22 +143,22 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
             this.rangeZ = tag.getInt("rangeZ");
         if(this.hasFilter){
             for(int i = 0; i < 9; i++)
-                this.filter.set(i, tag.contains("filter" + i) ? ItemStack.read(tag.getCompound("filter" + i)) : ItemStack.EMPTY);
+                this.filter.set(i, tag.contains("filter" + i) ? ItemStack.of(tag.getCompound("filter" + i)) : ItemStack.EMPTY);
             this.filterWhitelist = tag.contains("filterWhitelist") && tag.getBoolean("filterWhitelist");
             this.filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound){
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound){
+        super.save(compound);
         compound.put("data", this.getData());
         return compound;
     }
 
     @Override
-    public void read(CompoundNBT compound){
-        super.read(compound);
+    public void load(CompoundNBT compound){
+        super.load(compound);
         if(compound.contains("data"))
             this.handleData(compound.getCompound("data"));
     }
@@ -167,12 +167,12 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickableTile
     @Override
     public SUpdateTileEntityPacket getUpdatePacket(){
         CompoundNBT tag = this.getChangedData();
-        return tag == null || tag.isEmpty() ? null : new SUpdateTileEntityPacket(this.pos, 0, tag);
+        return tag == null || tag.isEmpty() ? null : new SUpdateTileEntityPacket(this.worldPosition, 0, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
-        this.handleData(pkt.getNbtCompound());
+        this.handleData(pkt.getTag());
     }
 
     @Override

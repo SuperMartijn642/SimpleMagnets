@@ -38,14 +38,14 @@ public class PacketToggleMagnetMessage {
         if(player != null){
             if(this.on){
                 if(SMConfig.showToggleMessage.get())
-                    player.sendStatusMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").applyTextStyle(TextFormatting.YELLOW).appendText(" ").appendSibling(new TranslationTextComponent("simplemagnets.magnets.toggle_message.off").applyTextStyle(TextFormatting.RED)), true);
+                    player.displayClientMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").withStyle(TextFormatting.YELLOW).append(" ").append(new TranslationTextComponent("simplemagnets.magnets.toggle_message.off").withStyle(TextFormatting.RED)), true);
                 if(SMConfig.playToggleSound.get())
-                    player.world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
+                    player.level.playSound(player, player.x, player.y, player.z, SoundEvents.NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.01f);
             }else{
                 if(SMConfig.showToggleMessage.get())
-                    player.sendStatusMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").applyTextStyle(TextFormatting.YELLOW).appendText(" ").appendSibling(new TranslationTextComponent("simplemagnets.magnets.toggle_message.on").applyTextStyle(TextFormatting.GREEN)), true);
+                    player.displayClientMessage(new TranslationTextComponent("simplemagnets.magnets.toggle_message").withStyle(TextFormatting.YELLOW).append(" ").append(new TranslationTextComponent("simplemagnets.magnets.toggle_message.on").withStyle(TextFormatting.GREEN)), true);
                 if(SMConfig.playToggleSound.get())
-                    player.world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
+                    player.level.playSound(player, player.x, player.y, player.z, SoundEvents.NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 0.4f, 0.9f);
             }
         }
     }

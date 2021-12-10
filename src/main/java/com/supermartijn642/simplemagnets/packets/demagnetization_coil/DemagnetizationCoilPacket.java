@@ -37,12 +37,12 @@ public abstract class DemagnetizationCoilPacket {
         contextSupplier.get().setPacketHandled(true);
 
         PlayerEntity player = contextSupplier.get().getSender();
-        if(player == null || player.getPositionVec().squareDistanceTo(this.pos.getX(), this.pos.getY(), this.pos.getZ()) > 32 * 32)
+        if(player == null || player.position().distanceToSqr(this.pos.getX(), this.pos.getY(), this.pos.getZ()) > 32 * 32)
             return;
-        World world = player.world;
+        World world = player.level;
         if(world == null)
             return;
-        TileEntity tile = world.getTileEntity(this.pos);
+        TileEntity tile = world.getBlockEntity(this.pos);
         if(tile instanceof DemagnetizationCoilTile)
             contextSupplier.get().enqueueWork(() -> this.handle(player, world, (DemagnetizationCoilTile)tile));
     }

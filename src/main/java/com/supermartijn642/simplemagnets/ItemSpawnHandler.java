@@ -22,16 +22,16 @@ public class ItemSpawnHandler {
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
 
     private static ItemSpawnHandler getInstance(World world){
-        return world.isRemote ? CLIENT : SERVER;
+        return world.isClientSide ? CLIENT : SERVER;
     }
 
     public static void add(DemagnetizationCoilTile tile){
-        if(tile == null || tile.isRemoved() || !tile.hasWorld())
+        if(tile == null || tile.isRemoved() || !tile.hasLevel())
             return;
 
-        ItemSpawnHandler handler = getInstance(tile.getWorld());
-        handler.tiles.putIfAbsent(tile.getWorld().getDimension().getType(), new LinkedList<>());
-        handler.tiles.get(tile.getWorld().getDimension().getType()).add(new WeakReference<>(tile));
+        ItemSpawnHandler handler = getInstance(tile.getLevel());
+        handler.tiles.putIfAbsent(tile.getLevel().getDimension().getType(), new LinkedList<>());
+        handler.tiles.get(tile.getLevel().getDimension().getType()).add(new WeakReference<>(tile));
     }
 
     private final HashMap<DimensionType,List<WeakReference<DemagnetizationCoilTile>>> tiles = new HashMap<>();
@@ -51,12 +51,12 @@ public class ItemSpawnHandler {
         List<WeakReference<DemagnetizationCoilTile>> list = handler.tiles.get(e.getWorld().getDimension().getType());
         for(WeakReference<DemagnetizationCoilTile> reference : list){
             DemagnetizationCoilTile tile = reference.get();
-            if(tile == null || tile.isRemoved() || !tile.hasWorld()){
+            if(tile == null || tile.isRemoved() || !tile.hasLevel()){
                 toRemove.add(reference);
                 continue;
             }
 
-            if(tile.getArea().contains(item.getPositionVec()) && tile.shouldEffectItem(item.getItem())){
+            if(tile.getArea().contains(item.position()) && tile.shouldEffectItem(item.getItem())){
                 item.getPersistentData().putBoolean("PreventRemoteMovement", true);
                 item.getPersistentData().putBoolean("AllowMachineRemoteMovement", true);
             }

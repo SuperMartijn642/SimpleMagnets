@@ -28,13 +28,13 @@ public class ClientProxy {
     }
 
     public static void registerScreen(){
-        ScreenManager.registerFactory(SimpleMagnets.container, MagnetContainerScreen::new);
-        ScreenManager.registerFactory(SimpleMagnets.demagnetization_coil_container, (ScreenManager.IScreenFactory<DemagnetizationCoilContainer,DemagnetizationCoilContainerScreen>)(container, inventory, title) -> new DemagnetizationCoilContainerScreen(container));
-        ScreenManager.registerFactory(SimpleMagnets.filtered_demagnetization_coil_container, (ScreenManager.IScreenFactory<FilteredDemagnetizationCoilContainer,FilteredDemagnetizationCoilContainerScreen>)(container, inventory, title) -> new FilteredDemagnetizationCoilContainerScreen(container));
+        ScreenManager.register(SimpleMagnets.container, MagnetContainerScreen::new);
+        ScreenManager.register(SimpleMagnets.demagnetization_coil_container, (ScreenManager.IScreenFactory<DemagnetizationCoilContainer,DemagnetizationCoilContainerScreen>)(container, inventory, title) -> new DemagnetizationCoilContainerScreen(container));
+        ScreenManager.register(SimpleMagnets.filtered_demagnetization_coil_container, (ScreenManager.IScreenFactory<FilteredDemagnetizationCoilContainer,FilteredDemagnetizationCoilContainerScreen>)(container, inventory, title) -> new FilteredDemagnetizationCoilContainerScreen(container));
     }
 
     public static void onKey(InputEvent.KeyInputEvent e){
-        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.isPressed() && Minecraft.getInstance().world != null && Minecraft.getInstance().currentScreen == null)
+        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.consumeClick() && Minecraft.getInstance().level != null && Minecraft.getInstance().screen == null)
             SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnet());
     }
 

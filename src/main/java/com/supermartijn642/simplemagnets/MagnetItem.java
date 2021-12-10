@@ -36,19 +36,19 @@ import java.util.List;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class MagnetItem extends Item {
     public MagnetItem(String registryName){
-        super(new Properties().group(ItemGroup.SEARCH).maxStackSize(1));
+        super(new Properties().tab(ItemGroup.TAB_SEARCH).stacksTo(1));
         this.setRegistryName(registryName);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn){
-        ItemStack stack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn){
+        ItemStack stack = playerIn.getItemInHand(handIn);
         toggleMagnet(playerIn, stack);
         return new ActionResult<>(ActionResultType.SUCCESS, stack);
     }
 
     public static void toggleMagnet(PlayerEntity player, ItemStack stack){
-        if(!player.world.isRemote && stack.getItem() instanceof MagnetItem){
+        if(!player.level.isClientSide && stack.getItem() instanceof MagnetItem){
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             // let the client decide whether to show the toggle message and play a sound
@@ -62,25 +62,25 @@ public abstract class MagnetItem extends Item {
         if(tag.contains("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entityIn.getCommandSenderWorldPosition().add(-r, -r, -r), entityIn.getCommandSenderWorldPosition().add(r, r, r));
 
-                List<Entity> items = worldIn.getEntitiesWithinAABB(EntityType.ITEM, area,
+                List<Entity> items = worldIn.getEntities(EntityType.ITEM, area,
                     item -> item instanceof ItemEntity && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, ((ItemEntity)item).getItem()) &&
-                            (((ItemEntity)item).getThrowerId() == null || !((ItemEntity)item).getThrowerId().equals(entityIn.getUniqueID()) || !((ItemEntity)item).cannotPickup())
+                            (((ItemEntity)item).getThrower() == null || !((ItemEntity)item).getThrower().equals(entityIn.getUUID()) || !((ItemEntity)item).hasPickUpDelay())
                 );
-                items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
+                items.forEach(item -> item.setPos(entityIn.x, entityIn.y, entityIn.z));
             }
 
-            if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof PlayerEntity){
+            if(!worldIn.isClientSide && this.canPickupXp(tag) && entityIn instanceof PlayerEntity){
                 int r = this.getRangeXp(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().add(-r, -r, -r), entityIn.getPositionVector().add(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entityIn.getCommandSenderWorldPosition().add(-r, -r, -r), entityIn.getCommandSenderWorldPosition().add(r, r, r));
 
                 PlayerEntity player = (PlayerEntity)entityIn;
-                List<Entity> orbs = worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, area);
+                List<Entity> orbs = worldIn.getEntitiesOfClass(ExperienceOrbEntity.class, area);
                 orbs.stream().map(ExperienceOrbEntity.class::cast).forEach(orb -> {
-                    orb.delayBeforeCanPickup = 0;
-                    player.xpCooldown = 0;
-                    orb.onCollideWithPlayer(player);
+                    orb.throwTime = 0;
+                    player.takeXpDelay = 0;
+                    orb.playerTouch(player);
                 });
             }
         }
@@ -97,22 +97,22 @@ public abstract class MagnetItem extends Item {
     protected abstract int getRangeXp(CompoundNBT tag);
 
     @Override
-    public boolean hasEffect(ItemStack stack){
+    public boolean isFoil(ItemStack stack){
         return stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        tooltip.add(this.getTooltip().applyTextStyle(TextFormatting.AQUA));
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
+        tooltip.add(this.getTooltip().withStyle(TextFormatting.AQUA));
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
     protected abstract TextComponent getTooltip();
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
-        if(!e.getPlayer().world.isRemote && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrowerId() != null)
+        if(!e.getPlayer().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrower() != null)
             SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)e.getPlayer()), new PacketItemInfo((ItemEntity)e.getTarget()));
     }
 }

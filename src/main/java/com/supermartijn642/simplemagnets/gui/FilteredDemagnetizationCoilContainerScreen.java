@@ -19,20 +19,20 @@ public class FilteredDemagnetizationCoilContainerScreen extends BaseDemagnetizat
     private DurabilityButton durabilityButton;
 
     public FilteredDemagnetizationCoilContainerScreen(FilteredDemagnetizationCoilContainer container){
-        super(container, container.getObjectOrClose().getBlockState().getBlock().getTranslationKey());
+        super(container, container.getObjectOrClose().getBlockState().getBlock().getDescriptionId());
     }
 
     @Override
     protected void addWidgets(DemagnetizationCoilTile tile){
-        this.upXButton = this.addWidget(new UpDownArrowButton(40, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXRange(this.container.getTilePos()))));
-        this.downXButton = this.addWidget(new UpDownArrowButton(40, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXRange(this.container.getTilePos()))));
-        this.upYButton = this.addWidget(new UpDownArrowButton(93, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseYRange(this.container.getTilePos()))));
-        this.downYButton = this.addWidget(new UpDownArrowButton(93, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseYRange(this.container.getTilePos()))));
-        this.upZButton = this.addWidget(new UpDownArrowButton(146, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseZRange(this.container.getTilePos()))));
-        this.downZButton = this.addWidget(new UpDownArrowButton(146, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseZRange(this.container.getTilePos()))));
-        this.whitelistButton = this.addWidget(new WhitelistButton(175, 88, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleWhitelist(this.container.getTilePos()))));
+        this.upXButton = this.addWidget(new UpDownArrowButton(40, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXRange(this.menu.getTilePos()))));
+        this.downXButton = this.addWidget(new UpDownArrowButton(40, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXRange(this.menu.getTilePos()))));
+        this.upYButton = this.addWidget(new UpDownArrowButton(93, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseYRange(this.menu.getTilePos()))));
+        this.downYButton = this.addWidget(new UpDownArrowButton(93, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseYRange(this.menu.getTilePos()))));
+        this.upZButton = this.addWidget(new UpDownArrowButton(146, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseZRange(this.menu.getTilePos()))));
+        this.downZButton = this.addWidget(new UpDownArrowButton(146, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseZRange(this.menu.getTilePos()))));
+        this.whitelistButton = this.addWidget(new WhitelistButton(175, 88, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleWhitelist(this.menu.getTilePos()))));
         this.whitelistButton.update(tile.filterWhitelist);
-        this.durabilityButton = this.addWidget(new DurabilityButton(197, 88, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleDurability(this.container.getTilePos()))));
+        this.durabilityButton = this.addWidget(new DurabilityButton(197, 88, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleDurability(this.menu.getTilePos()))));
         this.durabilityButton.update(tile.filterDurability);
     }
 
@@ -53,8 +53,8 @@ public class FilteredDemagnetizationCoilContainerScreen extends BaseDemagnetizat
 
     @Override
     protected void renderForeground(int mouseX, int mouseY, DemagnetizationCoilTile tile){
-        ScreenUtils.drawCenteredString(this.font, this.title, this.xSize / 2f, 6, 4210752);
-        ScreenUtils.drawString(this.font, this.playerInventory.getDisplayName(), 32, 112, 4210752);
+        ScreenUtils.drawCenteredString(this.font, this.title, this.imageWidth / 2f, 6, 4210752);
+        ScreenUtils.drawString(this.font, this.inventory.getDisplayName(), 32, 112, 4210752);
 
         ScreenUtils.drawString(this.font, new TranslationTextComponent("gui.simplemagnets.demagnetization_coil.range", (tile.rangeX - 1) * 2 + 1, (tile.rangeY - 1) * 2 + 1, (tile.rangeZ - 1) * 2 + 1), 8, 26, 4210752);
         ScreenUtils.drawCenteredString(this.font, new StringTextComponent("x:"), 35, 51, 4210752);

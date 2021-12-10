@@ -27,11 +27,11 @@ public class DemagnetizationCoilAreaHighlighter {
         if(!SMConfig.showDemagnetizationArea.get())
             return;
 
-        World world = Minecraft.getInstance().world;
-        BlockPos pos = e.getTarget().getPos();
-        TileEntity tile = world.getTileEntity(pos);
+        World world = Minecraft.getInstance().level;
+        BlockPos pos = e.getTarget().getBlockPos();
+        TileEntity tile = world.getBlockEntity(pos);
         if(tile instanceof DemagnetizationCoilTile){
-            Vec3d playerPos = e.getInfo().getProjectedView();
+            Vec3d playerPos = e.getInfo().getPosition();
             drawBoundingBox(playerPos, pos, (DemagnetizationCoilTile)tile);
         }
     }
@@ -41,7 +41,7 @@ public class DemagnetizationCoilAreaHighlighter {
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.matrixMode(5889);
         GlStateManager.disableTexture();
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
         GlStateManager.enableDepthTest();
         GlStateManager.depthFunc(515);
         GlStateManager.depthMask(false);
@@ -56,45 +56,45 @@ public class DemagnetizationCoilAreaHighlighter {
 
     private static void renderSides(Vec3d viewPos, AxisAlignedBB pos, float red, float green, float blue, float alpha){
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder builder = tessellator.getBuffer();
+        BufferBuilder builder = tessellator.getBuilder();
         builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
 
         float minX = (float)(pos.minX - viewPos.x), maxX = (float)(pos.maxX - viewPos.x);
         float minY = (float)(pos.minY - viewPos.y), maxY = (float)(pos.maxY - viewPos.y);
         float minZ = (float)(pos.minZ - viewPos.z), maxZ = (float)(pos.maxZ - viewPos.z);
 
-        builder.pos(minX, minY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, maxY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, minY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, minY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, minY, minZ).color(red, green, blue, alpha).endVertex();
 
-        builder.pos(minX, minY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, minY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
-
-
-        builder.pos(minX, minY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, minY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, minY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, minY, maxZ).color(red, green, blue, alpha).endVertex();
-
-        builder.pos(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, minY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, minY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
 
 
-        builder.pos(minX, minY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, minY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, minY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, minY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, minY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, minY, maxZ).color(red, green, blue, alpha).endVertex();
 
-        builder.pos(maxX, minY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, maxY, minZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
-        builder.pos(maxX, minY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, maxY, minZ).color(red, green, blue, alpha).endVertex();
 
-        tessellator.draw();
+
+        builder.vertex(minX, minY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, minY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+
+        builder.vertex(maxX, minY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, maxY, minZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, maxY, maxZ).color(red, green, blue, alpha).endVertex();
+        builder.vertex(maxX, minY, maxZ).color(red, green, blue, alpha).endVertex();
+
+        tessellator.end();
     }
 }

@@ -27,7 +27,7 @@ public class PacketDecreaseXpRange {
 
         PlayerEntity player = contextSupplier.get().getSender();
         if(player != null){
-            ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+            ItemStack stack = player.getItemInHand(Hand.MAIN_HAND);
 
             if(stack.getItem() instanceof AdvancedMagnet)
                 stack.getOrCreateTag().putInt("xpRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (stack.getOrCreateTag().contains("xpRange") ? stack.getOrCreateTag().getInt("xpRange") : SMConfig.advancedMagnetRange.get()) - 1));

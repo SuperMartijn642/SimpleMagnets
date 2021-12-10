@@ -17,17 +17,17 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     private UpDownArrowButton upZButton, downZButton;
 
     public DemagnetizationCoilContainerScreen(DemagnetizationCoilContainer container){
-        super(container, container.getObjectOrClose().getBlockState().getBlock().getTranslationKey());
+        super(container, container.getObjectOrClose().getBlockState().getBlock().getDescriptionId());
     }
 
     @Override
     protected void addWidgets(DemagnetizationCoilTile demagnetizationCoilTile){
-        this.upXButton = this.addWidget(new UpDownArrowButton(24, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXRange(this.container.getTilePos()))));
-        this.downXButton = this.addWidget(new UpDownArrowButton(24, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXRange(this.container.getTilePos()))));
-        this.upYButton = this.addWidget(new UpDownArrowButton(77, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseYRange(this.container.getTilePos()))));
-        this.downYButton = this.addWidget(new UpDownArrowButton(77, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseYRange(this.container.getTilePos()))));
-        this.upZButton = this.addWidget(new UpDownArrowButton(130, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseZRange(this.container.getTilePos()))));
-        this.downZButton = this.addWidget(new UpDownArrowButton(130, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseZRange(this.container.getTilePos()))));
+        this.upXButton = this.addWidget(new UpDownArrowButton(24, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXRange(this.menu.getTilePos()))));
+        this.downXButton = this.addWidget(new UpDownArrowButton(24, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXRange(this.menu.getTilePos()))));
+        this.upYButton = this.addWidget(new UpDownArrowButton(77, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseYRange(this.menu.getTilePos()))));
+        this.downYButton = this.addWidget(new UpDownArrowButton(77, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseYRange(this.menu.getTilePos()))));
+        this.upZButton = this.addWidget(new UpDownArrowButton(130, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseZRange(this.menu.getTilePos()))));
+        this.downZButton = this.addWidget(new UpDownArrowButton(130, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseZRange(this.menu.getTilePos()))));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
 
     @Override
     protected void renderForeground(int mouseX, int mouseY, DemagnetizationCoilTile tile){
-        ScreenUtils.drawCenteredString(this.font, this.title, this.xSize / 2f, 6, 4210752);
+        ScreenUtils.drawCenteredString(this.font, this.title, this.imageWidth / 2f, 6, 4210752);
 
         ScreenUtils.drawString(this.font, new TranslationTextComponent("gui.simplemagnets.demagnetization_coil.range", (tile.rangeX - 1) * 2 + 1, (tile.rangeY - 1) * 2 + 1, (tile.rangeZ - 1) * 2 + 1), 8, 26, 4210752);
         ScreenUtils.drawCenteredString(this.font, new StringTextComponent("x:"), 19, 51, 4210752);
