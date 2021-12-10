@@ -1,29 +1,24 @@
 package com.supermartijn642.simplemagnets.packets.demagnetization_coil;
 
+import com.supermartijn642.core.network.PacketContext;
+import com.supermartijn642.core.network.TileEntityBasePacket;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
  */
-public class PacketToggleWhitelist extends DemagnetizationCoilPacket {
+public class PacketToggleWhitelist extends TileEntityBasePacket<DemagnetizationCoilTile> {
+
     public PacketToggleWhitelist(BlockPos pos){
         super(pos);
     }
 
-    public PacketToggleWhitelist(FriendlyByteBuf buffer){
-        super(buffer);
-    }
-
-    public static PacketToggleWhitelist decode(FriendlyByteBuf buffer){
-        return new PacketToggleWhitelist(buffer);
+    public PacketToggleWhitelist(){
     }
 
     @Override
-    protected void handle(Player player, Level world, DemagnetizationCoilTile tile){
+    protected void handle(DemagnetizationCoilTile tile, PacketContext context){
         tile.filterWhitelist = !tile.filterWhitelist;
         tile.dataChanged();
     }

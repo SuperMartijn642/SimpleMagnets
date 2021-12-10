@@ -1,16 +1,14 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ItemBaseContainerScreen;
 import com.supermartijn642.core.gui.ScreenUtils;
-import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -99,27 +97,20 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
         ScreenUtils.drawCenteredString(matrixStack, this.font, this.title, this.imageWidth / 2f, 6, 4210752);
         ScreenUtils.drawString(matrixStack, this.font, this.playerInventoryTitle, 32, 102, 4210752);
 
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new TranslatableComponent("gui.advancedmagnet.items"), 53, 26, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new TranslatableComponent("gui.advancedmagnet.xp"), 147, 26, 4210752);
-        ScreenUtils.drawString(matrixStack, this.font, new TranslatableComponent("gui.advancedmagnet.filter"), 8, 68, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.translation("gui.advancedmagnet.items").get(), 53, 26, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.translation("gui.advancedmagnet.xp").get(), 147, 26, 4210752);
+        ScreenUtils.drawString(matrixStack, this.font, TextComponents.translation("gui.advancedmagnet.filter").get(), 8, 68, 4210752);
 
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("" + this.itemRange), 68, 44, 4210752);
-        ScreenUtils.drawCenteredString(matrixStack, this.font, new TextComponent("" + this.xpRange), 162, 44, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.number(this.itemRange).get(), 68, 44, 4210752);
+        ScreenUtils.drawCenteredString(matrixStack, this.font, TextComponents.number(this.xpRange).get(), 162, 44, 4210752);
     }
 
     @Override
     protected void renderTooltips(PoseStack matrixStack, int mouseX, int mouseY, ItemStack stack){
         if(mouseX > 68 - 5 && mouseX < 68 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
-            this.renderTooltip(matrixStack, new TranslatableComponent("gui.advancedmagnet.items.range", this.itemRange), mouseX, mouseY);
+            this.renderTooltip(matrixStack, TextComponents.translation("gui.advancedmagnet.items.range", this.itemRange).get(), mouseX, mouseY);
 
         if(mouseX > 162 - 5 && mouseX < 162 + 5 && mouseY > 44 - 5 && mouseY < 44 + 5)
-            this.renderTooltip(matrixStack, new TranslatableComponent("gui.advancedmagnet.xp.range", this.xpRange), mouseX, mouseY);
-    }
-
-    public CompoundTag getTagOrClose(){
-        ItemStack stack = this.getObjectOrClose();
-        if(stack.getItem() instanceof AdvancedMagnet)
-            return stack.getOrCreateTag();
-        return null;
+            this.renderTooltip(matrixStack, TextComponents.translation("gui.advancedmagnet.xp.range", this.xpRange).get(), mouseX, mouseY);
     }
 }

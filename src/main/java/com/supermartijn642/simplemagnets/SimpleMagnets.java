@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.network.PacketChannel;
 import com.supermartijn642.simplemagnets.gui.DemagnetizationCoilContainer;
 import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContainer;
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -22,8 +22,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.ObjectHolder;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 
@@ -33,7 +31,7 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 @Mod("simplemagnets")
 public class SimpleMagnets {
 
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation("simplemagnets", "main"), () -> "1", "1"::equals, "1"::equals);
+    public static final PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
 
     @ObjectHolder("simplemagnets:basicmagnet")
     public static Item simple_magnet;
@@ -61,27 +59,27 @@ public class SimpleMagnets {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::interModEnqueue);
 
         // magnets
-        CHANNEL.registerMessage(0, PacketToggleItems.class, PacketToggleItems::encode, PacketToggleItems::decode, PacketToggleItems::handle);
-        CHANNEL.registerMessage(1, PacketIncreaseItemRange.class, PacketIncreaseItemRange::encode, PacketIncreaseItemRange::decode, PacketIncreaseItemRange::handle);
-        CHANNEL.registerMessage(2, PacketDecreaseItemRange.class, PacketDecreaseItemRange::encode, PacketDecreaseItemRange::decode, PacketDecreaseItemRange::handle);
-        CHANNEL.registerMessage(3, PacketToggleXp.class, PacketToggleXp::encode, PacketToggleXp::decode, PacketToggleXp::handle);
-        CHANNEL.registerMessage(4, PacketIncreaseXpRange.class, PacketIncreaseXpRange::encode, PacketIncreaseXpRange::decode, PacketIncreaseXpRange::handle);
-        CHANNEL.registerMessage(5, PacketDecreaseXpRange.class, PacketDecreaseXpRange::encode, PacketDecreaseXpRange::decode, PacketDecreaseXpRange::handle);
-        CHANNEL.registerMessage(6, PacketToggleMagnetWhitelist.class, PacketToggleMagnetWhitelist::encode, PacketToggleMagnetWhitelist::decode, PacketToggleMagnetWhitelist::handle);
-        CHANNEL.registerMessage(7, PacketToggleMagnet.class, PacketToggleMagnet::encode, PacketToggleMagnet::decode, PacketToggleMagnet::handle);
-        CHANNEL.registerMessage(8, PacketItemInfo.class, PacketItemInfo::encode, PacketItemInfo::decode, PacketItemInfo::handle);
-        CHANNEL.registerMessage(9, PacketToggleMagnetMessage.class, PacketToggleMagnetMessage::encode, PacketToggleMagnetMessage::decode, PacketToggleMagnetMessage::handle);
-        CHANNEL.registerMessage(10, PacketToggleMagnetDurability.class, PacketToggleMagnetDurability::encode, PacketToggleMagnetDurability::decode, PacketToggleMagnetDurability::handle);
+        CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
+        CHANNEL.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseItemRange.class, PacketDecreaseItemRange::new, true);
+        CHANNEL.registerMessage(PacketToggleXp.class, PacketToggleXp::new, true);
+        CHANNEL.registerMessage(PacketIncreaseXpRange.class, PacketIncreaseXpRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseXpRange.class, PacketDecreaseXpRange::new, true);
+        CHANNEL.registerMessage(PacketToggleMagnetWhitelist.class, PacketToggleMagnetWhitelist::new, true);
+        CHANNEL.registerMessage(PacketToggleMagnet.class, PacketToggleMagnet::new, true);
+        CHANNEL.registerMessage(PacketItemInfo.class, PacketItemInfo::new, false);
+        CHANNEL.registerMessage(PacketToggleMagnetMessage.class, PacketToggleMagnetMessage::new, true);
+        CHANNEL.registerMessage(PacketToggleMagnetDurability.class, PacketToggleMagnetDurability::new, true);
 
         // demagnetization coils
-        CHANNEL.registerMessage(11, PacketDecreaseXRange.class, PacketDecreaseXRange::encode, PacketDecreaseXRange::decode, PacketDecreaseXRange::handle);
-        CHANNEL.registerMessage(12, PacketDecreaseYRange.class, PacketDecreaseYRange::encode, PacketDecreaseYRange::decode, PacketDecreaseYRange::handle);
-        CHANNEL.registerMessage(13, PacketDecreaseZRange.class, PacketDecreaseZRange::encode, PacketDecreaseZRange::decode, PacketDecreaseZRange::handle);
-        CHANNEL.registerMessage(14, PacketIncreaseXRange.class, PacketIncreaseXRange::encode, PacketIncreaseXRange::decode, PacketIncreaseXRange::handle);
-        CHANNEL.registerMessage(15, PacketIncreaseYRange.class, PacketIncreaseYRange::encode, PacketIncreaseYRange::decode, PacketIncreaseYRange::handle);
-        CHANNEL.registerMessage(16, PacketIncreaseZRange.class, PacketIncreaseZRange::encode, PacketIncreaseZRange::decode, PacketIncreaseZRange::handle);
-        CHANNEL.registerMessage(17, PacketToggleDurability.class, PacketToggleDurability::encode, PacketToggleDurability::decode, PacketToggleDurability::handle);
-        CHANNEL.registerMessage(18, PacketToggleWhitelist.class, PacketToggleWhitelist::encode, PacketToggleWhitelist::decode, PacketToggleWhitelist::handle);
+        CHANNEL.registerMessage(PacketDecreaseXRange.class, PacketDecreaseXRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseYRange.class, PacketDecreaseYRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseZRange.class, PacketDecreaseZRange::new, true);
+        CHANNEL.registerMessage(PacketIncreaseXRange.class, PacketIncreaseXRange::new, true);
+        CHANNEL.registerMessage(PacketIncreaseYRange.class, PacketIncreaseYRange::new, true);
+        CHANNEL.registerMessage(PacketIncreaseZRange.class, PacketIncreaseZRange::new, true);
+        CHANNEL.registerMessage(PacketToggleDurability.class, PacketToggleDurability::new, true);
+        CHANNEL.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist::new, true);
     }
 
     public void init(FMLCommonSetupEvent e){

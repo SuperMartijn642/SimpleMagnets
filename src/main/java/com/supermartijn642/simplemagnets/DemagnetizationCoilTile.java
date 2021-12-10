@@ -1,25 +1,22 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.block.BaseTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created 2/19/2021 by SuperMartijn642
  */
-public class DemagnetizationCoilTile extends BlockEntity {
+public class DemagnetizationCoilTile extends BaseTileEntity {
 
     public static class BasicDemagnetizationCoilTile extends DemagnetizationCoilTile {
 
@@ -43,7 +40,6 @@ public class DemagnetizationCoilTile extends BlockEntity {
     public final List<ItemStack> filter = new ArrayList<>(9);
     public boolean filterWhitelist;
     public boolean filterDurability = true; // nbt in 1.14+
-    private boolean dataChanged;
 
     public DemagnetizationCoilTile(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state, int minRange, int maxRange, int range, boolean hasFilter){
         super(tileEntityType, pos, state);
@@ -108,18 +104,8 @@ public class DemagnetizationCoilTile extends BlockEntity {
             this.dataChanged();
     }
 
-    public void dataChanged(){
-        if(!this.level.isClientSide){
-            this.dataChanged = true;
-            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 2);
-        }
-    }
-
-    private CompoundTag getChangedData(){
-        return this.dataChanged ? this.getData() : null;
-    }
-
-    private CompoundTag getData(){
+    @Override
+    protected CompoundTag writeData(){
         CompoundTag tag = new CompoundTag();
         tag.putInt("rangeX", this.rangeX);
         tag.putInt("rangeY", this.rangeY);
@@ -135,7 +121,8 @@ public class DemagnetizationCoilTile extends BlockEntity {
         return tag;
     }
 
-    private void handleData(CompoundTag tag){
+    @Override
+    protected void readData(CompoundTag tag){
         if(tag.contains("rangeX"))
             this.rangeX = tag.getInt("rangeX");
         if(tag.contains("rangeY"))
@@ -148,39 +135,6 @@ public class DemagnetizationCoilTile extends BlockEntity {
             this.filterWhitelist = tag.contains("filterWhitelist") && tag.getBoolean("filterWhitelist");
             this.filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         }
-    }
-
-    @Override
-    public CompoundTag save(CompoundTag compound){
-        super.save(compound);
-        compound.put("data", this.getData());
-        return compound;
-    }
-
-    @Override
-    public void load(CompoundTag compound){
-        super.load(compound);
-        if(compound.contains("data"))
-            this.handleData(compound.getCompound("data"));
-    }
-
-    @Nullable
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket(){
-        CompoundTag tag = this.getChangedData();
-        return tag == null || tag.isEmpty() ? null : ClientboundBlockEntityDataPacket.create(this, entity -> tag);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt){
-        this.handleData(pkt.getTag());
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(){
-        CompoundTag tag = super.getUpdateTag();
-        tag.put("data", this.getData());
-        return tag;
     }
 
     @Override

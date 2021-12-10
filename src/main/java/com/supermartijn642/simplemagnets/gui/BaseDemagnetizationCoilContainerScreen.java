@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.TileEntityBaseContainerScreen;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemagnetizationCoilContainer> extends TileEntityBaseContainerScreen<DemagnetizationCoilTile,T> {
 
     public BaseDemagnetizationCoilContainerScreen(T container, String title){
-        super(container, new TranslatableComponent(title));
+        super(container, TextComponents.translation(title).get());
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
 import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -31,7 +31,7 @@ public class LeftRightArrowButton extends AbstractButtonWidget implements IHover
 
     @Override
     public Component getHoverText(){
-        return new TranslatableComponent(this.translationKey);
+        return TextComponents.translation(this.translationKey).get();
     }
 
     @Override

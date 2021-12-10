@@ -1,12 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,7 +25,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -53,7 +51,7 @@ public abstract class MagnetItem extends Item {
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             // let the client decide whether to show the toggle message and play a sound
-            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)player), new PacketToggleMagnetMessage(active));
+            SimpleMagnets.CHANNEL.sendToPlayer(player, new PacketToggleMagnetMessage(active));
         }
     }
 
@@ -66,8 +64,8 @@ public abstract class MagnetItem extends Item {
                 AABB area = new AABB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
 
                 List<ItemEntity> items = worldIn.getEntities(EntityType.ITEM, area,
-                    item -> !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
-                        (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay())
+                    item -> item.isAlive() && (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay()) &&
+                        !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entityIn.getX(), entityIn.getY(), entityIn.getZ()));
             }
@@ -105,15 +103,15 @@ public abstract class MagnetItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        tooltip.add(this.getTooltip().withStyle(ChatFormatting.AQUA));
+        tooltip.add(TextComponents.fromTextComponent(this.getTooltip()).color(ChatFormatting.AQUA).get());
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
-    protected abstract BaseComponent getTooltip();
+    protected abstract Component getTooltip();
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
         if(!e.getPlayer().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrower() != null)
-            SimpleMagnets.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)e.getPlayer()), new PacketItemInfo((ItemEntity)e.getTarget()));
+            SimpleMagnets.CHANNEL.sendToPlayer(e.getPlayer(), new PacketItemInfo((ItemEntity)e.getTarget()));
     }
 }

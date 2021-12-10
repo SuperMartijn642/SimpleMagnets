@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.AbstractButtonWidget;
 import com.supermartijn642.core.gui.widget.IHoverTextWidget;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -30,7 +30,7 @@ public class UpDownArrowButton extends AbstractButtonWidget implements IHoverTex
 
     @Override
     public Component getHoverText(){
-        return new TranslatableComponent(this.down ? "gui.simplemagnets.demagnetization_coil.range.decrease" : "gui.simplemagnets.demagnetization_coil.range.increase");
+        return TextComponents.translation(this.down ? "gui.simplemagnets.demagnetization_coil.range.decrease" : "gui.simplemagnets.demagnetization_coil.range.increase").get();
     }
 
     @Override

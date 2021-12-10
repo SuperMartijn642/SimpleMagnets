@@ -1,10 +1,9 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,7 +36,7 @@ public class AdvancedMagnet extends MagnetItem {
             NetworkHooks.openGui((ServerPlayer)playerIn, new MenuProvider() {
                 @Override
                 public Component getDisplayName(){
-                    return playerIn.getItemInHand(handIn).hasCustomHoverName() ? playerIn.getItemInHand(handIn).getHoverName() : new TranslatableComponent("gui.advancedmagnet.title");
+                    return playerIn.getItemInHand(handIn).hasCustomHoverName() ? playerIn.getItemInHand(handIn).getHoverName() : TextComponents.translation("gui.advancedmagnet.title").get();
                 }
 
                 @Nullable
@@ -86,8 +85,8 @@ public class AdvancedMagnet extends MagnetItem {
     }
 
     @Override
-    protected BaseComponent getTooltip(){
-        return new TranslatableComponent("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get());
+    protected Component getTooltip(){
+        return TextComponents.translation("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get()).get();
     }
 
 }
