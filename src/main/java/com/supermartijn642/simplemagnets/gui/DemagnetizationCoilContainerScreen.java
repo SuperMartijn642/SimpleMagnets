@@ -1,11 +1,10 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
@@ -47,12 +46,12 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     protected void renderForeground(int mouseX, int mouseY, DemagnetizationCoilTile tile){
         ScreenUtils.drawCenteredString(this.font, this.title, this.imageWidth / 2f, 6, 4210752);
 
-        ScreenUtils.drawString(this.font, new TranslationTextComponent("gui.simplemagnets.demagnetization_coil.range", (tile.rangeX - 1) * 2 + 1, (tile.rangeY - 1) * 2 + 1, (tile.rangeZ - 1) * 2 + 1), 8, 26, 4210752);
-        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("x:"), 19, 51, 4210752);
-        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("" + tile.rangeX), 33, 52, 4210752);
-        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("y:"), 72, 51, 4210752);
-        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("" + tile.rangeY), 86, 52, 4210752);
-        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("z:"), 125, 51, 4210752);
-        ScreenUtils.drawCenteredString(this.font, new StringTextComponent("" + tile.rangeZ), 139, 52, 4210752);
+        ScreenUtils.drawString(this.font, TextComponents.translation("gui.simplemagnets.demagnetization_coil.range", (tile.rangeX - 1) * 2 + 1, (tile.rangeY - 1) * 2 + 1, (tile.rangeZ - 1) * 2 + 1).get(), 8, 26, 4210752);
+        ScreenUtils.drawCenteredString(this.font, TextComponents.string("x:").get(), 19, 51, 4210752);
+        ScreenUtils.drawCenteredString(this.font, TextComponents.number(tile.rangeX).get(), 33, 52, 4210752);
+        ScreenUtils.drawCenteredString(this.font, TextComponents.string("y:").get(), 72, 51, 4210752);
+        ScreenUtils.drawCenteredString(this.font, TextComponents.number(tile.rangeY).get(), 86, 52, 4210752);
+        ScreenUtils.drawCenteredString(this.font, TextComponents.string("z:").get(), 125, 51, 4210752);
+        ScreenUtils.drawCenteredString(this.font, TextComponents.number(tile.rangeZ).get(), 139, 52, 4210752);
     }
 }

@@ -27,7 +27,7 @@ public class SMConfig {
     public static final Supplier<Integer> advancedCoilMaxRange;
     public static final Supplier<Boolean> advancedCoilFilter;
 
-    static {
+    static{
         ModConfigBuilder builder = new ModConfigBuilder("simplemagnets");
 
         builder.push("Client");
