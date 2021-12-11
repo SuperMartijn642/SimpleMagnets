@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,6 +33,13 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 public class SimpleMagnets {
 
     public static final PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
+
+    public static final CreativeModeTab GROUP = new CreativeModeTab("simplemagnets") {
+        @Override
+        public ItemStack makeIcon(){
+            return new ItemStack(simple_magnet);
+        }
+    };
 
     @ObjectHolder("simplemagnets:basicmagnet")
     public static Item simple_magnet;
