@@ -74,7 +74,8 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 List<EntityItem> items = worldIn.getEntitiesWithinAABB(EntityItem.class, area,
-                    item -> item.isEntityAlive() && (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup()) &&
+                    item -> item.isEntityAlive() && (!worldIn.isRemote || item.ticksExisted > 1) &&
+                        (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup()) &&
                         !item.getItem().isEmpty() && !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
 
                 );
