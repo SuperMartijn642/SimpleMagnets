@@ -54,10 +54,10 @@ public class DemagnetizationCoilBlock extends BaseBlock {
         SHAPES = new BlockShape[EnumFacing.values().length];
         SHAPES[EnumFacing.DOWN.getIndex()] = shape;
         SHAPES[EnumFacing.UP.getIndex()] = shape.rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X);
-        SHAPES[EnumFacing.NORTH.getIndex()] = shape.rotate(EnumFacing.Axis.X);
-        SHAPES[EnumFacing.EAST.getIndex()] = shape.rotate(EnumFacing.Axis.Z);
-        SHAPES[EnumFacing.SOUTH.getIndex()] = shape.rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X);
-        SHAPES[EnumFacing.WEST.getIndex()] = shape.rotate(EnumFacing.Axis.Z).rotate(EnumFacing.Axis.Z).rotate(EnumFacing.Axis.Z);
+        SHAPES[EnumFacing.NORTH.getIndex()] = shape.rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X);
+        SHAPES[EnumFacing.EAST.getIndex()] = shape.rotate(EnumFacing.Axis.Z).rotate(EnumFacing.Axis.Z).rotate(EnumFacing.Axis.Z);
+        SHAPES[EnumFacing.SOUTH.getIndex()] = shape.rotate(EnumFacing.Axis.X);
+        SHAPES[EnumFacing.WEST.getIndex()] = shape.rotate(EnumFacing.Axis.Z);
     }
 
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
