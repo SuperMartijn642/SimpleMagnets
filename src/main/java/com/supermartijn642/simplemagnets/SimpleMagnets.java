@@ -107,8 +107,8 @@ public class SimpleMagnets {
         public static void onItemRegistry(final RegistryEvent.Register<Item> e){
             e.getRegistry().register(new BasicMagnet());
             e.getRegistry().register(new AdvancedMagnet());
-            e.getRegistry().register(new BlockItem(basic_demagnetization_coil, new Item.Properties().tab(ItemGroup.TAB_SEARCH)).setRegistryName(basic_demagnetization_coil.getRegistryName()));
-            e.getRegistry().register(new BlockItem(advanced_demagnetization_coil, new Item.Properties().tab(ItemGroup.TAB_SEARCH)).setRegistryName(advanced_demagnetization_coil.getRegistryName()));
+            e.getRegistry().register(new BlockItem(basic_demagnetization_coil, new Item.Properties().tab(GROUP)).setRegistryName(basic_demagnetization_coil.getRegistryName()));
+            e.getRegistry().register(new BlockItem(advanced_demagnetization_coil, new Item.Properties().tab(GROUP)).setRegistryName(advanced_demagnetization_coil.getRegistryName()));
         }
 
         @SubscribeEvent
