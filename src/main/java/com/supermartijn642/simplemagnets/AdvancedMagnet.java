@@ -13,6 +13,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -86,7 +87,7 @@ public class AdvancedMagnet extends MagnetItem {
 
     @Override
     protected ITextComponent getTooltip(){
-        return TextComponents.translation("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get()).get();
+        return TextComponents.translation("simplemagnets.advancedmagnet.info", TextComponents.number(SMConfig.advancedMagnetMaxRange.get()).color(TextFormatting.GOLD).get()).color(TextFormatting.GRAY).get();
     }
 
 }
