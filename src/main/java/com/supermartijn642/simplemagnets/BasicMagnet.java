@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.core.TextComponents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +43,6 @@ public class BasicMagnet extends MagnetItem {
 
     @Override
     protected Component getTooltip(){
-        return TextComponents.translation("simplemagnets.basicmagnet.info", SMConfig.basicMagnetRange.get()).get();
+        return TextComponents.translation("simplemagnets.basicmagnet.info", TextComponents.number(SMConfig.basicMagnetRange.get()).color(ChatFormatting.GOLD).get()).color(ChatFormatting.GRAY).get();
     }
 }
