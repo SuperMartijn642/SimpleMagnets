@@ -1,6 +1,5 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -133,7 +131,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-        tooltip.add(TextComponents.fromTextComponent(this.getTooltip()).color(TextFormatting.AQUA).format());
+        tooltip.add(this.getTooltip().getFormattedText());
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 

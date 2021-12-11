@@ -86,9 +86,9 @@ public class DemagnetizationCoilBlock extends BaseBlock {
     @Override
     public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
         if(this.hasFilter.get())
-            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.filtered", this.maxRange.get()).color(TextFormatting.AQUA).format());
+            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.filtered", TextComponents.number(this.maxRange.get()).color(TextFormatting.GOLD).get()).color(TextFormatting.GRAY).format());
         else
-            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.no_filter", this.maxRange.get()).color(TextFormatting.AQUA).format());
+            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.no_filter", TextComponents.number(this.maxRange.get()).color(TextFormatting.GOLD).get()).color(TextFormatting.GRAY).format());
         super.addInformation(stack, world, tooltip, advanced);
     }
 
