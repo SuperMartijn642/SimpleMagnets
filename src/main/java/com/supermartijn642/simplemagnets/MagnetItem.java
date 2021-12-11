@@ -10,7 +10,6 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
@@ -35,7 +34,7 @@ import java.util.List;
 public abstract class MagnetItem extends Item {
 
     public MagnetItem(String registryName){
-        super(new Properties().tab(ItemGroup.TAB_SEARCH).stacksTo(1));
+        super(new Properties().tab(SimpleMagnets.GROUP).stacksTo(1));
         this.setRegistryName(registryName);
     }
 
