@@ -12,7 +12,6 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,7 +71,7 @@ public class DemagnetizationCoilBlock extends BaseBlock {
         this.hasFilter = hasFilter;
         this.tileSupplier = tileSupplier;
 
-        this.setCreativeTab(CreativeTabs.SEARCH);
+        this.setCreativeTab(SimpleMagnets.GROUP);
 
         this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.DOWN));
     }
