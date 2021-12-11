@@ -14,7 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -35,7 +34,7 @@ import java.util.List;
 public abstract class MagnetItem extends Item {
 
     public MagnetItem(String registryName){
-        super(new Properties().tab(CreativeModeTab.TAB_SEARCH).stacksTo(1));
+        super(new Properties().tab(SimpleMagnets.GROUP).stacksTo(1));
         this.setRegistryName(registryName);
     }
 
