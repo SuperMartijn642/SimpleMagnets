@@ -4,6 +4,7 @@ import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -21,6 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
@@ -66,6 +68,9 @@ public abstract class MagnetItem extends Item {
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entityIn.getX(), entityIn.getY(), entityIn.getZ()));
+                // Directly add items to the player's inventory when ItemPhysic is installed
+                if(!worldIn.isClientSide && entityIn instanceof Player && ModList.get().isLoaded("itemphysic"))
+                    items.forEach(item -> playerTouch(item, (Player)entityIn));
             }
 
             if(!worldIn.isClientSide && this.canPickupXp(tag) && entityIn instanceof Player){
@@ -79,6 +84,35 @@ public abstract class MagnetItem extends Item {
                     player.takeXpDelay = 0;
                     orb.playerTouch(player);
                 });
+            }
+        }
+    }
+
+    /**
+     * Copied from {@link ItemEntity#playerTouch(Player)}. Use this when ItemPhysic is installed to still pick up items.
+     */
+    private static void playerTouch(ItemEntity itemEntity, Player player){
+        if(!itemEntity.level.isClientSide){
+            if(itemEntity.hasPickUpDelay()) return;
+            ItemStack itemstack = itemEntity.getItem();
+            Item item = itemstack.getItem();
+            int i = itemstack.getCount();
+
+            int hook = net.minecraftforge.event.ForgeEventFactory.onItemPickup(itemEntity, player);
+            if(hook < 0) return;
+
+            ItemStack copy = itemstack.copy();
+            if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getUUID())) && (hook == 1 || i <= 0 || player.getInventory().add(itemstack))){
+                copy.setCount(copy.getCount() - itemstack.getCount());
+                net.minecraftforge.fmllegacy.hooks.BasicEventHooks.firePlayerItemPickupEvent(player, itemEntity, copy);
+                player.take(itemEntity, i);
+                if(itemstack.isEmpty()){
+                    itemEntity.discard();
+                    itemstack.setCount(i);
+                }
+
+                player.awardStat(Stats.ITEM_PICKED_UP.get(item), i);
+                player.onItemPickup(itemEntity);
             }
         }
     }
