@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -21,6 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
@@ -66,6 +68,9 @@ public abstract class MagnetItem extends Item {
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entityIn.getX(), entityIn.getY(), entityIn.getZ()));
+                // Directly add items to the player's inventory when ItemPhysic is installed
+                if(!worldIn.isClientSide && entityIn instanceof PlayerEntity && ModList.get().isLoaded("itemphysic"))
+                    items.forEach(item -> playerTouch(item, (PlayerEntity)entityIn));
             }
 
             if(!worldIn.isClientSide && this.canPickupXp(tag) && entityIn instanceof PlayerEntity){
@@ -79,6 +84,34 @@ public abstract class MagnetItem extends Item {
                     player.takeXpDelay = 0;
                     orb.playerTouch(player);
                 });
+            }
+        }
+    }
+
+    /**
+     * Copied from {@link ItemEntity#playerTouch(PlayerEntity)}. Use this when ItemPhysic is installed to still pick up items.
+     */
+    private static void playerTouch(ItemEntity itemEntity, PlayerEntity player){
+        if(!itemEntity.level.isClientSide){
+            if(itemEntity.hasPickUpDelay()) return;
+            ItemStack itemstack = itemEntity.getItem();
+            Item item = itemstack.getItem();
+            int i = itemstack.getCount();
+
+            int hook = net.minecraftforge.event.ForgeEventFactory.onItemPickup(itemEntity, player);
+            if(hook < 0) return;
+
+            ItemStack copy = itemstack.copy();
+            if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getUUID())) && (hook == 1 || i <= 0 || player.inventory.add(itemstack))){
+                copy.setCount(copy.getCount() - itemstack.getCount());
+                net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerItemPickupEvent(player, itemEntity, copy);
+                player.take(itemEntity, i);
+                if(itemstack.isEmpty()){
+                    itemEntity.remove();
+                    itemstack.setCount(i);
+                }
+
+                player.awardStat(Stats.ITEM_PICKED_UP.get(item), i);
             }
         }
     }
