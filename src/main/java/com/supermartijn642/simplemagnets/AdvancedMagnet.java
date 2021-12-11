@@ -2,6 +2,7 @@ package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -86,7 +87,7 @@ public class AdvancedMagnet extends MagnetItem {
 
     @Override
     protected Component getTooltip(){
-        return TextComponents.translation("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get()).get();
+        return TextComponents.translation("simplemagnets.advancedmagnet.info", TextComponents.number(SMConfig.advancedMagnetMaxRange.get()).color(ChatFormatting.GOLD).get()).color(ChatFormatting.GRAY).get();
     }
 
 }

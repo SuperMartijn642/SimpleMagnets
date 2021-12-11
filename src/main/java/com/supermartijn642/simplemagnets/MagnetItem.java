@@ -1,9 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -103,7 +101,7 @@ public abstract class MagnetItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        tooltip.add(TextComponents.fromTextComponent(this.getTooltip()).color(ChatFormatting.AQUA).get());
+        tooltip.add(this.getTooltip());
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 

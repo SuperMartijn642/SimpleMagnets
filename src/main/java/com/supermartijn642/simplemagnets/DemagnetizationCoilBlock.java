@@ -112,9 +112,9 @@ public class DemagnetizationCoilBlock extends BaseBlock implements EntityBlock {
     @Override
     public void appendHoverText(ItemStack stack, BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn){
         if(this.hasFilter.get())
-            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.filtered", this.maxRange.get()).color(ChatFormatting.AQUA).get());
+            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.filtered", TextComponents.number(this.maxRange.get()).color(ChatFormatting.GOLD).get()).color(ChatFormatting.GRAY).get());
         else
-            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.no_filter", this.maxRange.get()).color(ChatFormatting.AQUA).get());
+            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.no_filter", TextComponents.number(this.maxRange.get()).color(ChatFormatting.GOLD).get()).color(ChatFormatting.GRAY).get());
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 
