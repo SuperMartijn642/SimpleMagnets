@@ -63,7 +63,8 @@ public abstract class MagnetItem extends Item {
                 AxisAlignedBB area = new AxisAlignedBB(entityIn.getCommandSenderWorldPosition().add(-r, -r, -r), entityIn.getCommandSenderWorldPosition().add(r, r, r));
 
                 List<Entity> items = worldIn.getEntities(EntityType.ITEM, area,
-                    item -> item instanceof ItemEntity && item.isAlive() && (((ItemEntity)item).getThrower() == null || !((ItemEntity)item).getThrower().equals(entityIn.getUUID()) || !((ItemEntity)item).hasPickUpDelay()) &&
+                    item -> item instanceof ItemEntity && item.isAlive() && (!worldIn.isClientSide || item.tickCount > 1) &&
+                        (((ItemEntity)item).getThrower() == null || !((ItemEntity)item).getThrower().equals(entityIn.getUUID()) || !((ItemEntity)item).hasPickUpDelay()) &&
                         !((ItemEntity)item).getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, ((ItemEntity)item).getItem())
                 );
                 items.forEach(item -> item.setPos(entityIn.x, entityIn.y, entityIn.z));
