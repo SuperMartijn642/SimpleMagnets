@@ -6,8 +6,10 @@ import com.supermartijn642.simplemagnets.integration.BaublesInactive;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -32,6 +34,13 @@ public class SimpleMagnets {
     public static final String DEPENDENCIES = "required-after:forge@[14.23.5.2779,);required-after:supermartijn642configlib@[1.0.5,);required-after:supermartijn642corelib@[1.0.0,1.1.0)";
 
     public static PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
+
+    public static CreativeTabs GROUP = new CreativeTabs("simplemagnets") {
+        @Override
+        public ItemStack getTabIconItem(){
+            return new ItemStack(basic_magnet);
+        }
+    };
 
     @Mod.Instance
     public static SimpleMagnets instance;

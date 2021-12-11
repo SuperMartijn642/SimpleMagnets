@@ -32,3 +32,4 @@ keys.simplemagnets.toggle=Toggle Magnet
 simplemagnets.magnets.toggle_message=Magnet:
 simplemagnets.magnets.toggle_message.on=On
 simplemagnets.magnets.toggle_message.off=Off
+itemGroup.simplemagnets=Simple Magnets

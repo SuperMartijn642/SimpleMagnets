@@ -4,7 +4,6 @@ import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -45,7 +44,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
         this.setUnlocalizedName(SimpleMagnets.MODID + "." + registryName);
 
         this.setMaxStackSize(1);
-        this.setCreativeTab(CreativeTabs.SEARCH);
+        this.setCreativeTab(SimpleMagnets.GROUP);
     }
 
     @Override
