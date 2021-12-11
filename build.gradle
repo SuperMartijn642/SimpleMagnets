@@ -1,19 +1,15 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
-        maven { url = 'https://plugins.gradle.org/m2'}
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'com.wynprice.cursemaven', name: 'CurseMaven', version: '2.1.4'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
-apply plugin: 'com.wynprice.cursemaven'
 
 version = "1.1.2-mc1.12"
 group = "com.supermartijn642.simplemagnets" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -31,8 +27,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
 
             mods {
                 simplemagnets {
@@ -44,8 +39,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
 
             mods {
                 simplemagnets {
@@ -57,36 +51,26 @@ minecraft {
 }
 
 repositories {
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+    flatDir {
+        dirs 'libs'
     }
     maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
+        url "https://www.cursemaven.com"
     }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
 
-    // compile against the JEI API but do not include it at runtime
-//    compileOnly fg.deobf("mezz.jei:jei_1.12.2:4.16.1.301:api")
-    // at runtime, use the full JEI jar
-//    runtimeOnly fg.deobf("mezz.jei:jei_1.12.2:4.16.1.301")
-
-    // Config Lib
-    compile fg.deobf("curse.maven:supermartijn642s-config-lib:3211007")
-
     // Core Lib
-    compile fg.deobf("curse.maven:supermartijn642s-core-lib:3235052")
+    implementation fg.deobf("curse.maven:supermartijn642s-core-lib-454372:3544931")
+    // Config Lib
+    implementation fg.deobf("curse.maven:supermartijn642s-config-lib-438332:3413933")
 
     // Baubles
-    compile files("lib/Baubles-1.12-1.5.2-deobf.jar")
+    implementation fg.deobf('curse.maven:baubles-227083:2518667')
 }
 
-//sourceSets {
-//    main { output.resourcesDir = output.classesDir }
-//}
+sourceSets {
+    main { output.resourcesDir = output.classesDir }
+}

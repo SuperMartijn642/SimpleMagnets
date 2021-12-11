@@ -1,6 +1,9 @@
 package com.supermartijn642.simplemagnets;
 
-import net.minecraft.block.Block;
+import com.supermartijn642.core.TextComponents;
+import com.supermartijn642.core.ToolType;
+import com.supermartijn642.core.block.BaseBlock;
+import com.supermartijn642.core.block.BlockShape;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -19,8 +22,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,104 +32,32 @@ import java.util.function.Supplier;
 /**
  * Created 2/19/2021 by SuperMartijn642
  */
-public class DemagnetizationCoilBlock extends Block {
+public class DemagnetizationCoilBlock extends BaseBlock {
 
-    private static final AxisAlignedBB[][] SHAPES;
-    private static final AxisAlignedBB[] SHAPES_COMBINED = new AxisAlignedBB[6];
+    private static final BlockShape[] SHAPES;
 
     static{
-        SHAPES = new AxisAlignedBB[EnumFacing.values().length][];
-        SHAPES[EnumFacing.DOWN.getIndex()] = new AxisAlignedBB[]{
-            new AxisAlignedBB(7 / 16d, 10.5 / 16d, 7 / 16d, 9 / 16d, 11 / 16d, 9 / 16d),
-            new AxisAlignedBB(4.5 / 16d, 0 / 16d, 4.5 / 16d, 11.5 / 16d, 1 / 16d, 11.5 / 16d),
-            new AxisAlignedBB(6.5 / 16d, 2 / 16d, 6.5 / 16d, 9.5 / 16d, 10.5 / 16d, 9.5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 1 / 16d, 5.5 / 16d, 10.5 / 16d, 1.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 1.5 / 16d, 6 / 16d, 10 / 16d, 2 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 3 / 16d, 6 / 16d, 10 / 16d, 4 / 16d, 10 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 8 / 16d, 5.5 / 16d, 10.5 / 16d, 9 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 7 / 16d, 6 / 16d, 10 / 16d, 8 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 9 / 16d, 6 / 16d, 10 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 5 / 16d, 6 / 16d, 10 / 16d, 6 / 16d, 10 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 4 / 16d, 5.5 / 16d, 10.5 / 16d, 5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 6 / 16d, 5.5 / 16d, 10.5 / 16d, 7 / 16d, 10.5 / 16d)
-        };
-        SHAPES[EnumFacing.UP.getIndex()] = new AxisAlignedBB[]{
-            new AxisAlignedBB(7 / 16d, 5 / 16d, 7 / 16d, 9 / 16d, 5.5 / 16d, 9 / 16d),
-            new AxisAlignedBB(4.5 / 16d, 15 / 16d, 4.5 / 16d, 11.5 / 16d, 16 / 16d, 11.5 / 16d),
-            new AxisAlignedBB(6.5 / 16d, 5.5 / 16d, 6.5 / 16d, 9.5 / 16d, 14 / 16d, 9.5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 14.5 / 16d, 5.5 / 16d, 10.5 / 16d, 15 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 14 / 16d, 6 / 16d, 10 / 16d, 14.5 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 12 / 16d, 6 / 16d, 10 / 16d, 13 / 16d, 10 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 7 / 16d, 5.5 / 16d, 10.5 / 16d, 8 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 8 / 16d, 6 / 16d, 10 / 16d, 9 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 6 / 16d, 10 / 16d, 7 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 10 / 16d, 6 / 16d, 10 / 16d, 11 / 16d, 10 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 11 / 16d, 5.5 / 16d, 10.5 / 16d, 12 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 9 / 16d, 5.5 / 16d, 10.5 / 16d, 10 / 16d, 10.5 / 16d)
-        };
-        SHAPES[EnumFacing.NORTH.getIndex()] = new AxisAlignedBB[]{
-            new AxisAlignedBB(7 / 16d, 7 / 16d, 10.5 / 16d, 9 / 16d, 9 / 16d, 11 / 16d),
-            new AxisAlignedBB(4.5 / 16d, 4.5 / 16d, 0 / 16d, 11.5 / 16d, 11.5 / 16d, 1 / 16d),
-            new AxisAlignedBB(6.5 / 16d, 6.5 / 16d, 2 / 16d, 9.5 / 16d, 9.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 1 / 16d, 10.5 / 16d, 10.5 / 16d, 1.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 1.5 / 16d, 10 / 16d, 10 / 16d, 2 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 3 / 16d, 10 / 16d, 10 / 16d, 4 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 8 / 16d, 10.5 / 16d, 10.5 / 16d, 9 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 7 / 16d, 10 / 16d, 10 / 16d, 8 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 9 / 16d, 10 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 5 / 16d, 10 / 16d, 10 / 16d, 6 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 4 / 16d, 10.5 / 16d, 10.5 / 16d, 5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 6 / 16d, 10.5 / 16d, 10.5 / 16d, 7 / 16d)
-        };
-        SHAPES[EnumFacing.EAST.getIndex()] = new AxisAlignedBB[]{
-            new AxisAlignedBB(5 / 16d, 7 / 16d, 7 / 16d, 5.5 / 16d, 9 / 16d, 9 / 16d),
-            new AxisAlignedBB(15 / 16d, 4.5 / 16d, 4.5 / 16d, 16 / 16d, 11.5 / 16d, 11.5 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 6.5 / 16d, 6.5 / 16d, 14 / 16d, 9.5 / 16d, 9.5 / 16d),
-            new AxisAlignedBB(14.5 / 16d, 5.5 / 16d, 5.5 / 16d, 15 / 16d, 10.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(14 / 16d, 6 / 16d, 6 / 16d, 14.5 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(12 / 16d, 6 / 16d, 6 / 16d, 13 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(7 / 16d, 5.5 / 16d, 5.5 / 16d, 8 / 16d, 10.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(8 / 16d, 6 / 16d, 6 / 16d, 9 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 6 / 16d, 7 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(10 / 16d, 6 / 16d, 6 / 16d, 11 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(11 / 16d, 5.5 / 16d, 5.5 / 16d, 12 / 16d, 10.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(9 / 16d, 5.5 / 16d, 5.5 / 16d, 10 / 16d, 10.5 / 16d, 10.5 / 16d)
-        };
-        SHAPES[EnumFacing.SOUTH.getIndex()] = new AxisAlignedBB[]{
-            new AxisAlignedBB(7 / 16d, 7 / 16d, 5 / 16d, 9 / 16d, 9 / 16d, 5.5 / 16d),
-            new AxisAlignedBB(4.5 / 16d, 4.5 / 16d, 15 / 16d, 11.5 / 16d, 11.5 / 16d, 16 / 16d),
-            new AxisAlignedBB(6.5 / 16d, 6.5 / 16d, 5.5 / 16d, 9.5 / 16d, 9.5 / 16d, 14 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 14.5 / 16d, 10.5 / 16d, 10.5 / 16d, 15 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 14 / 16d, 10 / 16d, 10 / 16d, 14.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 12 / 16d, 10 / 16d, 10 / 16d, 13 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 7 / 16d, 10.5 / 16d, 10.5 / 16d, 8 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 8 / 16d, 10 / 16d, 10 / 16d, 9 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 6 / 16d, 10 / 16d, 10 / 16d, 7 / 16d),
-            new AxisAlignedBB(6 / 16d, 6 / 16d, 10 / 16d, 10 / 16d, 10 / 16d, 11 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 11 / 16d, 10.5 / 16d, 10.5 / 16d, 12 / 16d),
-            new AxisAlignedBB(5.5 / 16d, 5.5 / 16d, 9 / 16d, 10.5 / 16d, 10.5 / 16d, 10 / 16d)
-        };
-        SHAPES[EnumFacing.WEST.getIndex()] = new AxisAlignedBB[]{
-            new AxisAlignedBB(10.5 / 16d, 7 / 16d, 7 / 16d, 11 / 16d, 9 / 16d, 9 / 16d),
-            new AxisAlignedBB(0 / 16d, 4.5 / 16d, 4.5 / 16d, 1 / 16d, 11.5 / 16d, 11.5 / 16d),
-            new AxisAlignedBB(2 / 16d, 6.5 / 16d, 6.5 / 16d, 10.5 / 16d, 9.5 / 16d, 9.5 / 16d),
-            new AxisAlignedBB(1 / 16d, 5.5 / 16d, 5.5 / 16d, 1.5 / 16d, 10.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(1.5 / 16d, 6 / 16d, 6 / 16d, 2 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(3 / 16d, 6 / 16d, 6 / 16d, 4 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(8 / 16d, 5.5 / 16d, 5.5 / 16d, 9 / 16d, 10.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(7 / 16d, 6 / 16d, 6 / 16d, 8 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(9 / 16d, 6 / 16d, 6 / 16d, 10 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(5 / 16d, 6 / 16d, 6 / 16d, 6 / 16d, 10 / 16d, 10 / 16d),
-            new AxisAlignedBB(4 / 16d, 5.5 / 16d, 5.5 / 16d, 5 / 16d, 10.5 / 16d, 10.5 / 16d),
-            new AxisAlignedBB(6 / 16d, 5.5 / 16d, 5.5 / 16d, 7 / 16d, 10.5 / 16d, 10.5 / 16d)
-        };
-
-        for(EnumFacing facing : EnumFacing.values()){
-            AxisAlignedBB bb = SHAPES[facing.getIndex()][0];
-            for(AxisAlignedBB bb2 : SHAPES[facing.getIndex()])
-                bb = bb.union(bb2);
-            SHAPES_COMBINED[facing.getIndex()] = bb;
-        }
+        BlockShape shape = BlockShape.or(
+            BlockShape.createBlockShape(7, 10.5, 7, 9, 11, 9),
+            BlockShape.createBlockShape(4.5, 0, 4.5, 11.5, 1, 11.5),
+            BlockShape.createBlockShape(6.5, 2, 6.5, 9.5, 10.5, 9.5),
+            BlockShape.createBlockShape(5.5, 1, 5.5, 10.5, 1.5, 10.5),
+            BlockShape.createBlockShape(6, 1.5, 6, 10, 2, 10),
+            BlockShape.createBlockShape(6, 3, 6, 10, 4, 10),
+            BlockShape.createBlockShape(5.5, 8, 5.5, 10.5, 9, 10.5),
+            BlockShape.createBlockShape(6, 7, 6, 10, 8, 10),
+            BlockShape.createBlockShape(6, 9, 6, 10, 10, 10),
+            BlockShape.createBlockShape(6, 5, 6, 10, 6, 10),
+            BlockShape.createBlockShape(5.5, 4, 5.5, 10.5, 5, 10.5),
+            BlockShape.createBlockShape(5.5, 6, 5.5, 10.5, 7, 10.5)
+        );
+        SHAPES = new BlockShape[EnumFacing.values().length];
+        SHAPES[EnumFacing.DOWN.getIndex()] = shape;
+        SHAPES[EnumFacing.UP.getIndex()] = shape.rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X);
+        SHAPES[EnumFacing.NORTH.getIndex()] = shape.rotate(EnumFacing.Axis.X);
+        SHAPES[EnumFacing.EAST.getIndex()] = shape.rotate(EnumFacing.Axis.Z);
+        SHAPES[EnumFacing.SOUTH.getIndex()] = shape.rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X).rotate(EnumFacing.Axis.X);
+        SHAPES[EnumFacing.WEST.getIndex()] = shape.rotate(EnumFacing.Axis.Z).rotate(EnumFacing.Axis.Z).rotate(EnumFacing.Axis.Z);
     }
 
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
@@ -138,18 +67,12 @@ public class DemagnetizationCoilBlock extends Block {
     private final Supplier<? extends DemagnetizationCoilTile> tileSupplier;
 
     public DemagnetizationCoilBlock(String registryName, Supplier<Integer> maxRange, Supplier<Boolean> hasFilter, Supplier<? extends DemagnetizationCoilTile> tileSupplier){
-        super(Material.IRON, MapColor.GRAY);
-        this.setRegistryName(registryName);
-        this.setUnlocalizedName(SimpleMagnets.MODID + "." + registryName);
+        super(registryName, false, Properties.create(Material.IRON, MapColor.GRAY).harvestTool(ToolType.PICKAXE).harvestLevel(0).hardnessAndResistance(3.0F, 5.0F).sound(SoundType.METAL));
         this.maxRange = maxRange;
         this.hasFilter = hasFilter;
         this.tileSupplier = tileSupplier;
 
         this.setCreativeTab(CreativeTabs.SEARCH);
-        this.setHarvestLevel("pickaxe", 0);
-        this.setHardness(3);
-        this.setResistance(5);
-        this.setSoundType(SoundType.METAL);
 
         this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.DOWN));
     }
@@ -164,9 +87,9 @@ public class DemagnetizationCoilBlock extends Block {
     @Override
     public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
         if(this.hasFilter.get())
-            tooltip.add(new TextComponentTranslation("simplemagnets.demagnetization_coil.info.filtered", this.maxRange.get()).setStyle(new Style().setColor(TextFormatting.AQUA)).getFormattedText());
+            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.filtered", this.maxRange.get()).color(TextFormatting.AQUA).format());
         else
-            tooltip.add(new TextComponentTranslation("simplemagnets.demagnetization_coil.info.no_filter", this.maxRange.get()).setStyle(new Style().setColor(TextFormatting.AQUA)).getFormattedText());
+            tooltip.add(TextComponents.translation("simplemagnets.demagnetization_coil.info.no_filter", this.maxRange.get()).color(TextFormatting.AQUA).format());
         super.addInformation(stack, world, tooltip, advanced);
     }
 
@@ -177,12 +100,12 @@ public class DemagnetizationCoilBlock extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos){
-        return SHAPES_COMBINED[state.getValue(FACING).getIndex()];
+        return SHAPES[state.getValue(FACING).getIndex()].simplify();
     }
 
     @Override
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState){
-        for(AxisAlignedBB bb : SHAPES[state.getValue(FACING).getIndex()])
+        for(AxisAlignedBB bb : SHAPES[state.getValue(FACING).getIndex()].toBoxes())
             addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
     }
 

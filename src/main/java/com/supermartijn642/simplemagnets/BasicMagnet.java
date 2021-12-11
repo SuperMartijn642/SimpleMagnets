@@ -1,9 +1,9 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.TextComponents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -42,6 +42,6 @@ public class BasicMagnet extends MagnetItem {
 
     @Override
     protected ITextComponent getTooltip(){
-        return new TextComponentTranslation("simplemagnets.basicmagnet.info", SMConfig.basicMagnetRange.get());
+        return TextComponents.translation("simplemagnets.basicmagnet.info", SMConfig.basicMagnetRange.get()).get();
     }
 }

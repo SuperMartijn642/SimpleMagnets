@@ -1,36 +1,34 @@
 package com.supermartijn642.simplemagnets.packets.magnet;
 
+import com.supermartijn642.core.network.BasePacket;
+import com.supermartijn642.core.network.PacketContext;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class PacketToggleMagnet implements IMessage, IMessageHandler<PacketToggleMagnet,IMessage> {
+public class PacketToggleMagnet implements BasePacket {
 
     @Override
-    public void fromBytes(ByteBuf buffer){
+    public void write(PacketBuffer buffer){
     }
 
     @Override
-    public void toBytes(ByteBuf buffer){
+    public void read(PacketBuffer buffer){
     }
 
     @Override
-    public IMessage onMessage(PacketToggleMagnet message, MessageContext ctx){
-        EntityPlayer player = ctx.getServerHandler().player;
+    public void handle(PacketContext context){
+        EntityPlayer player = context.getSendingPlayer();
         if(player != null){
             ItemStack stack = findStack(player);
             if(stack != null && !stack.isEmpty())
                 MagnetItem.toggleMagnet(player, stack);
         }
-        return null;
     }
 
     private static ItemStack findStack(EntityPlayer player){

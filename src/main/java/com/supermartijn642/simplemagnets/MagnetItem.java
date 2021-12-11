@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.client.util.ITooltipFlag;
@@ -8,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,9 +17,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,6 +38,7 @@ import java.util.List;
  */
 @Mod.EventBusSubscriber
 public abstract class MagnetItem extends Item implements ICapabilityProvider {
+
     public MagnetItem(String registryName){
         super();
         this.setRegistryName(registryName);
@@ -63,7 +62,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             tag.setBoolean("active", !active);
             stack.setTagCompound(tag);
             // let the client decide whether to show the toggle message and play a sound
-            SimpleMagnets.channel.sendTo(new PacketToggleMagnetMessage(active), (EntityPlayerMP)player);
+            SimpleMagnets.CHANNEL.sendToPlayer(player, new PacketToggleMagnetMessage(active));
         }
     }
 
@@ -73,19 +72,19 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
         if(tag.hasKey("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AxisAlignedBB area = createBox(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 List<EntityItem> items = worldIn.getEntitiesWithinAABB(EntityItem.class, area,
-                    item ->
-                        !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem()) &&
-                            (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup())
+                    item -> item.isEntityAlive() && (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup()) &&
+                        !item.getItem().isEmpty() && !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
+
                 );
                 items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
             }
 
             if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof EntityPlayer){
                 int r = this.getRangeXp(tag);
-                AxisAlignedBB area = createBox(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
 
                 EntityPlayer player = (EntityPlayer)entityIn;
                 List<EntityXPOrb> orbs = worldIn.getEntitiesWithinAABB(EntityXPOrb.class, area);
@@ -97,10 +96,6 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             }
         }
         stack.setTagCompound(tag);
-    }
-
-    private static AxisAlignedBB createBox(Vec3d pos1, Vec3d pos2){
-        return new AxisAlignedBB(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
     }
 
     protected abstract boolean canPickupItems(NBTTagCompound tag);
@@ -138,7 +133,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-        tooltip.add(this.getTooltip().setStyle(new Style().setColor(TextFormatting.AQUA)).getFormattedText());
+        tooltip.add(TextComponents.fromTextComponent(this.getTooltip()).color(TextFormatting.AQUA).format());
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -152,7 +147,7 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
-        if(e.getTarget() instanceof EntityItem && !e.getEntityPlayer().world.isRemote && e.getTarget().getEntityData().hasKey("simplemagnets:throwerIdMost"))
-            SimpleMagnets.channel.sendTo(new PacketItemInfo((EntityItem)e.getTarget()), (EntityPlayerMP)e.getEntityPlayer());
+        if(!e.getEntityPlayer().world.isRemote && e.getTarget() instanceof EntityItem && e.getTarget().getEntityData().hasKey("simplemagnets:throwerIdMost"))
+            SimpleMagnets.CHANNEL.sendToPlayer(e.getEntityPlayer(), new PacketItemInfo((EntityItem)e.getTarget()));
     }
 }

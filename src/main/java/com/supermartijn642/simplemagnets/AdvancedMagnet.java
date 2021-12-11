@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.TextComponents;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,7 +8,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 /**
@@ -70,7 +70,7 @@ public class AdvancedMagnet extends MagnetItem {
 
     @Override
     protected ITextComponent getTooltip(){
-        return new TextComponentTranslation("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get());
+        return TextComponents.translation("simplemagnets.advancedmagnet.info", SMConfig.advancedMagnetMaxRange.get()).get();
     }
 
 }

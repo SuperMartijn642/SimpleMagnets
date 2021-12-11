@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -38,18 +38,10 @@ public class ClientProxy {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(SimpleMagnets.advanced_demagnetization_coil), 0, new ModelResourceLocation(SimpleMagnets.advanced_demagnetization_coil.getRegistryName(), "inventory"));
     }
 
-    public static EntityPlayer getPlayer(){
-        return Minecraft.getMinecraft().player;
-    }
-
     @SubscribeEvent
     public static void onKey(InputEvent.KeyInputEvent e){
-        if(TOGGLE_MAGNET_KEY != null && TOGGLE_MAGNET_KEY.isPressed() && Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().currentScreen == null)
-            SimpleMagnets.channel.sendToServer(new PacketToggleMagnet());
-    }
-
-    public static void queTask(Runnable task){
-        Minecraft.getMinecraft().addScheduledTask(task);
+        if(TOGGLE_MAGNET_KEY != null && TOGGLE_MAGNET_KEY.isPressed() && ClientUtils.getWorld() != null && Minecraft.getMinecraft().currentScreen == null)
+            SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnet());
     }
 
 }

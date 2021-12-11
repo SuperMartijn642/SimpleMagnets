@@ -1,31 +1,29 @@
 package com.supermartijn642.simplemagnets;
 
-import net.minecraft.block.state.IBlockState;
+import com.supermartijn642.core.block.BaseTileEntity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created 2/19/2021 by SuperMartijn642
  */
-public class DemagnetizationCoilTile extends TileEntity implements ITickable {
+public class DemagnetizationCoilTile extends BaseTileEntity implements ITickable {
 
     public static class BasicDemagnetizationCoilTile extends DemagnetizationCoilTile {
+
         public BasicDemagnetizationCoilTile(){
             super(SMConfig.basicCoilMinRange.get(), SMConfig.basicCoilMaxRange.get(), SMConfig.basicCoilRange.get(), SMConfig.basicCoilFilter.get());
         }
     }
 
     public static class AdvancedDemagnetizationCoilTile extends DemagnetizationCoilTile {
+
         public AdvancedDemagnetizationCoilTile(){
             super(SMConfig.advancedCoilMinRange.get(), SMConfig.advancedCoilMaxRange.get(), SMConfig.advancedCoilRange.get(), SMConfig.advancedCoilFilter.get());
         }
@@ -39,7 +37,6 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickable {
     public final List<ItemStack> filter = new ArrayList<>(9);
     public boolean filterWhitelist;
     public boolean filterDurability = true; // nbt in 1.14+
-    private boolean dataChanged;
 
     public DemagnetizationCoilTile(int minRange, int maxRange, int range, boolean hasFilter){
         this.minRange = minRange;
@@ -108,18 +105,8 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickable {
             this.dataChanged();
     }
 
-    public void dataChanged(){
-        if(!this.world.isRemote){
-            this.dataChanged = true;
-            this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
-        }
-    }
-
-    private NBTTagCompound getChangedData(){
-        return this.dataChanged ? this.getData() : null;
-    }
-
-    private NBTTagCompound getData(){
+    @Override
+    protected NBTTagCompound writeData(){
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("rangeX", this.rangeX);
         tag.setInteger("rangeY", this.rangeY);
@@ -135,7 +122,8 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickable {
         return tag;
     }
 
-    private void handleData(NBTTagCompound tag){
+    @Override
+    protected void readData(NBTTagCompound tag){
         if(tag.hasKey("rangeX"))
             this.rangeX = tag.getInteger("rangeX");
         if(tag.hasKey("rangeY"))
@@ -151,44 +139,7 @@ public class DemagnetizationCoilTile extends TileEntity implements ITickable {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound){
-        super.writeToNBT(compound);
-        compound.setTag("data", this.getData());
-        return compound;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound){
-        super.readFromNBT(compound);
-        if(compound.hasKey("data"))
-            this.handleData(compound.getCompoundTag("data"));
-    }
-
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket(){
-        NBTTagCompound tag = this.getChangedData();
-        return tag == null || tag.hasNoTags() ? null : new SPacketUpdateTileEntity(this.pos, 0, tag);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
-        this.handleData(pkt.getNbtCompound());
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag(){
-        NBTTagCompound tag = super.getUpdateTag();
-        tag.setTag("data", this.getData());
-        return tag;
-    }
-
-    @Override
     public void onLoad(){
         ItemSpawnHandler.add(this);
-    }
-
-    public IBlockState getBlockState(){
-        return this.world.getBlockState(this.pos);
     }
 }

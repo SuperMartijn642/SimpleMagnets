@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.TileEntityBaseContainerScreen;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemagnetizationCoilContainer> extends TileEntityBaseContainerScreen<DemagnetizationCoilTile,T> {
 
     public BaseDemagnetizationCoilContainerScreen(T container, String title){
-        super(container, new TextComponentTranslation(title));
+        super(container, TextComponents.translation(title).get());
     }
 
     @Override

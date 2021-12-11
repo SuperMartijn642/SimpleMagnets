@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.network.PacketChannel;
 import com.supermartijn642.simplemagnets.integration.BaublesActive;
 import com.supermartijn642.simplemagnets.integration.BaublesInactive;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
@@ -16,7 +17,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -31,10 +31,10 @@ public class SimpleMagnets {
     public static final String VERSION = "1.1.2";
     public static final String DEPENDENCIES = "required-after:forge@[14.23.5.2779,);required-after:supermartijn642configlib@[1.0.5,);required-after:supermartijn642corelib@[1.0.0,1.1.0)";
 
+    public static PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
+
     @Mod.Instance
     public static SimpleMagnets instance;
-
-    public static SimpleNetworkWrapper channel;
 
     public static BaublesInactive baubles;
 
@@ -49,30 +49,28 @@ public class SimpleMagnets {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e){
-        channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-
         // magnets
-        channel.registerMessage(PacketToggleItems.class, PacketToggleItems.class, 0, Side.SERVER);
-        channel.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange.class, 1, Side.SERVER);
-        channel.registerMessage(PacketDecreaseItemRange.class, PacketDecreaseItemRange.class, 2, Side.SERVER);
-        channel.registerMessage(PacketToggleXp.class, PacketToggleXp.class, 3, Side.SERVER);
-        channel.registerMessage(PacketIncreaseXpRange.class, PacketIncreaseXpRange.class, 4, Side.SERVER);
-        channel.registerMessage(PacketDecreaseXpRange.class, PacketDecreaseXpRange.class, 5, Side.SERVER);
-        channel.registerMessage(PacketToggleMagnetWhitelist.class, PacketToggleMagnetWhitelist.class, 6, Side.SERVER);
-        channel.registerMessage(PacketToggleMagnet.class, PacketToggleMagnet.class, 7, Side.SERVER);
-        channel.registerMessage(PacketItemInfo.class, PacketItemInfo.class, 8, Side.CLIENT);
-        channel.registerMessage(PacketToggleMagnetMessage.class, PacketToggleMagnetMessage.class, 9, Side.CLIENT);
-        channel.registerMessage(PacketToggleMagnetDurability.class, PacketToggleMagnetDurability.class, 10, Side.SERVER);
+        CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
+        CHANNEL.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseItemRange.class, PacketDecreaseItemRange::new, true);
+        CHANNEL.registerMessage(PacketToggleXp.class, PacketToggleXp::new, true);
+        CHANNEL.registerMessage(PacketIncreaseXpRange.class, PacketIncreaseXpRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseXpRange.class, PacketDecreaseXpRange::new, true);
+        CHANNEL.registerMessage(PacketToggleMagnetWhitelist.class, PacketToggleMagnetWhitelist::new, true);
+        CHANNEL.registerMessage(PacketToggleMagnet.class, PacketToggleMagnet::new, true);
+        CHANNEL.registerMessage(PacketItemInfo.class, PacketItemInfo::new, false);
+        CHANNEL.registerMessage(PacketToggleMagnetMessage.class, PacketToggleMagnetMessage::new, true);
+        CHANNEL.registerMessage(PacketToggleMagnetDurability.class, PacketToggleMagnetDurability::new, true);
 
         // demagnetization coils
-        channel.registerMessage(PacketDecreaseXRange.class, PacketDecreaseXRange.class, 11, Side.SERVER);
-        channel.registerMessage(PacketDecreaseYRange.class, PacketDecreaseYRange.class, 12, Side.SERVER);
-        channel.registerMessage(PacketDecreaseZRange.class, PacketDecreaseZRange.class, 13, Side.SERVER);
-        channel.registerMessage(PacketIncreaseXRange.class, PacketIncreaseXRange.class, 14, Side.SERVER);
-        channel.registerMessage(PacketIncreaseYRange.class, PacketIncreaseYRange.class, 151, Side.SERVER);
-        channel.registerMessage(PacketIncreaseZRange.class, PacketIncreaseZRange.class, 16, Side.SERVER);
-        channel.registerMessage(PacketToggleDurability.class, PacketToggleDurability.class, 17, Side.SERVER);
-        channel.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist.class, 18, Side.SERVER);
+        CHANNEL.registerMessage(PacketDecreaseXRange.class, PacketDecreaseXRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseYRange.class, PacketDecreaseYRange::new, true);
+        CHANNEL.registerMessage(PacketDecreaseZRange.class, PacketDecreaseZRange::new, true);
+        CHANNEL.registerMessage(PacketIncreaseXRange.class, PacketIncreaseXRange::new, true);
+        CHANNEL.registerMessage(PacketIncreaseYRange.class, PacketIncreaseYRange::new, true);
+        CHANNEL.registerMessage(PacketIncreaseZRange.class, PacketIncreaseZRange::new, true);
+        CHANNEL.registerMessage(PacketToggleDurability.class, PacketToggleDurability::new, true);
+        CHANNEL.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist::new, true);
 
         baubles = Loader.isModLoaded("baubles") ? new BaublesActive() : new BaublesInactive();
     }
@@ -87,6 +85,7 @@ public class SimpleMagnets {
 
     @Mod.EventBusSubscriber
     public static class RegistryEvents {
+
         @SubscribeEvent
         public static void onItemRegistry(final RegistryEvent.Register<Item> e){
             e.getRegistry().register(new BasicMagnet());
