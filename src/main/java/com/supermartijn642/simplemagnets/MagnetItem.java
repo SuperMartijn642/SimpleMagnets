@@ -63,7 +63,8 @@ public abstract class MagnetItem extends Item {
                 AABB area = new AABB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
 
                 List<ItemEntity> items = worldIn.getEntities(EntityType.ITEM, area,
-                    item -> item.isAlive() && (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay()) &&
+                    item -> item.isAlive() && (!worldIn.isClientSide || item.tickCount > 1) &&
+                        (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entityIn.getX(), entityIn.getY(), entityIn.getZ()));
