@@ -11,6 +11,7 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeContainerType;
@@ -33,6 +34,13 @@ import top.theillusivec4.curios.api.imc.CurioIMCMessage;
 public class SimpleMagnets {
 
     public static final PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
+
+    public static final ItemGroup GROUP = new ItemGroup("simplemagnets") {
+        @Override
+        public ItemStack makeIcon(){
+            return new ItemStack(simple_magnet);
+        }
+    };
 
     @ObjectHolder("simplemagnets:basicmagnet")
     public static Item simple_magnet;
