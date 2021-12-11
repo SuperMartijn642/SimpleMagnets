@@ -65,10 +65,10 @@ public class DemagnetizationCoilBlock extends BaseBlock {
         SHAPES = new BlockShape[Direction.values().length];
         SHAPES[Direction.DOWN.get3DDataValue()] = shape;
         SHAPES[Direction.UP.get3DDataValue()] = shape.rotate(Direction.Axis.X).rotate(Direction.Axis.X);
-        SHAPES[Direction.NORTH.get3DDataValue()] = shape.rotate(Direction.Axis.X);
-        SHAPES[Direction.EAST.get3DDataValue()] = shape.rotate(Direction.Axis.Z);
-        SHAPES[Direction.SOUTH.get3DDataValue()] = shape.rotate(Direction.Axis.X).rotate(Direction.Axis.X).rotate(Direction.Axis.X);
-        SHAPES[Direction.WEST.get3DDataValue()] = shape.rotate(Direction.Axis.Z).rotate(Direction.Axis.Z).rotate(Direction.Axis.Z);
+        SHAPES[Direction.NORTH.get3DDataValue()] = shape.rotate(Direction.Axis.X).rotate(Direction.Axis.X).rotate(Direction.Axis.X);
+        SHAPES[Direction.EAST.get3DDataValue()] = shape.rotate(Direction.Axis.Z).rotate(Direction.Axis.Z).rotate(Direction.Axis.Z);
+        SHAPES[Direction.SOUTH.get3DDataValue()] = shape.rotate(Direction.Axis.X);
+        SHAPES[Direction.WEST.get3DDataValue()] = shape.rotate(Direction.Axis.Z);
     }
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
