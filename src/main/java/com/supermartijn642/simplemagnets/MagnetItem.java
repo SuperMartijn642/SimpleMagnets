@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,9 +77,11 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
                     item -> item.isEntityAlive() && (!worldIn.isRemote || item.ticksExisted > 1) &&
                         (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup()) &&
                         !item.getItem().isEmpty() && !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
-
                 );
                 items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
+                // Directly add items to the player's inventory when ItemPhysic is installed
+                if(!worldIn.isRemote && entityIn instanceof EntityPlayer && Loader.isModLoaded("itemphysic"))
+                    items.forEach(item -> playerTouch(item, (EntityPlayer)entityIn));
             }
 
             if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof EntityPlayer){
@@ -94,6 +98,35 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
             }
         }
         stack.setTagCompound(tag);
+    }
+
+    /**
+     * Copied from {@link EntityItem#onCollideWithPlayer(EntityPlayer)}. Use this when ItemPhysic is installed to still pick up items.
+     */
+    private static void playerTouch(EntityItem itemEntity, EntityPlayer player){
+        if(!itemEntity.world.isRemote){
+            if(itemEntity.cannotPickup()) return;
+            ItemStack itemstack = itemEntity.getItem();
+            Item item = itemstack.getItem();
+            int i = itemstack.getCount();
+
+            int hook = net.minecraftforge.event.ForgeEventFactory.onItemPickup(itemEntity, player);
+            if(hook < 0) return;
+
+            ItemStack copy = itemstack.copy();
+            if(!itemEntity.cannotPickup() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getName())) && (hook == 1 || i <= 0 || player.inventory.addItemStackToInventory(itemstack) || copy.getCount() > itemEntity.getItem().getCount())){
+                copy.setCount(copy.getCount() - itemstack.getCount());
+                net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerItemPickupEvent(player, itemEntity, copy);
+
+                if(itemstack.isEmpty()){
+                    player.onItemPickup(itemEntity, i);
+                    itemEntity.setDead();
+                    itemstack.setCount(i);
+                }
+
+                player.addStat(StatList.getObjectsPickedUpStats(item), i);
+            }
+        }
     }
 
     protected abstract boolean canPickupItems(NBTTagCompound tag);
