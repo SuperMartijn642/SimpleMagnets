@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -116,10 +115,10 @@ public class MagnetContainerScreen extends ItemBaseContainerScreen<MagnetContain
     @Override
     protected void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY, ItemStack stack){
         if(mouseX > 79.5f - 5 && mouseX < 79.5f + 5 && mouseY > 43 - 5 && mouseY < 43 + 5)
-            this.renderTooltip(matrixStack, new TranslationTextComponent("gui.advancedmagnet.items.range", this.itemRange), mouseX, mouseY);
+            this.renderTooltip(matrixStack, TextComponents.translation("gui.advancedmagnet.items.range", this.itemRange).get(), mouseX, mouseY);
 
         if(mouseX > 187.5f - 5 && mouseX < 187.5f + 5 && mouseY > 43 - 5 && mouseY < 43 + 5)
-            this.renderTooltip(matrixStack, new TranslationTextComponent("gui.advancedmagnet.xp.range", this.xpRange), mouseX, mouseY);
+            this.renderTooltip(matrixStack, TextComponents.translation("gui.advancedmagnet.xp.range", this.xpRange).get(), mouseX, mouseY);
     }
 
     public CompoundNBT getTagOrClose(){
