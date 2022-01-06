@@ -11,15 +11,15 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Created 7/8/2020 by SuperMartijn642
  */
-public class LeftRightArrowButton extends AbstractButtonWidget implements IHoverTextWidget {
+public class PlusMinusButton extends AbstractButtonWidget implements IHoverTextWidget {
 
-    private final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/left_right_arrow_buttons.png");
+    private static final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/plus_minus_buttons.png");
 
     private final boolean left;
     private final String translationKey;
 
-    public LeftRightArrowButton(int x, int y, boolean left, String translationKey, Runnable onPress){
-        super(x, y, 11, 17, onPress);
+    public PlusMinusButton(int x, int y, boolean left, String translationKey, Runnable onPress){
+        super(x, y, 17, 17, onPress);
         this.left = left;
         this.translationKey = translationKey;
     }
