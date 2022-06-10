@@ -4,6 +4,7 @@ import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
@@ -16,5 +17,10 @@ public class DemagnetizationCoilContainer extends BaseDemagnetizationCoilContain
 
     @Override
     protected void addSlots(Player playerEntity, DemagnetizationCoilTile demagnetizationCoilTile){
+    }
+
+    @Override
+    public ItemStack quickMoveStack(Player player, int slot){
+        return null; // TODO implement this in all branches
     }
 }

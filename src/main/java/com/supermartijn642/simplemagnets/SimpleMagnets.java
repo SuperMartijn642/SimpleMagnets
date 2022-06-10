@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -23,8 +22,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.RegisterEvent;
 import top.theillusivec4.curios.api.SlotTypeMessage;
+
+import java.util.Objects;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -41,25 +45,25 @@ public class SimpleMagnets {
         }
     };
 
-    @ObjectHolder("simplemagnets:basicmagnet")
+    @ObjectHolder(value = "simplemagnets:basicmagnet", registryName = "minecraft:item")
     public static Item simple_magnet;
-    @ObjectHolder("simplemagnets:advancedmagnet")
+    @ObjectHolder(value = "simplemagnets:advancedmagnet", registryName = "minecraft:item")
     public static Item advanced_magnet;
-    @ObjectHolder("simplemagnets:basic_demagnetization_coil")
+    @ObjectHolder(value = "simplemagnets:basic_demagnetization_coil", registryName = "minecraft:block")
     public static Block basic_demagnetization_coil;
-    @ObjectHolder("simplemagnets:advanced_demagnetization_coil")
+    @ObjectHolder(value = "simplemagnets:advanced_demagnetization_coil", registryName = "minecraft:block")
     public static Block advanced_demagnetization_coil;
 
-    @ObjectHolder("simplemagnets:basic_demagnetization_coil_tile")
+    @ObjectHolder(value = "simplemagnets:basic_demagnetization_coil_tile", registryName = "minecraft:block_entity_type")
     public static BlockEntityType<?> basic_demagnetization_coil_tile;
-    @ObjectHolder("simplemagnets:advanced_demagnetization_coil_tile")
+    @ObjectHolder(value = "simplemagnets:advanced_demagnetization_coil_tile", registryName = "minecraft:block_entity_type")
     public static BlockEntityType<?> advanced_demagnetization_coil_tile;
 
-    @ObjectHolder("simplemagnets:container")
+    @ObjectHolder(value = "simplemagnets:container", registryName = "minecraft:menu")
     public static MenuType<MagnetContainer> container;
-    @ObjectHolder("simplemagnets:demagnetization_coil_container")
+    @ObjectHolder(value = "simplemagnets:demagnetization_coil_container", registryName = "minecraft:menu")
     public static MenuType<DemagnetizationCoilContainer> demagnetization_coil_container;
-    @ObjectHolder("simplemagnets:filtered_demagnetization_coil_container")
+    @ObjectHolder(value = "simplemagnets:filtered_demagnetization_coil_container", registryName = "minecraft:menu")
     public static MenuType<FilteredDemagnetizationCoilContainer> filtered_demagnetization_coil_container;
 
     public SimpleMagnets(){
@@ -103,30 +107,38 @@ public class SimpleMagnets {
     public static class RegistryEvents {
 
         @SubscribeEvent
-        public static void onItemRegistry(final RegistryEvent.Register<Item> e){
-            e.getRegistry().register(new BasicMagnet());
-            e.getRegistry().register(new AdvancedMagnet());
-            e.getRegistry().register(new BlockItem(basic_demagnetization_coil, new Item.Properties().tab(GROUP)).setRegistryName(basic_demagnetization_coil.getRegistryName()));
-            e.getRegistry().register(new BlockItem(advanced_demagnetization_coil, new Item.Properties().tab(GROUP)).setRegistryName(advanced_demagnetization_coil.getRegistryName()));
+        public static void onRegisterEvent(RegisterEvent e){
+            if(e.getRegistryKey().equals(ForgeRegistries.Keys.BLOCKS))
+                onItemBlock(Objects.requireNonNull(e.getForgeRegistry()));
+            else if(e.getRegistryKey().equals(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES))
+                onTileEntityRegistry(Objects.requireNonNull(e.getForgeRegistry()));
+            else if(e.getRegistryKey().equals(ForgeRegistries.Keys.ITEMS))
+                onItemRegistry(Objects.requireNonNull(e.getForgeRegistry()));
+            else if(e.getRegistryKey().equals(ForgeRegistries.Keys.CONTAINER_TYPES))
+                onContainerRegistry(Objects.requireNonNull(e.getForgeRegistry()));
         }
 
-        @SubscribeEvent
-        public static void onItemBlock(final RegistryEvent.Register<Block> e){
-            e.getRegistry().register(new DemagnetizationCoilBlock("basic_demagnetization_coil", SMConfig.basicCoilMaxRange, SMConfig.basicCoilFilter, DemagnetizationCoilTile.BasicDemagnetizationCoilTile::new));
-            e.getRegistry().register(new DemagnetizationCoilBlock("advanced_demagnetization_coil", SMConfig.advancedCoilMaxRange, SMConfig.advancedCoilFilter, DemagnetizationCoilTile.AdvancedDemagnetizationCoilTile::new));
+        public static void onItemRegistry(IForgeRegistry<Item> registry){
+            registry.register("basicmagnet", new BasicMagnet());
+            registry.register("advancedmagnet", new AdvancedMagnet());
+            registry.register("basic_demagnetization_coil", new BlockItem(basic_demagnetization_coil, new Item.Properties().tab(GROUP)));
+            registry.register("advanced_demagnetization_coil", new BlockItem(advanced_demagnetization_coil, new Item.Properties().tab(GROUP)));
         }
 
-        @SubscribeEvent
-        public static void onTileEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> e){
-            e.getRegistry().register(BlockEntityType.Builder.of(DemagnetizationCoilTile.BasicDemagnetizationCoilTile::new, basic_demagnetization_coil).build(null).setRegistryName("basic_demagnetization_coil_tile"));
-            e.getRegistry().register(BlockEntityType.Builder.of(DemagnetizationCoilTile.AdvancedDemagnetizationCoilTile::new, advanced_demagnetization_coil).build(null).setRegistryName("advanced_demagnetization_coil_tile"));
+        public static void onItemBlock(IForgeRegistry<Block> registry){
+            registry.register("basic_demagnetization_coil", new DemagnetizationCoilBlock("basic_demagnetization_coil", SMConfig.basicCoilMaxRange, SMConfig.basicCoilFilter, DemagnetizationCoilTile.BasicDemagnetizationCoilTile::new));
+            registry.register("advanced_demagnetization_coil", new DemagnetizationCoilBlock("advanced_demagnetization_coil", SMConfig.advancedCoilMaxRange, SMConfig.advancedCoilFilter, DemagnetizationCoilTile.AdvancedDemagnetizationCoilTile::new));
         }
 
-        @SubscribeEvent
-        public static void onContainerRegistry(final RegistryEvent.Register<MenuType<?>> e){
-            e.getRegistry().register(IForgeMenuType.create((windowId, inv, data) -> new MagnetContainer(windowId, inv.player, data.readInt())).setRegistryName("container"));
-            e.getRegistry().register(IForgeMenuType.create((windowId, inv, data) -> new DemagnetizationCoilContainer(windowId, inv.player, data.readBlockPos())).setRegistryName("demagnetization_coil_container"));
-            e.getRegistry().register(IForgeMenuType.create((windowId, inv, data) -> new FilteredDemagnetizationCoilContainer(windowId, inv.player, data.readBlockPos())).setRegistryName("filtered_demagnetization_coil_container"));
+        public static void onTileEntityRegistry(IForgeRegistry<BlockEntityType<?>> registry){
+            registry.register("basic_demagnetization_coil_tile", BlockEntityType.Builder.of(DemagnetizationCoilTile.BasicDemagnetizationCoilTile::new, basic_demagnetization_coil).build(null));
+            registry.register("advanced_demagnetization_coil_tile", BlockEntityType.Builder.of(DemagnetizationCoilTile.AdvancedDemagnetizationCoilTile::new, advanced_demagnetization_coil).build(null));
+        }
+
+        public static void onContainerRegistry(IForgeRegistry<MenuType<?>> registry){
+            registry.register("container", IForgeMenuType.create((windowId, inv, data) -> new MagnetContainer(windowId, inv.player, data.readInt())));
+            registry.register("demagnetization_coil_container", IForgeMenuType.create((windowId, inv, data) -> new DemagnetizationCoilContainer(windowId, inv.player, data.readBlockPos())));
+            registry.register("filtered_demagnetization_coil_container", IForgeMenuType.create((windowId, inv, data) -> new FilteredDemagnetizationCoilContainer(windowId, inv.player, data.readBlockPos())));
         }
     }
 

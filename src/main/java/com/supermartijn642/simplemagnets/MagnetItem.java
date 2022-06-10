@@ -35,7 +35,7 @@ public abstract class MagnetItem extends Item {
 
     public MagnetItem(String registryName){
         super(new Properties().tab(SimpleMagnets.GROUP).stacksTo(1));
-        this.setRegistryName(registryName);
+//        this.setRegistryName(registryName); TODO
     }
 
     @Override
