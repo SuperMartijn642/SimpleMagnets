@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 public class DemagnetizationCoilAreaHighlighter {
 
     @SubscribeEvent
-    public static void onDrawHighlight(DrawSelectionEvent.HighlightBlock e){
+    public static void onDrawHighlight(RenderHighlightEvent.Block e){
         if(!SMConfig.showDemagnetizationArea.get())
             return;
 

@@ -95,7 +95,6 @@ public class SimpleMagnets {
     }
 
     public void init(FMLCommonSetupEvent e){
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::init);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> ClientProxy::registerScreen);
     }
 
