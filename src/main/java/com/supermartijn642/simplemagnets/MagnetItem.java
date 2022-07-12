@@ -144,7 +144,7 @@ public abstract class MagnetItem extends Item {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
-        if(!e.getPlayer().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrower() != null)
-            SimpleMagnets.CHANNEL.sendToPlayer(e.getPlayer(), new PacketItemInfo((ItemEntity)e.getTarget()));
+        if(!e.getEntity().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrower() != null)
+            SimpleMagnets.CHANNEL.sendToPlayer(e.getEntity(), new PacketItemInfo((ItemEntity)e.getTarget()));
     }
 }

@@ -3,7 +3,7 @@ package com.supermartijn642.simplemagnets;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -37,18 +37,18 @@ public class ItemSpawnHandler {
     private final HashMap<ResourceKey<Level>,List<WeakReference<DemagnetizationCoilTile>>> tiles = new HashMap<>();
 
     @SubscribeEvent
-    public static void onEntitySpawn(EntityJoinWorldEvent e){
+    public static void onEntitySpawn(EntityJoinLevelEvent e){
         if(!(e.getEntity() instanceof ItemEntity))
             return;
 
         ItemEntity item = (ItemEntity)e.getEntity();
 
-        ItemSpawnHandler handler = getInstance(e.getWorld());
-        handler.tiles.putIfAbsent(e.getWorld().dimension(), new LinkedList<>());
+        ItemSpawnHandler handler = getInstance(e.getLevel());
+        handler.tiles.putIfAbsent(e.getLevel().dimension(), new LinkedList<>());
 
         List<WeakReference<DemagnetizationCoilTile>> toRemove = new ArrayList<>();
 
-        List<WeakReference<DemagnetizationCoilTile>> list = handler.tiles.get(e.getWorld().dimension());
+        List<WeakReference<DemagnetizationCoilTile>> list = handler.tiles.get(e.getLevel().dimension());
         for(WeakReference<DemagnetizationCoilTile> reference : list){
             DemagnetizationCoilTile tile = reference.get();
             if(tile == null || tile.isRemoved() || !tile.hasLevel()){

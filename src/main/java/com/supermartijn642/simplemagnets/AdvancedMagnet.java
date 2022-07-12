@@ -34,7 +34,7 @@ public class AdvancedMagnet extends MagnetItem {
             return super.use(worldIn, playerIn, handIn);
         int slot = handIn == InteractionHand.MAIN_HAND ? playerIn.getInventory().selected : 40;
         if(!worldIn.isClientSide){
-            NetworkHooks.openGui((ServerPlayer)playerIn, new MenuProvider() {
+            NetworkHooks.openScreen((ServerPlayer)playerIn, new MenuProvider() {
                 @Override
                 public Component getDisplayName(){
                     return playerIn.getItemInHand(handIn).hasCustomHoverName() ? playerIn.getItemInHand(handIn).getHoverName() : TextComponents.translation("gui.advancedmagnet.title").get();
