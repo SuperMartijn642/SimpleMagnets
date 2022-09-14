@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -102,7 +103,7 @@ public abstract class MagnetItem extends BaseItem {
             ItemStack copy = itemstack.copy();
             if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getUUID())) && (hook == 1 || i <= 0 || player.getInventory().add(itemstack))){
                 copy.setCount(copy.getCount() - itemstack.getCount());
-                net.minecraftforge.event.ForgeEventFactory.firePlayerItemPickupEvent(player, itemEntity, copy);
+                ForgeEventFactory.firePlayerItemPickupEvent(player, itemEntity, copy);
                 player.take(itemEntity, i);
                 if(itemstack.isEmpty()){
                     itemEntity.discard();

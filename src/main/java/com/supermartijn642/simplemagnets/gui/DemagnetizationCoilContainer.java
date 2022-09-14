@@ -21,6 +21,6 @@ public class DemagnetizationCoilContainer extends BaseDemagnetizationCoilContain
 
     @Override
     public ItemStack quickMoveStack(Player player, int slot){
-        return null; // TODO implement this in all branches
+        return null;
     }
 }
