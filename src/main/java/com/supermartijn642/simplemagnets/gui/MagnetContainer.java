@@ -1,7 +1,7 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.core.gui.ItemBaseContainer;
-import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,13 +24,13 @@ public class MagnetContainer extends ItemBaseContainer {
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot){
-            CompoundNBT tag = MagnetContainer.this.getTagOrClose();
+            CompoundNBT tag = MagnetContainer.this.object.getTag();
             return (tag != null && tag.contains("filter" + slot)) ? ItemStack.of(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
         }
     };
 
-    public MagnetContainer(int id, PlayerEntity player, int slot){
-        super(SimpleMagnets.container, id, player, slot);
+    public MagnetContainer(PlayerEntity player, int slot){
+        super(SimpleMagnets.magnet_container, player, slot, stack -> stack.getItem() instanceof MagnetItem);
         this.slot = slot;
 
         this.addSlots();
@@ -43,7 +43,7 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++)
             this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
                 @Override
-                public boolean mayPickup(PlayerEntity playerIn){
+                public boolean mayPickup(PlayerEntity player){
                     return false;
                 }
             });
@@ -59,50 +59,45 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++){
             int index = column;
             this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
-                public boolean mayPickup(PlayerEntity playerIn){
-                    return index != MagnetContainer.this.slot;
+                public boolean mayPickup(PlayerEntity player){
+                    return this.index != MagnetContainer.this.slot;
                 }
             });
         }
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn){
-        return true;
-    }
-
-    @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player){
-        if(clickTypeIn == ClickType.SWAP && dragType == this.slot)
+    public ItemStack clicked(int slotId, int dragType, ClickType clickType, PlayerEntity player){
+        if(!this.validateObjectOrClose())
             return ItemStack.EMPTY;
+        if(clickType == ClickType.SWAP && dragType == this.slot)
+            return ItemStack.EMPTY;
+
         if(slotId < 9 && slotId >= 0){
-            CompoundNBT tag = this.getTagOrClose();
-            if(tag != null){
-                if(player.inventory.getCarried().isEmpty())
-                    tag.remove("filter" + slotId);
-                else{
-                    ItemStack stack = player.inventory.getCarried().copy();
-                    stack.setCount(1);
-                    tag.put("filter" + slotId, stack.save(new CompoundNBT()));
-                }
+            if(player.inventory.getCarried().isEmpty())
+                this.object.getOrCreateTag().remove("filter" + slotId);
+            else{
+                ItemStack stack = player.inventory.getCarried().copy();
+                stack.setCount(1);
+                this.object.getOrCreateTag().put("filter" + slotId, stack.save(new CompoundNBT()));
             }
             return ItemStack.EMPTY;
         }
-        return super.clicked(slotId, dragType, clickTypeIn, player);
+        return super.clicked(slotId, dragType, clickType, player);
     }
 
     @Override
     public ItemStack quickMoveStack(PlayerEntity player, int index){
+        if(!this.validateObjectOrClose())
+            return ItemStack.EMPTY;
+
         if(index < 9){
-            CompoundNBT tag = this.getTagOrClose();
-            if(tag != null){
-                if(player.inventory.getCarried().isEmpty())
-                    tag.remove("filter" + index);
-                else{
-                    ItemStack stack = player.inventory.getCarried().copy();
-                    stack.setCount(1);
-                    tag.put("filter" + index, stack.save(new CompoundNBT()));
-                }
+            if(player.inventory.getCarried().isEmpty())
+                this.object.getOrCreateTag().remove("filter" + index);
+            else{
+                ItemStack stack = player.inventory.getCarried().copy();
+                stack.setCount(1);
+                this.object.getOrCreateTag().put("filter" + index, stack.save(new CompoundNBT()));
             }
         }else if(!this.getSlot(index).getItem().isEmpty()){
             boolean contains = false;
@@ -117,21 +112,21 @@ public class MagnetContainer extends ItemBaseContainer {
                     firstEmpty = i;
             }
             if(!contains && firstEmpty != -1){
-                CompoundNBT tag = this.getTagOrClose();
-                if(tag != null){
-                    ItemStack stack = this.getSlot(index).getItem().copy();
-                    stack.setCount(1);
-                    tag.put("filter" + firstEmpty, stack.save(new CompoundNBT()));
-                }
+                ItemStack stack = this.getSlot(index).getItem().copy();
+                stack.setCount(1);
+                this.object.getOrCreateTag().put("filter" + firstEmpty, stack.save(new CompoundNBT()));
             }
         }
         return ItemStack.EMPTY;
     }
 
-    public CompoundNBT getTagOrClose(){
-        ItemStack stack = this.getObjectOrClose();
-        if(stack.getItem() instanceof AdvancedMagnet)
-            return stack.getOrCreateTag();
-        return null;
+    @Override
+    public ItemStack getObject(ItemStack oldObject){
+        return super.getObject(oldObject);
+    }
+
+    @Override
+    public boolean validateObject(ItemStack object){
+        return super.validateObject(object);
     }
 }

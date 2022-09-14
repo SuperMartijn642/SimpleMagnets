@@ -1,53 +1,30 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.annotation.Nullable;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
 public class AdvancedMagnet extends MagnetItem {
 
-    public AdvancedMagnet(){
-        super("advancedmagnet");
-    }
-
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn){
-        if(!playerIn.isShiftKeyDown())
-            return super.use(worldIn, playerIn, handIn);
-        int slot = handIn == Hand.MAIN_HAND ? playerIn.inventory.selected : 40;
-        if(!worldIn.isClientSide){
-            NetworkHooks.openGui((ServerPlayerEntity)playerIn, new INamedContainerProvider() {
-                @Override
-                public ITextComponent getDisplayName(){
-                    return playerIn.getItemInHand(handIn).hasCustomHoverName() ? playerIn.getItemInHand(handIn).getHoverName() : TextComponents.translation("gui.advancedmagnet.title").get();
-                }
+    public ItemUseResult interact(ItemStack stack, PlayerEntity player, Hand hand, World level){
+        if(!player.isShiftKeyDown())
+            return super.interact(stack, player, hand, level);
 
-                @Nullable
-                @Override
-                public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player){
-                    return new MagnetContainer(windowId, player, slot);
-                }
-            }, data -> data.writeInt(slot));
-        }
-        return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
+        int slot = hand == Hand.MAIN_HAND ? player.inventory.selected : 40;
+        if(!level.isClientSide)
+            CommonUtils.openContainer(new MagnetContainer(player, slot));
+        return ItemUseResult.success(stack);
     }
 
     @Override
