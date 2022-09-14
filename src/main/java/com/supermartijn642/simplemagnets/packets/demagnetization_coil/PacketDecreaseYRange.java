@@ -1,14 +1,14 @@
 package com.supermartijn642.simplemagnets.packets.demagnetization_coil;
 
+import com.supermartijn642.core.network.BlockEntityBasePacket;
 import com.supermartijn642.core.network.PacketContext;
-import com.supermartijn642.core.network.TileEntityBasePacket;
-import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
+import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import net.minecraft.util.math.BlockPos;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
  */
-public class PacketDecreaseYRange extends TileEntityBasePacket<DemagnetizationCoilTile> {
+public class PacketDecreaseYRange extends BlockEntityBasePacket<DemagnetizationCoilBlockEntity> {
 
     public PacketDecreaseYRange(BlockPos pos){
         super(pos);
@@ -18,7 +18,7 @@ public class PacketDecreaseYRange extends TileEntityBasePacket<DemagnetizationCo
     }
 
     @Override
-    protected void handle(DemagnetizationCoilTile tile, PacketContext context){
-        tile.setRangeY(tile.rangeY - 1);
+    protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
+        entity.setRangeY(entity.rangeY - 1);
     }
 }

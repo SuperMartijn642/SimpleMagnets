@@ -1,20 +1,20 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.supermartijn642.core.gui.TileEntityBaseContainer;
-import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
+import com.supermartijn642.core.gui.BaseContainerType;
+import com.supermartijn642.core.gui.BlockEntityBaseContainer;
+import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-public abstract class BaseDemagnetizationCoilContainer extends TileEntityBaseContainer<DemagnetizationCoilTile> {
+public abstract class BaseDemagnetizationCoilContainer extends BlockEntityBaseContainer<DemagnetizationCoilBlockEntity> {
 
     public final int width, height;
 
-    public BaseDemagnetizationCoilContainer(ContainerType<?> type, int id, PlayerEntity player, BlockPos pos, int width, int height, boolean hasSlots){
-        super(type, id, player, pos);
+    public BaseDemagnetizationCoilContainer(BaseContainerType<?> type, PlayerEntity player, BlockPos pos, int width, int height, boolean hasSlots){
+        super(type, player, pos);
         this.width = width;
         this.height = height;
 
@@ -24,11 +24,11 @@ public abstract class BaseDemagnetizationCoilContainer extends TileEntityBaseCon
     }
 
     @Override
-    protected DemagnetizationCoilTile getObjectOrClose(){
-        return super.getObjectOrClose();
+    public DemagnetizationCoilBlockEntity getObject(DemagnetizationCoilBlockEntity oldObject){
+        return super.getObject(oldObject);
     }
 
-    public BlockPos getTilePos(){
-        return this.tilePos;
+    public BlockPos getBlockEntityPos(){
+        return this.blockEntityPos;
     }
 }

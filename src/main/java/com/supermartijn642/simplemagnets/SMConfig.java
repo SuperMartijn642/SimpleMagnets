@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.configlib.ModConfigBuilder;
+import com.supermartijn642.configlib.api.ConfigBuilders;
+import com.supermartijn642.configlib.api.IConfigBuilder;
 
 import java.util.function.Supplier;
 
@@ -28,7 +29,7 @@ public class SMConfig {
     public static final Supplier<Boolean> advancedCoilFilter;
 
     static{
-        ModConfigBuilder builder = new ModConfigBuilder("simplemagnets");
+        IConfigBuilder builder = ConfigBuilders.newTomlConfig("simplemagnets", null, false);
 
         builder.push("Client");
 

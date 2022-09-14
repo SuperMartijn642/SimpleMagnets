@@ -11,11 +11,6 @@ import net.minecraft.util.text.TextFormatting;
  */
 public class BasicMagnet extends MagnetItem {
 
-
-    public BasicMagnet(){
-        super("basicmagnet");
-    }
-
     @Override
     protected boolean canPickupItems(CompoundNBT tag){
         return true;
