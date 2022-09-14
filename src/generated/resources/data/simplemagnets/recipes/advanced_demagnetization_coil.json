@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "BCB",
+    "CDC"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "B": {
+      "tag": "forge:dusts/redstone"
+    },
+    "C": {
+      "tag": "forge:ingots/gold"
+    },
+    "D": {
+      "item": "simplemagnets:basic_demagnetization_coil"
+    }
+  },
+  "result": {
+    "item": "simplemagnets:advanced_demagnetization_coil"
+  }
+}

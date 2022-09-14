@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "display": {
+    "icon": {
+      "item": "simplemagnets:basicmagnet"
+    },
+    "title": {
+      "translate": "simplemagnets.advancement.recipes/simplemagnets/basicmagnet.title"
+    },
+    "description": {
+      "translate": "simplemagnets.advancement.recipes/simplemagnets/basicmagnet.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "can_unlock_recipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/iron"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplemagnets:basicmagnet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "can_unlock_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "simplemagnets:basicmagnet"
+    ]
+  }
+}

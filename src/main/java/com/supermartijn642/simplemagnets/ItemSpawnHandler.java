@@ -21,20 +21,20 @@ public class ItemSpawnHandler {
 
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
 
-    private static ItemSpawnHandler getInstance(Level world){
-        return world.isClientSide ? CLIENT : SERVER;
+    private static ItemSpawnHandler getInstance(Level level){
+        return level.isClientSide ? CLIENT : SERVER;
     }
 
-    public static void add(DemagnetizationCoilTile tile){
-        if(tile == null || tile.isRemoved() || !tile.hasLevel())
+    public static void add(DemagnetizationCoilBlockEntity entity){
+        if(entity == null || entity.isRemoved() || !entity.hasLevel())
             return;
 
-        ItemSpawnHandler handler = getInstance(tile.getLevel());
-        handler.tiles.putIfAbsent(tile.getLevel().dimension(), new LinkedList<>());
-        handler.tiles.get(tile.getLevel().dimension()).add(new WeakReference<>(tile));
+        ItemSpawnHandler handler = getInstance(entity.getLevel());
+        handler.blocks.putIfAbsent(entity.getLevel().dimension(), new LinkedList<>());
+        handler.blocks.get(entity.getLevel().dimension()).add(new WeakReference<>(entity));
     }
 
-    private final HashMap<ResourceKey<Level>,List<WeakReference<DemagnetizationCoilTile>>> tiles = new HashMap<>();
+    private final HashMap<ResourceKey<Level>,List<WeakReference<DemagnetizationCoilBlockEntity>>> blocks = new HashMap<>();
 
     @SubscribeEvent
     public static void onEntitySpawn(EntityJoinLevelEvent e){
@@ -44,19 +44,19 @@ public class ItemSpawnHandler {
         ItemEntity item = (ItemEntity)e.getEntity();
 
         ItemSpawnHandler handler = getInstance(e.getLevel());
-        handler.tiles.putIfAbsent(e.getLevel().dimension(), new LinkedList<>());
+        handler.blocks.putIfAbsent(e.getLevel().dimension(), new LinkedList<>());
 
-        List<WeakReference<DemagnetizationCoilTile>> toRemove = new ArrayList<>();
+        List<WeakReference<DemagnetizationCoilBlockEntity>> toRemove = new ArrayList<>();
 
-        List<WeakReference<DemagnetizationCoilTile>> list = handler.tiles.get(e.getLevel().dimension());
-        for(WeakReference<DemagnetizationCoilTile> reference : list){
-            DemagnetizationCoilTile tile = reference.get();
-            if(tile == null || tile.isRemoved() || !tile.hasLevel()){
+        List<WeakReference<DemagnetizationCoilBlockEntity>> list = handler.blocks.get(e.getLevel().dimension());
+        for(WeakReference<DemagnetizationCoilBlockEntity> reference : list){
+            DemagnetizationCoilBlockEntity entity = reference.get();
+            if(entity == null || entity.isRemoved() || !entity.hasLevel()){
                 toRemove.add(reference);
                 continue;
             }
 
-            if(tile.getArea().contains(item.position()) && tile.shouldEffectItem(item.getItem())){
+            if(entity.getArea().contains(item.position()) && entity.shouldEffectItem(item.getItem())){
                 item.getPersistentData().putBoolean("PreventRemoteMovement", true);
                 item.getPersistentData().putBoolean("AllowMachineRemoteMovement", true);
             }

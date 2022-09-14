@@ -1,7 +1,7 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.core.gui.ItemBaseContainer;
-import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,13 +24,13 @@ public class MagnetContainer extends ItemBaseContainer {
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot){
-            CompoundTag tag = MagnetContainer.this.getTagOrClose();
+            CompoundTag tag = MagnetContainer.this.object.getTag();
             return (tag != null && tag.contains("filter" + slot)) ? ItemStack.of(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
         }
     };
 
-    public MagnetContainer(int id, Player player, int slot){
-        super(SimpleMagnets.container, id, player, slot);
+    public MagnetContainer(Player player, int slot){
+        super(SimpleMagnets.magnet_container, player, slot, stack -> stack.getItem() instanceof MagnetItem);
         this.slot = slot;
 
         this.addSlots();
@@ -43,7 +43,7 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++)
             this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
                 @Override
-                public boolean mayPickup(Player playerIn){
+                public boolean mayPickup(Player player){
                     return false;
                 }
             });
@@ -59,50 +59,45 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++){
             int index = column;
             this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
-                public boolean mayPickup(Player playerIn){
-                    return index != MagnetContainer.this.slot;
+                public boolean mayPickup(Player player){
+                    return this.index != MagnetContainer.this.slot;
                 }
             });
         }
     }
 
     @Override
-    public boolean stillValid(Player playerIn){
-        return true;
-    }
-
-    @Override
-    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player){
-        if(clickTypeIn == ClickType.SWAP && dragType == this.slot)
+    public void clicked(int slotId, int dragType, ClickType clickType, Player player){
+        if(!this.validateObjectOrClose())
             return;
+        if(clickType == ClickType.SWAP && dragType == this.slot)
+            return;
+
         if(slotId < 9 && slotId >= 0){
-            CompoundTag tag = this.getTagOrClose();
-            if(tag != null){
-                if(this.getCarried().isEmpty())
-                    tag.remove("filter" + slotId);
-                else{
-                    ItemStack stack = this.getCarried().copy();
-                    stack.setCount(1);
-                    tag.put("filter" + slotId, stack.save(new CompoundTag()));
-                }
+            if(this.getCarried().isEmpty())
+                this.object.getOrCreateTag().remove("filter" + slotId);
+            else{
+                ItemStack stack = this.getCarried().copy();
+                stack.setCount(1);
+                this.object.getOrCreateTag().put("filter" + slotId, stack.save(new CompoundTag()));
             }
             return;
         }
-        super.clicked(slotId, dragType, clickTypeIn, player);
+        super.clicked(slotId, dragType, clickType, player);
     }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index){
+        if(!this.validateObjectOrClose())
+            return ItemStack.EMPTY;
+
         if(index < 9){
-            CompoundTag tag = this.getTagOrClose();
-            if(tag != null){
-                if(this.getCarried().isEmpty())
-                    tag.remove("filter" + index);
-                else{
-                    ItemStack stack = this.getCarried().copy();
-                    stack.setCount(1);
-                    tag.put("filter" + index, stack.save(new CompoundTag()));
-                }
+            if(this.getCarried().isEmpty())
+                this.object.getOrCreateTag().remove("filter" + index);
+            else{
+                ItemStack stack = this.getCarried().copy();
+                stack.setCount(1);
+                this.object.getOrCreateTag().put("filter" + index, stack.save(new CompoundTag()));
             }
         }else if(!this.getSlot(index).getItem().isEmpty()){
             boolean contains = false;
@@ -117,21 +112,21 @@ public class MagnetContainer extends ItemBaseContainer {
                     firstEmpty = i;
             }
             if(!contains && firstEmpty != -1){
-                CompoundTag tag = this.getTagOrClose();
-                if(tag != null){
-                    ItemStack stack = this.getSlot(index).getItem().copy();
-                    stack.setCount(1);
-                    tag.put("filter" + firstEmpty, stack.save(new CompoundTag()));
-                }
+                ItemStack stack = this.getSlot(index).getItem().copy();
+                stack.setCount(1);
+                this.object.getOrCreateTag().put("filter" + firstEmpty, stack.save(new CompoundTag()));
             }
         }
         return ItemStack.EMPTY;
     }
 
-    public CompoundTag getTagOrClose(){
-        ItemStack stack = this.getObjectOrClose();
-        if(stack.getItem() instanceof AdvancedMagnet)
-            return stack.getOrCreateTag();
-        return null;
+    @Override
+    public ItemStack getObject(ItemStack oldObject){
+        return super.getObject(oldObject);
+    }
+
+    @Override
+    public boolean validateObject(ItemStack object){
+        return super.validateObject(object);
     }
 }
