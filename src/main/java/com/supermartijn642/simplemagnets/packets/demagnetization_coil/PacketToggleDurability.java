@@ -1,14 +1,14 @@
 package com.supermartijn642.simplemagnets.packets.demagnetization_coil;
 
+import com.supermartijn642.core.network.BlockEntityBasePacket;
 import com.supermartijn642.core.network.PacketContext;
-import com.supermartijn642.core.network.TileEntityBasePacket;
-import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
+import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import net.minecraft.core.BlockPos;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
  */
-public class PacketToggleDurability extends TileEntityBasePacket<DemagnetizationCoilTile> {
+public class PacketToggleDurability extends BlockEntityBasePacket<DemagnetizationCoilBlockEntity> {
 
     public PacketToggleDurability(BlockPos pos){
         super(pos);
@@ -18,8 +18,8 @@ public class PacketToggleDurability extends TileEntityBasePacket<Demagnetization
     }
 
     @Override
-    protected void handle(DemagnetizationCoilTile tile, PacketContext context){
-        tile.filterDurability = !tile.filterDurability;
-        tile.dataChanged();
+    protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
+        entity.filterDurability = !entity.filterDurability;
+        entity.dataChanged();
     }
 }

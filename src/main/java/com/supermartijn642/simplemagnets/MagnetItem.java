@@ -1,13 +1,14 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
+import com.supermartijn642.core.item.BaseItem;
+import com.supermartijn642.core.item.ItemProperties;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -15,34 +16,32 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmllegacy.hooks.BasicEventHooks;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public abstract class MagnetItem extends Item {
+public abstract class MagnetItem extends BaseItem {
 
-    public MagnetItem(String registryName){
-        super(new Properties().tab(SimpleMagnets.GROUP).stacksTo(1));
-        this.setRegistryName(registryName);
+    public MagnetItem(){
+        super(ItemProperties.create().group(SimpleMagnets.GROUP).maxStackSize(1));
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn){
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        toggleMagnet(playerIn, stack);
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
+    public ItemUseResult interact(ItemStack stack, Player player, InteractionHand hand, Level level){
+        toggleMagnet(player, stack);
+        return ItemUseResult.success(stack);
     }
 
     public static void toggleMagnet(Player player, ItemStack stack){
@@ -55,30 +54,30 @@ public abstract class MagnetItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected){
+    public void inventoryUpdate(ItemStack stack, Level level, Entity entity, int itemSlot, boolean isSelected){
         CompoundTag tag = stack.getOrCreateTag();
         if(tag.contains("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AABB area = new AABB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
+                AABB area = new AABB(entity.position().add(-r, -r, -r), entity.position().add(r, r, r));
 
-                List<ItemEntity> items = worldIn.getEntities(EntityType.ITEM, area,
-                    item -> item.isAlive() && (!worldIn.isClientSide || item.tickCount > 1) &&
-                        (item.getThrower() == null || !item.getThrower().equals(entityIn.getUUID()) || !item.hasPickUpDelay()) &&
+                List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
+                    item -> item.isAlive() && (!level.isClientSide || item.tickCount > 1) &&
+                        (item.getThrower() == null || !item.getThrower().equals(entity.getUUID()) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
                 );
-                items.forEach(item -> item.setPos(entityIn.getX(), entityIn.getY(), entityIn.getZ()));
+                items.forEach(item -> item.setPos(entity.getX(), entity.getY(), entity.getZ()));
                 // Directly add items to the player's inventory when ItemPhysic is installed
-                if(!worldIn.isClientSide && entityIn instanceof Player && ModList.get().isLoaded("itemphysic"))
-                    items.forEach(item -> playerTouch(item, (Player)entityIn));
+                if(!level.isClientSide && entity instanceof Player && CommonUtils.isModLoaded("itemphysic"))
+                    items.forEach(item -> playerTouch(item, (Player)entity));
             }
 
-            if(!worldIn.isClientSide && this.canPickupXp(tag) && entityIn instanceof Player){
+            if(!level.isClientSide && this.canPickupXp(tag) && entity instanceof Player){
                 int r = this.getRangeXp(tag);
-                AABB area = new AABB(entityIn.position().add(-r, -r, -r), entityIn.position().add(r, r, r));
+                AABB area = new AABB(entity.position().add(-r, -r, -r), entity.position().add(r, r, r));
 
-                Player player = (Player)entityIn;
-                List<ExperienceOrb> orbs = worldIn.getEntitiesOfClass(ExperienceOrb.class, area);
+                Player player = (Player)entity;
+                List<ExperienceOrb> orbs = level.getEntitiesOfClass(ExperienceOrb.class, area);
                 orbs.forEach(orb -> {
                     orb.invulnerableTime = 0;
                     player.takeXpDelay = 0;
@@ -104,7 +103,7 @@ public abstract class MagnetItem extends Item {
             ItemStack copy = itemstack.copy();
             if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getUUID())) && (hook == 1 || i <= 0 || player.getInventory().add(itemstack))){
                 copy.setCount(copy.getCount() - itemstack.getCount());
-                net.minecraftforge.fmllegacy.hooks.BasicEventHooks.firePlayerItemPickupEvent(player, itemEntity, copy);
+                BasicEventHooks.firePlayerItemPickupEvent(player, itemEntity, copy);
                 player.take(itemEntity, i);
                 if(itemstack.isEmpty()){
                     itemEntity.discard();
@@ -132,11 +131,9 @@ public abstract class MagnetItem extends Item {
         return stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
-        tooltip.add(this.getTooltip());
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    protected void appendItemInformation(ItemStack stack, @Nullable BlockGetter level, Consumer<Component> info, boolean advanced){
+        info.accept(this.getTooltip());
     }
 
     protected abstract Component getTooltip();

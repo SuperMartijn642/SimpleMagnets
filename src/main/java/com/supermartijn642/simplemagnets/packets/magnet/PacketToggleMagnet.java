@@ -1,12 +1,12 @@
 package com.supermartijn642.simplemagnets.packets.magnet;
 
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.network.BasePacket;
 import com.supermartijn642.core.network.PacketContext;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -52,7 +52,7 @@ public class PacketToggleMagnet implements BasePacket {
     }
 
     private static ItemStack findCuriosStack(Player player){ // TODO
-        if(ModList.get().isLoaded("curios")){
+        if(CommonUtils.isModLoaded("curios")){
             ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY).orElse(null);
             if(handler != null){
                 for(IDynamicStackHandler stackHandler : handler.getCurios().values().stream().map(ICurioStacksHandler::getStacks).collect(Collectors.toSet())){

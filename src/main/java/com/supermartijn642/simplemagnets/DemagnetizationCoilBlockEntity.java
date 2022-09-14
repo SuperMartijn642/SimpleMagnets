@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets;
 
-import com.supermartijn642.core.block.BaseTileEntity;
+import com.supermartijn642.core.block.BaseBlockEntity;
+import com.supermartijn642.core.block.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -16,18 +17,18 @@ import java.util.List;
 /**
  * Created 2/19/2021 by SuperMartijn642
  */
-public class DemagnetizationCoilTile extends BaseTileEntity {
+public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements TickableBlockEntity {
 
-    public static class BasicDemagnetizationCoilTile extends DemagnetizationCoilTile {
+    public static class BasicDemagnetizationCoilBlockEntity extends DemagnetizationCoilBlockEntity {
 
-        public BasicDemagnetizationCoilTile(BlockPos pos, BlockState state){
+        public BasicDemagnetizationCoilBlockEntity(BlockPos pos, BlockState state){
             super(SimpleMagnets.basic_demagnetization_coil_tile, pos, state, SMConfig.basicCoilMinRange.get(), SMConfig.basicCoilMaxRange.get(), SMConfig.basicCoilRange.get(), SMConfig.basicCoilFilter.get());
         }
     }
 
-    public static class AdvancedDemagnetizationCoilTile extends DemagnetizationCoilTile {
+    public static class AdvancedDemagnetizationCoilBlockEntity extends DemagnetizationCoilBlockEntity {
 
-        public AdvancedDemagnetizationCoilTile(BlockPos pos, BlockState state){
+        public AdvancedDemagnetizationCoilBlockEntity(BlockPos pos, BlockState state){
             super(SimpleMagnets.advanced_demagnetization_coil_tile, pos, state, SMConfig.advancedCoilMinRange.get(), SMConfig.advancedCoilMaxRange.get(), SMConfig.advancedCoilRange.get(), SMConfig.advancedCoilFilter.get());
         }
     }
@@ -41,8 +42,8 @@ public class DemagnetizationCoilTile extends BaseTileEntity {
     public boolean filterWhitelist;
     public boolean filterDurability = true; // nbt in 1.14+
 
-    public DemagnetizationCoilTile(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state, int minRange, int maxRange, int range, boolean hasFilter){
-        super(tileEntityType, pos, state);
+    public DemagnetizationCoilBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int minRange, int maxRange, int range, boolean hasFilter){
+        super(blockEntityType, pos, state);
         this.minRange = minRange;
         this.maxRange = maxRange;
         this.rangeX = this.rangeY = this.rangeZ = range;
@@ -51,7 +52,8 @@ public class DemagnetizationCoilTile extends BaseTileEntity {
             this.filter.add(ItemStack.EMPTY);
     }
 
-    public void tick(){
+    @Override
+    public void update(){
         AABB area = this.getArea();
 
         List<ItemEntity> affectedItems = this.level.getEntities(EntityType.ITEM, area,
