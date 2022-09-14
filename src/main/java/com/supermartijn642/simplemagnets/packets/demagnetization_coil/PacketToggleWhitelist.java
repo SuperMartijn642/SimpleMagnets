@@ -1,14 +1,14 @@
 package com.supermartijn642.simplemagnets.packets.demagnetization_coil;
 
+import com.supermartijn642.core.network.BlockEntityBasePacket;
 import com.supermartijn642.core.network.PacketContext;
-import com.supermartijn642.core.network.TileEntityBasePacket;
-import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
+import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import net.minecraft.util.math.BlockPos;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
  */
-public class PacketToggleWhitelist extends TileEntityBasePacket<DemagnetizationCoilTile> {
+public class PacketToggleWhitelist extends BlockEntityBasePacket<DemagnetizationCoilBlockEntity> {
 
     public PacketToggleWhitelist(BlockPos pos){
         super(pos);
@@ -18,8 +18,8 @@ public class PacketToggleWhitelist extends TileEntityBasePacket<DemagnetizationC
     }
 
     @Override
-    protected void handle(DemagnetizationCoilTile tile, PacketContext context){
-        tile.filterWhitelist = !tile.filterWhitelist;
-        tile.dataChanged();
+    protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
+        entity.filterWhitelist = !entity.filterWhitelist;
+        entity.dataChanged();
     }
 }

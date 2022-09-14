@@ -1,7 +1,8 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.core.gui.ItemBaseContainer;
-import com.supermartijn642.simplemagnets.AdvancedMagnet;
+import com.supermartijn642.simplemagnets.MagnetItem;
+import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -23,13 +24,13 @@ public class MagnetContainer extends ItemBaseContainer {
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot){
-            NBTTagCompound tag = MagnetContainer.this.getTagOrClose();
+            NBTTagCompound tag = MagnetContainer.this.object.getTagCompound();
             return (tag != null && tag.hasKey("filter" + slot)) ? new ItemStack(tag.getCompoundTag("filter" + slot)) : ItemStack.EMPTY;
         }
     };
 
     public MagnetContainer(EntityPlayer player, int slot){
-        super(player, slot);
+        super(SimpleMagnets.magnet_container, player, slot, stack -> stack.getItem() instanceof MagnetItem);
         this.slot = slot;
 
         this.addSlots();
@@ -42,7 +43,7 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++)
             this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
                 @Override
-                public boolean canTakeStack(EntityPlayer playerIn){
+                public boolean canTakeStack(EntityPlayer player){
                     return false;
                 }
             });
@@ -58,7 +59,7 @@ public class MagnetContainer extends ItemBaseContainer {
         for(int column = 0; column < 9; column++){
             int index = column;
             this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
-                public boolean canTakeStack(EntityPlayer playerIn){
+                public boolean canTakeStack(EntityPlayer player){
                     return index != MagnetContainer.this.slot;
                 }
             });
@@ -66,16 +67,14 @@ public class MagnetContainer extends ItemBaseContainer {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn){
-        return true;
-    }
-
-    @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
-        if(clickTypeIn == ClickType.SWAP && dragType == this.slot)
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player){
+        if(!this.validateObjectOrClose())
             return ItemStack.EMPTY;
+        if(clickType == ClickType.SWAP && dragType == this.slot)
+            return ItemStack.EMPTY;
+
         if(slotId < 9 && slotId >= 0){
-            NBTTagCompound tag = this.getTagOrClose();
+            NBTTagCompound tag = this.object.getTagCompound();
             if(tag != null){
                 if(player.inventory.getItemStack().isEmpty())
                     tag.removeTag("filter" + slotId);
@@ -87,13 +86,16 @@ public class MagnetContainer extends ItemBaseContainer {
             }
             return ItemStack.EMPTY;
         }
-        return super.slotClick(slotId, dragType, clickTypeIn, player);
+        return super.slotClick(slotId, dragType, clickType, player);
     }
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index){
+        if(!this.validateObjectOrClose())
+            return ItemStack.EMPTY;
+
         if(index < 9){
-            NBTTagCompound tag = this.getTagOrClose();
+            NBTTagCompound tag = this.object.getTagCompound();
             if(tag != null){
                 if(player.inventory.getItemStack().isEmpty())
                     tag.removeTag("filter" + index);
@@ -116,7 +118,7 @@ public class MagnetContainer extends ItemBaseContainer {
                     firstEmpty = i;
             }
             if(!contains && firstEmpty != -1){
-                NBTTagCompound tag = this.getTagOrClose();
+                NBTTagCompound tag = this.object.getTagCompound();
                 if(tag != null){
                     ItemStack stack = this.getSlot(index).getStack().copy();
                     stack.setCount(1);
@@ -127,13 +129,13 @@ public class MagnetContainer extends ItemBaseContainer {
         return ItemStack.EMPTY;
     }
 
-    public NBTTagCompound getTagOrClose(){
-        ItemStack stack = this.getObjectOrClose();
-        if(stack.getItem() instanceof AdvancedMagnet){
-            if(!stack.hasTagCompound())
-                stack.setTagCompound(new NBTTagCompound());
-            return stack.getTagCompound();
-        }
-        return null;
+    @Override
+    public ItemStack getObject(ItemStack oldObject){
+        return super.getObject(oldObject);
+    }
+
+    @Override
+    public boolean validateObject(ItemStack object){
+        return super.validateObject(object);
     }
 }

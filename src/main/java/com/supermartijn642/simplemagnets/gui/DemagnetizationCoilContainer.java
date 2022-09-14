@@ -1,6 +1,7 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.supermartijn642.simplemagnets.DemagnetizationCoilTile;
+import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
+import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 
@@ -10,10 +11,10 @@ import net.minecraft.util.math.BlockPos;
 public class DemagnetizationCoilContainer extends BaseDemagnetizationCoilContainer {
 
     public DemagnetizationCoilContainer(EntityPlayer player, BlockPos pos){
-        super(player, pos, 170, 82, false);
+        super(SimpleMagnets.demagnetization_coil_container, player, pos, 170, 82, false);
     }
 
     @Override
-    protected void addSlots(EntityPlayer playerEntity, DemagnetizationCoilTile demagnetizationCoilTile){
+    protected void addSlots(EntityPlayer playerEntity, DemagnetizationCoilBlockEntity demagnetizationCoilBlockEntity){
     }
 }

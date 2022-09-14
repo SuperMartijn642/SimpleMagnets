@@ -1,8 +1,10 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
+import com.supermartijn642.core.item.BaseItem;
+import com.supermartijn642.core.item.ItemProperties;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -11,47 +13,38 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
 @Mod.EventBusSubscriber
-public abstract class MagnetItem extends Item implements ICapabilityProvider {
+public abstract class MagnetItem extends BaseItem implements ICapabilityProvider {
 
-    public MagnetItem(String registryName){
-        super();
-        this.setRegistryName(registryName);
-        this.setUnlocalizedName(SimpleMagnets.MODID + "." + registryName);
-
-        this.setMaxStackSize(1);
-        this.setCreativeTab(SimpleMagnets.GROUP);
+    public MagnetItem(){
+        super(ItemProperties.create().group(SimpleMagnets.GROUP).maxStackSize(1));
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn){
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        toggleMagnet(playerIn, stack);
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+    public ItemUseResult interact(ItemStack stack, EntityPlayer player, EnumHand hand, World level){
+        toggleMagnet(player, stack);
+        return ItemUseResult.success(stack);
     }
 
     public static void toggleMagnet(EntityPlayer player, ItemStack stack){
@@ -66,30 +59,30 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
     }
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected){
+    public void onUpdate(ItemStack stack, World level, Entity entity, int itemSlot, boolean isSelected){
         NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
         if(tag.hasKey("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
                 int r = this.getRangeItems(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entity.getPositionVector().addVector(-r, -r, -r), entity.getPositionVector().addVector(r, r, r));
 
-                List<EntityItem> items = worldIn.getEntitiesWithinAABB(EntityItem.class, area,
-                    item -> item.isEntityAlive() && (!worldIn.isRemote || item.ticksExisted > 1) &&
-                        (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entityIn.getUniqueID()) || !item.cannotPickup()) &&
+                List<EntityItem> items = level.getEntitiesWithinAABB(EntityItem.class, area,
+                    item -> item.isEntityAlive() && (!level.isRemote || item.ticksExisted > 1) &&
+                        (!item.getEntityData().hasKey("simplemagnets:throwerIdMost") || !item.getEntityData().getUniqueId("simplemagnets:throwerId").equals(entity.getUniqueID()) || !item.cannotPickup()) &&
                         !item.getItem().isEmpty() && !item.getEntityData().hasKey("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
                 );
-                items.forEach(item -> item.setPosition(entityIn.posX, entityIn.posY, entityIn.posZ));
+                items.forEach(item -> item.setPosition(entity.posX, entity.posY, entity.posZ));
                 // Directly add items to the player's inventory when ItemPhysic is installed
-                if(!worldIn.isRemote && entityIn instanceof EntityPlayer && Loader.isModLoaded("itemphysic"))
-                    items.forEach(item -> playerTouch(item, (EntityPlayer)entityIn));
+                if(!level.isRemote && entity instanceof EntityPlayer && CommonUtils.isModLoaded("itemphysic"))
+                    items.forEach(item -> playerTouch(item, (EntityPlayer)entity));
             }
 
-            if(!worldIn.isRemote && this.canPickupXp(tag) && entityIn instanceof EntityPlayer){
+            if(!level.isRemote && this.canPickupXp(tag) && entity instanceof EntityPlayer){
                 int r = this.getRangeXp(tag);
-                AxisAlignedBB area = new AxisAlignedBB(entityIn.getPositionVector().addVector(-r, -r, -r), entityIn.getPositionVector().addVector(r, r, r));
+                AxisAlignedBB area = new AxisAlignedBB(entity.getPositionVector().addVector(-r, -r, -r), entity.getPositionVector().addVector(r, r, r));
 
-                EntityPlayer player = (EntityPlayer)entityIn;
-                List<EntityXPOrb> orbs = worldIn.getEntitiesWithinAABB(EntityXPOrb.class, area);
+                EntityPlayer player = (EntityPlayer)entity;
+                List<EntityXPOrb> orbs = level.getEntitiesWithinAABB(EntityXPOrb.class, area);
                 orbs.forEach(orb -> {
                     orb.delayBeforeCanPickup = 0;
                     player.xpCooldown = 0;
@@ -161,11 +154,9 @@ public abstract class MagnetItem extends Item implements ICapabilityProvider {
         return SimpleMagnets.baubles.isBaubleCapability(capability) ? SimpleMagnets.baubles.getBaubleCapability(capability, this) : null;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-        tooltip.add(this.getTooltip().getFormattedText());
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    protected void appendItemInformation(ItemStack stack, @Nullable IBlockAccess level, Consumer<ITextComponent> info, boolean advanced){
+        info.accept(this.getTooltip());
     }
 
     protected abstract ITextComponent getTooltip();

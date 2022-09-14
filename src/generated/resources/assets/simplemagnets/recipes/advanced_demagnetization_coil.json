@@ -1,0 +1,31 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " A ",
+    "BCB",
+    "CDC"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "dustGlowstone"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "D": [
+      {
+        "type": "minecraft:item",
+        "item": "simplemagnets:basic_demagnetization_coil"
+      }
+    ]
+  },
+  "result": {
+    "item": "simplemagnets:advanced_demagnetization_coil"
+  }
+}

@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.TextComponents;
+import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -16,18 +16,15 @@ import net.minecraft.world.World;
  */
 public class AdvancedMagnet extends MagnetItem {
 
-    public AdvancedMagnet(){
-        super("advancedmagnet");
-    }
-
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn){
-        if(!playerIn.isSneaking())
-            return super.onItemRightClick(worldIn, playerIn, handIn);
-        int slot = handIn == EnumHand.MAIN_HAND ? playerIn.inventory.currentItem : 40;
-        if(!worldIn.isRemote)
-            playerIn.openGui(SimpleMagnets.instance, slot, worldIn, (int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ);
-        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+    public ItemUseResult interact(ItemStack stack, EntityPlayer player, EnumHand hand, World level){
+        if(!player.isSneaking())
+            return super.interact(stack, player, hand, level);
+
+        int slot = hand == EnumHand.MAIN_HAND ? player.inventory.currentItem : 40;
+        if(!level.isRemote)
+            CommonUtils.openContainer(new MagnetContainer(player, slot));
+        return ItemUseResult.success(stack);
     }
 
     @Override

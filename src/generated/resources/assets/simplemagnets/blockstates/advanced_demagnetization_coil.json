@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "facing=down": {
+      "type": "supermartijn642corelib:any_model_location",
+      "model": "simplemagnets:advanced_demagnetization_coil"
+    },
+    "facing=up": {
+      "type": "supermartijn642corelib:any_model_location",
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 180
+    },
+    "facing=south": {
+      "type": "supermartijn642corelib:any_model_location",
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90
+    },
+    "facing=north": {
+      "type": "supermartijn642corelib:any_model_location",
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "type": "supermartijn642corelib:any_model_location",
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west": {
+      "type": "supermartijn642corelib:any_model_location",
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

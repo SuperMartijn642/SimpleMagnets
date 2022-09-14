@@ -21,20 +21,20 @@ public class ItemSpawnHandler {
 
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
 
-    private static ItemSpawnHandler getInstance(World world){
-        return world.isRemote ? CLIENT : SERVER;
+    private static ItemSpawnHandler getInstance(World level){
+        return level.isRemote ? CLIENT : SERVER;
     }
 
-    public static void add(DemagnetizationCoilTile tile){
-        if(tile == null || tile.isInvalid() || !tile.hasWorld())
+    public static void add(DemagnetizationCoilBlockEntity entity){
+        if(entity == null || entity.isInvalid() || !entity.hasWorld())
             return;
 
-        ItemSpawnHandler handler = getInstance(tile.getWorld());
-        handler.tiles.putIfAbsent(tile.getWorld().provider.getDimensionType(), new LinkedList<>());
-        handler.tiles.get(tile.getWorld().provider.getDimensionType()).add(new WeakReference<>(tile));
+        ItemSpawnHandler handler = getInstance(entity.getWorld());
+        handler.blocks.putIfAbsent(entity.getWorld().provider.getDimensionType(), new LinkedList<>());
+        handler.blocks.get(entity.getWorld().provider.getDimensionType()).add(new WeakReference<>(entity));
     }
 
-    private final HashMap<DimensionType,List<WeakReference<DemagnetizationCoilTile>>> tiles = new HashMap<>();
+    private final HashMap<DimensionType,List<WeakReference<DemagnetizationCoilBlockEntity>>> blocks = new HashMap<>();
 
     @SubscribeEvent
     public static void onEntitySpawn(EntityJoinWorldEvent e){
@@ -44,19 +44,19 @@ public class ItemSpawnHandler {
         EntityItem item = (EntityItem)e.getEntity();
 
         ItemSpawnHandler handler = getInstance(e.getWorld());
-        handler.tiles.putIfAbsent(e.getWorld().provider.getDimensionType(), new LinkedList<>());
+        handler.blocks.putIfAbsent(e.getWorld().provider.getDimensionType(), new LinkedList<>());
 
-        List<WeakReference<DemagnetizationCoilTile>> toRemove = new ArrayList<>();
+        List<WeakReference<DemagnetizationCoilBlockEntity>> toRemove = new ArrayList<>();
 
-        List<WeakReference<DemagnetizationCoilTile>> list = handler.tiles.get(e.getWorld().provider.getDimensionType());
-        for(WeakReference<DemagnetizationCoilTile> reference : list){
-            DemagnetizationCoilTile tile = reference.get();
-            if(tile == null || tile.isInvalid() || !tile.hasWorld()){
+        List<WeakReference<DemagnetizationCoilBlockEntity>> list = handler.blocks.get(e.getWorld().provider.getDimensionType());
+        for(WeakReference<DemagnetizationCoilBlockEntity> reference : list){
+            DemagnetizationCoilBlockEntity entity = reference.get();
+            if(entity == null || entity.isInvalid() || !entity.hasWorld()){
                 toRemove.add(reference);
                 continue;
             }
 
-            if(tile.getArea().contains(item.getPositionVector()) && tile.shouldEffectItem(item.getItem())){
+            if(entity.getArea().contains(item.getPositionVector()) && entity.shouldEffectItem(item.getItem())){
                 item.getEntityData().setBoolean("PreventRemoteMovement", true);
                 item.getEntityData().setBoolean("AllowMachineRemoteMovement", true);
             }

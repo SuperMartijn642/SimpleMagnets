@@ -24,19 +24,18 @@ public class DemagnetizationCoilAreaHighlighter {
             return;
 
         BlockPos pos = e.getTarget().getBlockPos();
-        // Jup, pos can be null here even though its a non null return type
+        // Jup, pos can be null here even though it's a non-null return type
         if(pos != null){
-            TileEntity tile = ClientUtils.getWorld().getTileEntity(pos);
-            if(tile instanceof DemagnetizationCoilTile){
+            TileEntity entity = ClientUtils.getWorld().getTileEntity(pos);
+            if(entity instanceof DemagnetizationCoilBlockEntity){
                 GlStateManager.pushMatrix();
                 Vec3d playerPos = RenderUtils.getCameraPosition();
                 GlStateManager.translate(-playerPos.x, -playerPos.y, -playerPos.z);
 
-                AxisAlignedBB area = ((DemagnetizationCoilTile)tile).getArea();
+                AxisAlignedBB area = ((DemagnetizationCoilBlockEntity)entity).getArea();
                 float red = Math.abs(pos.getX() % 255) / 255f, green = Math.abs(pos.getY() % 255) / 255f, blue = Math.abs(pos.getZ() % 255) / 255f;
-                RenderUtils.renderBox(area, red, green, blue, 0.3f);
-                RenderUtils.renderBoxSides(area, red, green, blue, 0.2f);
-                RenderUtils.resetState();
+                RenderUtils.renderBox(area, red, green, blue, 0.3f, true);
+                RenderUtils.renderBoxSides(area, red, green, blue, 0.2f, true);
 
                 GlStateManager.popMatrix();
             }

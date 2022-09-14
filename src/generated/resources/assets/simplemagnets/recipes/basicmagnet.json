@@ -1,0 +1,29 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAB",
+    "AC ",
+    "AAD"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "enderpearl"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    }
+  },
+  "result": {
+    "item": "simplemagnets:basicmagnet"
+  }
+}

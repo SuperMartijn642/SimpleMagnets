@@ -48,5 +48,4 @@ public class PacketToggleMagnet implements BasePacket {
     private static ItemStack findCuriosStack(EntityPlayer player){
         return SimpleMagnets.baubles.getMagnetStack(player);
     }
-
 }

@@ -1,0 +1,41 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "AAB",
+    "CDE",
+    "AAF"
+  ],
+  "key": {
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    },
+    "C": [
+      {
+        "type": "minecraft:item",
+        "item": "simplemagnets:basicmagnet"
+      }
+    ],
+    "D": [
+      {
+        "type": "minecraft:item",
+        "item": "minecraft:ender_eye"
+      }
+    ],
+    "E": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "F": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    }
+  },
+  "result": {
+    "item": "simplemagnets:advancedmagnet"
+  }
+}
