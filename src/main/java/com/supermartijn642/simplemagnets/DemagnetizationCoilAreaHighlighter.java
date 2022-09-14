@@ -24,17 +24,16 @@ public class DemagnetizationCoilAreaHighlighter {
             return;
 
         BlockPos pos = e.getTarget().getBlockPos();
-        TileEntity tile = ClientUtils.getWorld().getBlockEntity(pos);
-        if(tile instanceof DemagnetizationCoilTile){
+        TileEntity entity = ClientUtils.getWorld().getBlockEntity(pos);
+        if(entity instanceof DemagnetizationCoilBlockEntity){
             GlStateManager.pushMatrix();
-            Vec3d playerPos = e.getInfo().getPosition();
+            Vec3d playerPos = RenderUtils.getCameraPosition();
             GlStateManager.translated(-playerPos.x, -playerPos.y, -playerPos.z);
 
-            AxisAlignedBB area = ((DemagnetizationCoilTile)tile).getArea();
+            AxisAlignedBB area = ((DemagnetizationCoilBlockEntity)entity).getArea();
             float red = Math.abs(pos.getX() % 255) / 255f, green = Math.abs(pos.getY() % 255) / 255f, blue = Math.abs(pos.getZ() % 255) / 255f;
-            RenderUtils.renderBox(area, red, green, blue, 0.3f);
-            RenderUtils.renderBoxSides(area, red, green, blue, 0.2f);
-            RenderUtils.resetState();
+            RenderUtils.renderBox(area, red, green, blue, 0.3f, true);
+            RenderUtils.renderBoxSides(area, red, green, blue, 0.2f, true);
 
             GlStateManager.popMatrix();
         }
