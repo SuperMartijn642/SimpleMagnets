@@ -1,13 +1,13 @@
 package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.core.block.BaseBlockEntity;
+import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.block.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -42,7 +42,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
     public boolean filterWhitelist;
     public boolean filterDurability = true; // nbt in 1.14+
 
-    public DemagnetizationCoilBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int minRange, int maxRange, int range, boolean hasFilter){
+    public DemagnetizationCoilBlockEntity(BaseBlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int minRange, int maxRange, int range, boolean hasFilter){
         super(blockEntityType, pos, state);
         this.minRange = minRange;
         this.maxRange = maxRange;

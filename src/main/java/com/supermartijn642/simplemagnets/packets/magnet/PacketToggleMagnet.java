@@ -51,7 +51,7 @@ public class PacketToggleMagnet implements BasePacket {
         return null;
     }
 
-    private static ItemStack findCuriosStack(Player player){ // TODO
+    private static ItemStack findCuriosStack(Player player){
         if(CommonUtils.isModLoaded("curios")){
             ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY).orElse(null);
             if(handler != null){

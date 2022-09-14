@@ -12,6 +12,7 @@
   "simplemagnets.gui.demagnetization_coil.durability.on": "Match NBT",
   "simplemagnets.gui.magnet.xp.on": "On",
   "simplemagnets.gui.demagnetization_coil.range.increase": "Increase Range",
+  "simplemagnets.item_group": "Simple Magnets",
   "simplemagnets.gui.demagnetization_coil.range.decrease": "Decrease Range",
   "simplemagnets.keys.category": "Simple Magnets",
   "simplemagnets.basicmagnet.info": "Can pick up items and xp up to %d blocks away when activated",
@@ -33,6 +34,5 @@
   "simplemagnets.gui.magnet.filter": "Item Filter",
   "simplemagnets.gui.magnet.items.increase": "Increase Range",
   "simplemagnets.gui.magnet.xp.decrease": "Decrease Range",
-  "itemGroup.simplemagnets": "Simple Magnets",
   "simplemagnets.magnets.toggle_message.on": "On"
 }
