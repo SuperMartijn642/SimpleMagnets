@@ -54,7 +54,7 @@ public class SimpleMagnets {
     @RegistryEntryAcceptor(namespace = "simplemagnets", identifier = "filtered_demagnetization_coil_container", registry = RegistryEntryAcceptor.Registry.MENU_TYPES)
     public static BaseContainerType<FilteredDemagnetizationCoilContainer> filtered_demagnetization_coil_container;
 
-    public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", simple_magnet);
+    public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
     public SimpleMagnets(){
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::interModEnqueue);
