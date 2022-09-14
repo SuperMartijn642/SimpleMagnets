@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "display": {
+    "icon": {
+      "item": "simplemagnets:advanced_demagnetization_coil"
+    },
+    "title": {
+      "translate": "simplemagnets.advancement.recipes/simplemagnets/advanced_demagnetization_coil.title"
+    },
+    "description": {
+      "translate": "simplemagnets.advancement.recipes/simplemagnets/advanced_demagnetization_coil.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "can_unlock_recipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "simplemagnets:basic_demagnetization_coil"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplemagnets:advanced_demagnetization_coil"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "can_unlock_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "simplemagnets:advanced_demagnetization_coil"
+    ]
+  }
+}

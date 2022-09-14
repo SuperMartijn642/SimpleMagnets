@@ -11,11 +11,6 @@ import net.minecraft.world.item.ItemStack;
  */
 public class BasicMagnet extends MagnetItem {
 
-
-    public BasicMagnet(){
-        super("basicmagnet");
-    }
-
     @Override
     protected boolean canPickupItems(CompoundTag tag){
         return true;

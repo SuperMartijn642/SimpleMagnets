@@ -24,20 +24,19 @@ public class DemagnetizationCoilAreaHighlighter {
             return;
 
         BlockPos pos = e.getTarget().getBlockPos();
-        BlockEntity tile = ClientUtils.getWorld().getBlockEntity(pos);
-        if(tile instanceof DemagnetizationCoilTile){
-            PoseStack matrixStack = e.getPoseStack();
-            matrixStack.pushPose();
+        BlockEntity entity = ClientUtils.getWorld().getBlockEntity(pos);
+        if(entity instanceof DemagnetizationCoilBlockEntity){
+            PoseStack poseStack = e.getPoseStack();
+            poseStack.pushPose();
             Vec3 playerPos = RenderUtils.getCameraPosition();
-            matrixStack.translate(-playerPos.x, -playerPos.y, -playerPos.z);
+            poseStack.translate(-playerPos.x, -playerPos.y, -playerPos.z);
 
-            AABB area = ((DemagnetizationCoilTile)tile).getArea();
+            AABB area = ((DemagnetizationCoilBlockEntity)entity).getArea();
             float red = Math.abs(pos.getX() % 255) / 255f, green = Math.abs(pos.getY() % 255) / 255f, blue = Math.abs(pos.getZ() % 255) / 255f;
-            RenderUtils.renderBox(matrixStack, area, red, green, blue, 0.3f);
-            RenderUtils.renderBoxSides(matrixStack, area, red, green, blue, 0.2f);
-            RenderUtils.resetState();
+            RenderUtils.renderBox(poseStack, area, red, green, blue, 0.3f, true);
+            RenderUtils.renderBoxSides(poseStack, area, red, green, blue, 0.2f, true);
 
-            matrixStack.popPose();
+            poseStack.popPose();
         }
     }
 }
