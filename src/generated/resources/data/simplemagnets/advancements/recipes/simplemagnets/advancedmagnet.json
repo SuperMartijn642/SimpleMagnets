@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "display": {
+    "icon": {
+      "item": "simplemagnets:advancedmagnet"
+    },
+    "title": {
+      "translate": "simplemagnets.advancement.recipes/simplemagnets/advancedmagnet.title"
+    },
+    "description": {
+      "translate": "simplemagnets.advancement.recipes/simplemagnets/advancedmagnet.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "can_unlock_recipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "simplemagnets:basicmagnet"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplemagnets:advancedmagnet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "can_unlock_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "simplemagnets:advancedmagnet"
+    ]
+  }
+}

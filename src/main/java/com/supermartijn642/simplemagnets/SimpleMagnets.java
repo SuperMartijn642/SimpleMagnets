@@ -3,7 +3,10 @@ package com.supermartijn642.simplemagnets;
 import com.supermartijn642.core.block.BaseBlock;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.gui.BaseContainerType;
+import com.supermartijn642.core.item.BaseBlockItem;
 import com.supermartijn642.core.item.BaseItem;
+import com.supermartijn642.core.item.CreativeItemGroup;
+import com.supermartijn642.core.item.ItemProperties;
 import com.supermartijn642.core.network.PacketChannel;
 import com.supermartijn642.core.registry.GeneratorRegistrationHandler;
 import com.supermartijn642.core.registry.RegistrationHandler;
@@ -14,10 +17,6 @@ import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContaine
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -33,13 +32,6 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 public class SimpleMagnets {
 
     public static final PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
-
-    public static final CreativeModeTab GROUP = new CreativeModeTab("simplemagnets") {
-        @Override
-        public ItemStack makeIcon(){
-            return new ItemStack(simple_magnet);
-        }
-    };
 
     @RegistryEntryAcceptor(namespace = "simplemagnets", identifier = "basicmagnet", registry = RegistryEntryAcceptor.Registry.ITEMS)
     public static BaseItem simple_magnet;
@@ -61,6 +53,8 @@ public class SimpleMagnets {
     public static BaseContainerType<DemagnetizationCoilContainer> demagnetization_coil_container;
     @RegistryEntryAcceptor(namespace = "simplemagnets", identifier = "filtered_demagnetization_coil_container", registry = RegistryEntryAcceptor.Registry.MENU_TYPES)
     public static BaseContainerType<FilteredDemagnetizationCoilContainer> filtered_demagnetization_coil_container;
+
+    public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
     public SimpleMagnets(){
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::interModEnqueue);
@@ -102,8 +96,8 @@ public class SimpleMagnets {
         // Items
         handler.registerItem("basicmagnet", BasicMagnet::new);
         handler.registerItem("advancedmagnet", AdvancedMagnet::new);
-        handler.registerItem("basic_demagnetization_coil", () -> new BlockItem(basic_demagnetization_coil, new Item.Properties().tab(GROUP)));
-        handler.registerItem("advanced_demagnetization_coil", () -> new BlockItem(advanced_demagnetization_coil, new Item.Properties().tab(GROUP)));
+        handler.registerItem("basic_demagnetization_coil", () -> new BaseBlockItem(basic_demagnetization_coil, ItemProperties.create().group(GROUP)));
+        handler.registerItem("advanced_demagnetization_coil", () -> new BaseBlockItem(advanced_demagnetization_coil, ItemProperties.create().group(GROUP)));
         // Blocks
         handler.registerBlock("basic_demagnetization_coil", () -> new DemagnetizationCoilBlock(SMConfig.basicCoilMaxRange, SMConfig.basicCoilFilter, () -> basic_demagnetization_coil_tile));
         handler.registerBlock("advanced_demagnetization_coil", () -> new DemagnetizationCoilBlock(SMConfig.advancedCoilMaxRange, SMConfig.advancedCoilFilter, () -> advanced_demagnetization_coil_tile));

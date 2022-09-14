@@ -22,14 +22,14 @@ public class SimpleMagnetsBlockStateGenerator extends BlockStateGenerator {
                 Direction facing = state.get(DemagnetizationCoilBlock.FACING);
                 int xRotation = facing == Direction.UP ? 180 : facing == Direction.DOWN ? 0 : 90;
                 int yRotation = facing.getAxis() == Direction.Axis.Y ? 0 : (int)facing.toYRot();
-                builder.model("basic_demagnetization_coil",xRotation,yRotation);
+                builder.model("basic_demagnetization_coil", xRotation, yRotation);
             });
         this.blockState(SimpleMagnets.advanced_demagnetization_coil)
             .variantsForAll((state, builder) -> {
                 Direction facing = state.get(DemagnetizationCoilBlock.FACING);
                 int xRotation = facing == Direction.UP ? 180 : facing == Direction.DOWN ? 0 : 90;
                 int yRotation = facing.getAxis() == Direction.Axis.Y ? 0 : (int)facing.toYRot();
-                builder.model("advanced_demagnetization_coil",xRotation,yRotation);
+                builder.model("advanced_demagnetization_coil", xRotation, yRotation);
             });
     }
 }

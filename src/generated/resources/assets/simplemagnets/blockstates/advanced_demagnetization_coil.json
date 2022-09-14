@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90,
+      "y": 180
+    },
+    "facing=down": {
+      "model": "simplemagnets:advanced_demagnetization_coil"
+    },
+    "facing=up": {
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 180
+    },
+    "facing=west": {
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east": {
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90,
+      "y": 270
+    },
+    "facing=south": {
+      "model": "simplemagnets:advanced_demagnetization_coil",
+      "x": 90
+    }
+  }
+}
