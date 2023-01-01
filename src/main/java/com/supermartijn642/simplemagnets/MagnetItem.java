@@ -55,6 +55,10 @@ public abstract class MagnetItem extends BaseItem {
 
     @Override
     public void inventoryUpdate(ItemStack stack, Level level, Entity entity, int itemSlot, boolean isSelected){
+        // Prevent spectators from picking up items
+        if(entity.isSpectator())
+            return;
+
         CompoundTag tag = stack.getOrCreateTag();
         if(tag.contains("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
