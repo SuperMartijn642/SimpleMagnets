@@ -60,6 +60,10 @@ public abstract class MagnetItem extends BaseItem implements ICapabilityProvider
 
     @Override
     public void onUpdate(ItemStack stack, World level, Entity entity, int itemSlot, boolean isSelected){
+        // Prevent spectators from picking up items
+        if(entity instanceof EntityPlayer && ((EntityPlayer)entity).isSpectator())
+            return;
+
         NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
         if(tag.hasKey("active") && tag.getBoolean("active")){
             if(this.canPickupItems(tag)){
