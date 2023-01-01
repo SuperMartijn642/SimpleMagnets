@@ -5,10 +5,10 @@
       "item": "simplemagnets:basic_demagnetization_coil"
     },
     "title": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/basic_demagnetization_coil.title"
+      "translate": "simplemagnets.advancement.recipes/basic_demagnetization_coil.title"
     },
     "description": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/basic_demagnetization_coil.description"
+      "translate": "simplemagnets.advancement.recipes/basic_demagnetization_coil.description"
     },
     "frame": "task",
     "show_toast": false,
@@ -16,25 +16,25 @@
     "hidden": false
   },
   "criteria": {
-    "can_unlock_recipe": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "simplemagnets:basic_demagnetization_coil"
+      }
+    },
+    "recipe_condition": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           null
         ]
       }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "simplemagnets:basic_demagnetization_coil"
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "can_unlock_recipe"
+      "recipe_condition"
     ]
   ],
   "rewards": {
