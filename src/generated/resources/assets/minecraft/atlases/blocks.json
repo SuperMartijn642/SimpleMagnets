@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:basic_demagnetization_coil"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:basicmagnet"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:advanced_demagnetization_coil"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:demagnetization_coil_top"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:demagnetization_coil_bottom"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:advancedmagnet"
+    }
+  ]
+}

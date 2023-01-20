@@ -5,10 +5,10 @@
       "item": "simplemagnets:advanced_demagnetization_coil"
     },
     "title": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/advanced_demagnetization_coil.title"
+      "translate": "simplemagnets.advancement.recipes/misc/advanced_demagnetization_coil.title"
     },
     "description": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/advanced_demagnetization_coil.description"
+      "translate": "simplemagnets.advancement.recipes/misc/advanced_demagnetization_coil.description"
     },
     "frame": "task",
     "show_toast": false,

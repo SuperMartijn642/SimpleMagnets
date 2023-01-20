@@ -43,12 +43,12 @@ public class PacketToggleMagnetMessage implements BasePacket {
                 if(SMConfig.showToggleMessage.get())
                     player.displayClientMessage(TextComponents.translation("simplemagnets.magnets.toggle_message").color(ChatFormatting.YELLOW).string(" ").translation("simplemagnets.magnets.toggle_message.off").color(ChatFormatting.RED).get(), true);
                 if(SMConfig.playToggleSound.get())
-                    player.level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BELL, SoundSource.PLAYERS, 0.4f, 0.01f);
+                    player.level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BELL.get(), SoundSource.PLAYERS, 0.4f, 0.01f);
             }else{
                 if(SMConfig.showToggleMessage.get())
                     player.displayClientMessage(TextComponents.translation("simplemagnets.magnets.toggle_message").color(ChatFormatting.YELLOW).string(" ").translation("simplemagnets.magnets.toggle_message.on").color(ChatFormatting.GREEN).get(), true);
                 if(SMConfig.playToggleSound.get())
-                    player.level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BELL, SoundSource.PLAYERS, 0.4f, 0.9f);
+                    player.level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BELL.get(), SoundSource.PLAYERS, 0.4f, 0.9f);
             }
         }
     }
