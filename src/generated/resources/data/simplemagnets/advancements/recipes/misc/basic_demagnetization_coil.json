@@ -2,13 +2,13 @@
   "parent": "minecraft:recipes/root",
   "display": {
     "icon": {
-      "item": "simplemagnets:advanced_demagnetization_coil"
+      "item": "simplemagnets:basic_demagnetization_coil"
     },
     "title": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/advanced_demagnetization_coil.title"
+      "translate": "simplemagnets.advancement.recipes/misc/basic_demagnetization_coil.title"
     },
     "description": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/advanced_demagnetization_coil.description"
+      "translate": "simplemagnets.advancement.recipes/misc/basic_demagnetization_coil.description"
     },
     "frame": "task",
     "show_toast": false,
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "simplemagnets:advanced_demagnetization_coil"
+        "recipe": "simplemagnets:basic_demagnetization_coil"
       }
     },
     "recipe_condition": {
@@ -27,9 +27,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "simplemagnets:basic_demagnetization_coil"
-            ]
+            "tag": "c:iron_ingots"
           }
         ]
       }
@@ -43,7 +41,7 @@
   ],
   "rewards": {
     "recipes": [
-      "simplemagnets:advanced_demagnetization_coil"
+      "simplemagnets:basic_demagnetization_coil"
     ]
   }
 }

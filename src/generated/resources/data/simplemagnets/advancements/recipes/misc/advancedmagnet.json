@@ -5,10 +5,10 @@
       "item": "simplemagnets:advancedmagnet"
     },
     "title": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/advancedmagnet.title"
+      "translate": "simplemagnets.advancement.recipes/misc/advancedmagnet.title"
     },
     "description": {
-      "translate": "simplemagnets.advancement.recipes/simplemagnets/advancedmagnet.description"
+      "translate": "simplemagnets.advancement.recipes/misc/advancedmagnet.description"
     },
     "frame": "task",
     "show_toast": false,
