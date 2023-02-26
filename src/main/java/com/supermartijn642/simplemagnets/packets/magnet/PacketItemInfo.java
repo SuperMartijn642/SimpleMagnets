@@ -7,17 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.lang.reflect.Field;
 import java.util.UUID;
 
 /**
  * Created 1/8/2021 by SuperMartijn642
  */
 public class PacketItemInfo implements BasePacket {
-
-    private static final Field PICKUP_DELAY = ObfuscationReflectionHelper.findField(ItemEntity.class, "f_31986_");
 
     private int target;
     private UUID thrower;
@@ -26,12 +22,7 @@ public class PacketItemInfo implements BasePacket {
     public PacketItemInfo(ItemEntity itemEntity){
         this.target = itemEntity.getId();
         this.thrower = itemEntity.getThrower();
-        try{
-            PICKUP_DELAY.setAccessible(true);
-            this.pickupDelay = PICKUP_DELAY.getInt(itemEntity);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        this.pickupDelay = itemEntity.pickupDelay;
     }
 
     public PacketItemInfo(){

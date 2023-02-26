@@ -3,6 +3,7 @@ package com.supermartijn642.simplemagnets;
 import com.supermartijn642.core.block.BaseBlockEntity;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.block.TickableBlockEntity;
+import com.supermartijn642.simplemagnets.extensions.SimpleMagnetsItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -60,10 +61,9 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
             item -> item.isAlive() && this.shouldEffectItem(item.getItem())
         );
 
-        affectedItems.forEach(item -> {
-            item.getPersistentData().putBoolean("PreventRemoteMovement", true);
-            item.getPersistentData().putBoolean("AllowMachineRemoteMovement", true);
-        });
+        affectedItems.stream()
+            .map(SimpleMagnetsItemEntity.class::cast)
+            .forEach(SimpleMagnetsItemEntity::simplemagnetsMarkDontPickUp);
     }
 
     public AABB getArea(){
@@ -139,7 +139,6 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
         }
     }
 
-    @Override
     public void onLoad(){
         ItemSpawnHandler.add(this);
     }

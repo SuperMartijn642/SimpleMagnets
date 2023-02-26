@@ -3,16 +3,15 @@ package com.supermartijn642.simplemagnets.gui;
 import com.supermartijn642.core.gui.ItemBaseContainer;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
+import com.supermartijn642.trashcans.screen.DummySlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
-import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -20,13 +19,9 @@ import javax.annotation.Nonnull;
 public class MagnetContainer extends ItemBaseContainer {
 
     public final int slot;
-    private final ItemStackHandler itemHandler = new ItemStackHandler(9) {
-        @Nonnull
-        @Override
-        public ItemStack getStackInSlot(int slot){
-            CompoundTag tag = MagnetContainer.this.object.getTag();
-            return (tag != null && tag.contains("filter" + slot)) ? ItemStack.of(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
-        }
+    private final Function<Integer,ItemStack> itemHandler = slot -> {
+        CompoundTag tag = MagnetContainer.this.object.getTag();
+        return (tag != null && tag.contains("filter" + slot)) ? ItemStack.of(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
     };
 
     public MagnetContainer(Player player, int slot){
@@ -41,7 +36,12 @@ public class MagnetContainer extends ItemBaseContainer {
         Inventory inventory = player.getInventory();
 
         for(int column = 0; column < 9; column++)
-            this.addSlot(new SlotItemHandler(this.itemHandler, column, 8 + column * 18, 80) {
+            this.addSlot(new DummySlot(column, 8 + column * 18, 80) {
+                @Override
+                public ItemStack getItem(){
+                    return MagnetContainer.this.itemHandler.apply(this.index);
+                }
+
                 @Override
                 public boolean mayPickup(Player player){
                     return false;
@@ -103,7 +103,7 @@ public class MagnetContainer extends ItemBaseContainer {
             boolean contains = false;
             int firstEmpty = -1;
             for(int i = 0; i < 9; i++){
-                ItemStack stack = this.itemHandler.getStackInSlot(i);
+                ItemStack stack = this.itemHandler.apply(i);
                 if(ItemStack.isSame(stack, this.getSlot(index).getItem()) && ItemStack.tagMatches(stack, this.getSlot(index).getItem())){
                     contains = true;
                     break;

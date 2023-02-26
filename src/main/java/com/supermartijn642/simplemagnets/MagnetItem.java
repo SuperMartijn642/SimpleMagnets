@@ -3,6 +3,7 @@ package com.supermartijn642.simplemagnets;
 import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.item.BaseItem;
 import com.supermartijn642.core.item.ItemProperties;
+import com.supermartijn642.simplemagnets.extensions.SimpleMagnetsItemEntity;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketItemInfo;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnetMessage;
 import net.minecraft.nbt.CompoundTag;
@@ -19,10 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -31,7 +28,6 @@ import java.util.function.Consumer;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class MagnetItem extends BaseItem {
 
     public MagnetItem(){
@@ -65,10 +61,12 @@ public abstract class MagnetItem extends BaseItem {
                 int r = this.getRangeItems(tag);
                 AABB area = new AABB(entity.position().add(-r, -r, -r), entity.position().add(r, r, r));
 
+                // TODO look for alternative to 'PreventRemoteMovement' tag on Fabric
+
                 List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
                     item -> item.isAlive() && (!level.isClientSide || item.tickCount > 1) &&
                         (item.getThrower() == null || !item.getThrower().equals(entity.getUUID()) || !item.hasPickUpDelay()) &&
-                        !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(tag, item.getItem())
+                        !item.getItem().isEmpty() && ((SimpleMagnetsItemEntity)item).simplemagnetsCanBePickedUp() && this.canPickupStack(tag, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entity.getX(), entity.getY(), entity.getZ()));
                 // Directly add items to the player's inventory when ItemPhysic is installed
@@ -96,18 +94,11 @@ public abstract class MagnetItem extends BaseItem {
      */
     private static void playerTouch(ItemEntity itemEntity, Player player){
         if(!itemEntity.level.isClientSide){
-            if(itemEntity.hasPickUpDelay()) return;
             ItemStack itemstack = itemEntity.getItem();
             Item item = itemstack.getItem();
             int i = itemstack.getCount();
 
-            int hook = net.minecraftforge.event.ForgeEventFactory.onItemPickup(itemEntity, player);
-            if(hook < 0) return;
-
-            ItemStack copy = itemstack.copy();
-            if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getUUID())) && (hook == 1 || i <= 0 || player.getInventory().add(itemstack))){
-                copy.setCount(copy.getCount() - itemstack.getCount());
-                ForgeEventFactory.firePlayerItemPickupEvent(player, itemEntity, copy);
+            if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.getOwner().equals(player.getUUID())) && i <= 0 || player.getInventory().add(itemstack)){
                 player.take(itemEntity, i);
                 if(itemstack.isEmpty()){
                     itemEntity.discard();
@@ -142,9 +133,8 @@ public abstract class MagnetItem extends BaseItem {
 
     protected abstract Component getTooltip();
 
-    @SubscribeEvent
-    public static void onStartTracking(PlayerEvent.StartTracking e){
-        if(!e.getPlayer().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).getThrower() != null)
-            SimpleMagnets.CHANNEL.sendToPlayer(e.getPlayer(), new PacketItemInfo((ItemEntity)e.getTarget()));
+    public static void onStartTracking(Entity target, Player player){
+        if(!player.level.isClientSide && target instanceof ItemEntity && ((ItemEntity)target).getThrower() != null)
+            SimpleMagnets.CHANNEL.sendToPlayer(player, new PacketItemInfo((ItemEntity)target));
     }
 }

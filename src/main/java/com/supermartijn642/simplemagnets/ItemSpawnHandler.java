@@ -1,11 +1,11 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.simplemagnets.extensions.SimpleMagnetsItemEntity;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -16,13 +16,16 @@ import java.util.List;
 /**
  * Created 2/21/2021 by SuperMartijn642
  */
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ItemSpawnHandler {
 
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
 
     private static ItemSpawnHandler getInstance(Level level){
         return level.isClientSide ? CLIENT : SERVER;
+    }
+
+    public static void registerEventListeners(){
+        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> onEntitySpawn(entity));
     }
 
     public static void add(DemagnetizationCoilBlockEntity entity){
@@ -36,19 +39,18 @@ public class ItemSpawnHandler {
 
     private final HashMap<ResourceKey<Level>,List<WeakReference<DemagnetizationCoilBlockEntity>>> blocks = new HashMap<>();
 
-    @SubscribeEvent
-    public static void onEntitySpawn(EntityJoinWorldEvent e){
-        if(!(e.getEntity() instanceof ItemEntity))
+    private static void onEntitySpawn(Entity spawnedEntity){
+        if(!(spawnedEntity instanceof ItemEntity))
             return;
 
-        ItemEntity item = (ItemEntity)e.getEntity();
+        ItemEntity item = (ItemEntity)spawnedEntity;
 
-        ItemSpawnHandler handler = getInstance(e.getWorld());
-        handler.blocks.putIfAbsent(e.getWorld().dimension(), new LinkedList<>());
+        ItemSpawnHandler handler = getInstance(item.getLevel());
+        handler.blocks.putIfAbsent(item.getLevel().dimension(), new LinkedList<>());
 
         List<WeakReference<DemagnetizationCoilBlockEntity>> toRemove = new ArrayList<>();
 
-        List<WeakReference<DemagnetizationCoilBlockEntity>> list = handler.blocks.get(e.getWorld().dimension());
+        List<WeakReference<DemagnetizationCoilBlockEntity>> list = handler.blocks.get(item.getLevel().dimension());
         for(WeakReference<DemagnetizationCoilBlockEntity> reference : list){
             DemagnetizationCoilBlockEntity entity = reference.get();
             if(entity == null || entity.isRemoved() || !entity.hasLevel()){
@@ -56,10 +58,8 @@ public class ItemSpawnHandler {
                 continue;
             }
 
-            if(entity.getArea().contains(item.position()) && entity.shouldEffectItem(item.getItem())){
-                item.getPersistentData().putBoolean("PreventRemoteMovement", true);
-                item.getPersistentData().putBoolean("AllowMachineRemoteMovement", true);
-            }
+            if(entity.getArea().contains(item.position()) && entity.shouldEffectItem(item.getItem()))
+                ((SimpleMagnetsItemEntity)item).simplemagnetsMarkDontPickUp();
         }
 
         list.removeAll(toRemove);

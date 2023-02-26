@@ -7,41 +7,37 @@ import com.supermartijn642.simplemagnets.gui.DemagnetizationCoilContainerScreen;
 import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContainerScreen;
 import com.supermartijn642.simplemagnets.gui.MagnetContainerScreen;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class SimpleMagnetsClient {
+public class SimpleMagnetsClient implements ClientModInitializer {
 
     private static KeyMapping MAGNET_TOGGLE_KEY;
 
-    public static void register(){
+    @Override
+    public void onInitializeClient(){
         ClientRegistrationHandler handler = ClientRegistrationHandler.get("simplemagnets");
         // Screens
         handler.registerContainerScreen(() -> SimpleMagnets.magnet_container, container -> WidgetContainerScreen.of(new MagnetContainerScreen(), container, false));
         handler.registerContainerScreen(() -> SimpleMagnets.demagnetization_coil_container, container -> WidgetContainerScreen.of(new DemagnetizationCoilContainerScreen(), container, false));
         handler.registerContainerScreen(() -> SimpleMagnets.filtered_demagnetization_coil_container, container -> WidgetContainerScreen.of(new FilteredDemagnetizationCoilContainerScreen(), container, false));
-    }
 
-    @SubscribeEvent
-    public static void registerKeyBindings(FMLClientSetupEvent e){
         MAGNET_TOGGLE_KEY = new KeyMapping("simplemagnets.keys.toggle", 72/*'h'*/, "simplemagnets.keys.category");
-        ClientRegistry.registerKeyBinding(MAGNET_TOGGLE_KEY);
-        MinecraftForge.EVENT_BUS.addListener(SimpleMagnetsClient::onKey);
+        KeyBindingHelper.registerKeyBinding(MAGNET_TOGGLE_KEY);
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while(MAGNET_TOGGLE_KEY.consumeClick())
+                onKey();
+        });
     }
 
-    public static void onKey(InputEvent.KeyInputEvent e){
-        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.consumeClick() && ClientUtils.getWorld() != null && Minecraft.getInstance().screen == null)
+    public static void onKey(){
+        if(MAGNET_TOGGLE_KEY != null && ClientUtils.getWorld() != null && Minecraft.getInstance().screen == null)
             SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnet());
     }
 }

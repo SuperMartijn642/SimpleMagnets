@@ -4,15 +4,13 @@ import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.network.BasePacket;
 import com.supermartijn642.core.network.PacketContext;
 import com.supermartijn642.simplemagnets.MagnetItem;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
-import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
-
-import java.util.stream.Collectors;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
@@ -52,15 +50,13 @@ public class PacketToggleMagnet implements BasePacket {
     }
 
     private static ItemStack findCuriosStack(Player player){
-        if(CommonUtils.isModLoaded("curios")){
-            ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY).orElse(null);
+        if(CommonUtils.isModLoaded("trinkets")){
+            TrinketComponent handler = TrinketsApi.getTrinketComponent(player).orElse(null);
             if(handler != null){
-                for(IDynamicStackHandler stackHandler : handler.getCurios().values().stream().map(ICurioStacksHandler::getStacks).collect(Collectors.toSet())){
-                    for(int slot = 0; slot < stackHandler.getSlots(); slot++){
-                        ItemStack stack = stackHandler.getStackInSlot(slot);
-                        if(stack.getItem() instanceof MagnetItem)
-                            return stack;
-                    }
+                for(Tuple<SlotReference,ItemStack> slot : handler.getAllEquipped()){
+                    ItemStack stack = slot.getB();
+                    if(stack.getItem() instanceof MagnetItem)
+                        return stack;
                 }
             }
         }

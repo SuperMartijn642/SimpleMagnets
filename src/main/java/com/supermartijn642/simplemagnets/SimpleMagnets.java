@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.block.BaseBlock;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.gui.BaseContainerType;
@@ -15,21 +16,16 @@ import com.supermartijn642.simplemagnets.generators.*;
 import com.supermartijn642.simplemagnets.gui.DemagnetizationCoilContainer;
 import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContainer;
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
+import com.supermartijn642.simplemagnets.integration.TrinketsIntegration;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-@Mod("simplemagnets")
-public class SimpleMagnets {
+public class SimpleMagnets implements ModInitializer {
 
     public static final PacketChannel CHANNEL = PacketChannel.create("simplemagnets");
 
@@ -56,8 +52,13 @@ public class SimpleMagnets {
 
     public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
-    public SimpleMagnets(){
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::interModEnqueue);
+    @Override
+    public void onInitialize(){
+        ItemSpawnHandler.registerEventListeners();
+        ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register((entity, world) -> {
+            if(entity instanceof DemagnetizationCoilBlockEntity)
+                ((DemagnetizationCoilBlockEntity)entity).onLoad();
+        });
 
         // magnets
         CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
@@ -83,12 +84,7 @@ public class SimpleMagnets {
         CHANNEL.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist::new, true);
 
         register();
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> SimpleMagnetsClient::register);
         registerGenerators();
-    }
-
-    public void interModEnqueue(InterModEnqueueEvent e){
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
     }
 
     private static void register(){
@@ -108,6 +104,10 @@ public class SimpleMagnets {
         handler.registerMenuType("container", BaseContainerType.create((container, data) -> data.writeInt(container.slot), (player, data) -> new MagnetContainer(player, data.readInt())));
         handler.registerMenuType("demagnetization_coil_container", BaseContainerType.create((container, data) -> data.writeBlockPos(container.getBlockEntityPos()), (player, data) -> new DemagnetizationCoilContainer(player, data.readBlockPos())));
         handler.registerMenuType("filtered_demagnetization_coil_container", BaseContainerType.create((container, data) -> data.writeBlockPos(container.getBlockEntityPos()), (player, data) -> new FilteredDemagnetizationCoilContainer(player, data.readBlockPos())));
+
+        // Add trinkets
+        if(CommonUtils.isModLoaded("trinkets"))
+            handler.registerItemCallback(helper -> TrinketsIntegration.initialize());
     }
 
     private static void registerGenerators(){

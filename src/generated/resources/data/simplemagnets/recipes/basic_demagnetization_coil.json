@@ -7,13 +7,13 @@
   ],
   "key": {
     "A": {
-      "tag": "forge:ingots/gold"
+      "tag": "c:gold_ingots"
     },
     "B": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:redstone_dusts"
     },
     "C": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     }
   },
   "result": {
