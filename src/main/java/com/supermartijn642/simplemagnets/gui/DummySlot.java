@@ -1,4 +1,4 @@
-package com.supermartijn642.trashcans.screen;
+package com.supermartijn642.simplemagnets.gui;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
