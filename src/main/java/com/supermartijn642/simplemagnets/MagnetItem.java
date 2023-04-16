@@ -65,7 +65,7 @@ public abstract class MagnetItem extends BaseItem {
 
                 List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
                     item -> item.isAlive() && (!level.isClientSide || item.tickCount > 1) &&
-                        (item.getThrower() == null || !item.getThrower().equals(entity.getUUID()) || !item.hasPickUpDelay()) &&
+                        (item.thrower == null || !item.thrower.equals(entity.getUUID()) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && ((SimpleMagnetsItemEntity)item).simplemagnetsCanBePickedUp() && this.canPickupStack(tag, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entity.getX(), entity.getY(), entity.getZ()));
@@ -134,7 +134,7 @@ public abstract class MagnetItem extends BaseItem {
     protected abstract Component getTooltip();
 
     public static void onStartTracking(Entity target, Player player){
-        if(!player.level.isClientSide && target instanceof ItemEntity && ((ItemEntity)target).getThrower() != null)
+        if(!player.level.isClientSide && target instanceof ItemEntity && ((ItemEntity)target).thrower != null)
             SimpleMagnets.CHANNEL.sendToPlayer(player, new PacketItemInfo((ItemEntity)target));
     }
 }
