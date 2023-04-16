@@ -25,7 +25,7 @@ public class PacketItemInfo implements BasePacket {
 
     public PacketItemInfo(ItemEntity itemEntity){
         this.target = itemEntity.getId();
-        this.thrower = itemEntity.getThrower();
+        this.thrower = itemEntity.thrower;
         try{
             PICKUP_DELAY.setAccessible(true);
             this.pickupDelay = PICKUP_DELAY.getInt(itemEntity);
