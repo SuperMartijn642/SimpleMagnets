@@ -3,7 +3,6 @@ package com.supermartijn642.simplemagnets.gui;
 import com.supermartijn642.core.gui.ItemBaseContainer;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
-import com.supermartijn642.trashcans.screen.DummySlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

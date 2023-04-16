@@ -2,7 +2,6 @@ package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
-import com.supermartijn642.trashcans.screen.DummySlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
