@@ -39,7 +39,7 @@ public class AdvancedMagnet extends MagnetItem {
         for(int slot = 0; slot < 9; slot++){
             if(tag.contains("filter" + slot)){
                 ItemStack stack1 = ItemStack.of(tag.getCompound("filter" + slot));
-                boolean equal = ItemStack.isSame(stack, stack1) && (!filterDurability || ItemStack.tagMatches(stack, stack1));
+                boolean equal = ItemStack.isSameItem(stack, stack1) && (!filterDurability || ItemStack.isSameItemSameTags(stack, stack1));
                 if(equal)
                     return whitelist;
             }

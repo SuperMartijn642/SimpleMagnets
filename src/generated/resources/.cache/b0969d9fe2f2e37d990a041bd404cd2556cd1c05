@@ -1,9 +1,1 @@
-// 1.19.3	2023-02-26T20:16:39.7071916	Simple Magnets/Simple Magnets Recipe Generator
-464e3fd2d2c491eda1803aa310825989b6972012 data\simplemagnets\recipes\basicmagnet.json
-94778b5b09405f9e68f2833ab9b23958837d44c2 data\simplemagnets\recipes\advanced_demagnetization_coil.json
-5435cfe088035a56c6d94e66b0b659abedc42032 data\simplemagnets\advancements\recipes\misc\advanced_demagnetization_coil.json
-2895d943ce77b0a48f53bb686e9b8927ccaaccd1 data\simplemagnets\recipes\basic_demagnetization_coil.json
-62867ebdf184dc3106d136bc872d2698df24c0cd data\simplemagnets\advancements\recipes\misc\basicmagnet.json
-baf433a06b16c0ae384a2bfa1607d7501f7cc2fc data\simplemagnets\advancements\recipes\misc\basic_demagnetization_coil.json
-bd944c4e3c77ef73fbcc53faaa42a8caa2920e86 data\simplemagnets\recipes\advancedmagnet.json
-a98f0d906672bef045063408e9b21516cfe3b8e6 data\simplemagnets\advancements\recipes\misc\advancedmagnet.json
+// 1.20	2023-06-07T22:22:48.9803159	Simple Magnets/Simple Magnets Recipe Generator

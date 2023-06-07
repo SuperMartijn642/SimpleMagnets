@@ -1,8 +1,8 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.core.gui.widget.premade.AbstractButtonWidget;
 import com.supermartijn642.core.util.Holder;
 import net.minecraft.network.chat.Component;
@@ -40,8 +40,8 @@ public class PlusMinusButton extends AbstractButtonWidget {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY){
+    public void render(WidgetRenderContext context, int mouseX, int mouseY){
         ScreenUtils.bindTexture(BUTTONS);
-        ScreenUtils.drawTexture(poseStack, this.x, this.y, this.width, this.height, this.left ? 0.5f : 0, (this.active ? this.isFocused() ? 1 : 0 : 2) / 3f, 0.5f, 1 / 3f);
+        ScreenUtils.drawTexture(context.poseStack(), this.x, this.y, this.width, this.height, this.left ? 0.5f : 0, (this.active ? this.isFocused() ? 1 : 0 : 2) / 3f, 0.5f, 1 / 3f);
     }
 }

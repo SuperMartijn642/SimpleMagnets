@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.ItemBaseContainerWidget;
+import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
@@ -96,35 +96,35 @@ public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContain
     }
 
     @Override
-    protected void renderBackground(PoseStack poseStack, int mouseX, int mouseY, ItemStack stack){
+    protected void renderBackground(WidgetRenderContext context, int mouseX, int mouseY, ItemStack stack){
         ScreenUtils.bindTexture(BACKGROUND);
-        ScreenUtils.drawTexture(poseStack, 0, 0, this.width(), this.height());
+        ScreenUtils.drawTexture(context.poseStack(), 0, 0, this.width(), this.height());
 
-        super.renderBackground(poseStack, mouseX, mouseY, stack);
+        super.renderBackground(context, mouseX, mouseY, stack);
     }
 
     @Override
-    protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, ItemStack stack){
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.item(stack.getItem()).get(), this.width() / 2f, 6);
-        ScreenUtils.drawString(poseStack, ClientUtils.getPlayer().getInventory().getName(), 32, 102);
+    protected void renderForeground(WidgetRenderContext context, int mouseX, int mouseY, ItemStack stack){
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.item(stack.getItem()).get(), this.width() / 2f, 6);
+        ScreenUtils.drawString(context.poseStack(), ClientUtils.getPlayer().getInventory().getName(), 32, 102);
 
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.translation("simplemagnets.gui.magnet.items").get(), 58, 24);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.translation("simplemagnets.gui.magnet.xp").get(), 166, 24);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.translation("simplemagnets.gui.magnet.filter").get(), 112, 68);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.items").get(), 58, 24);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.xp").get(), 166, 24);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.filter").get(), 112, 68);
 
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.number(this.itemRange).get(), 79.5f, 43);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.number(this.xpRange).get(), 187.5f, 43);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(this.itemRange).get(), 79.5f, 43);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(this.xpRange).get(), 187.5f, 43);
 
-        super.renderForeground(poseStack, mouseX, mouseY, stack);
+        super.renderForeground(context, mouseX, mouseY, stack);
     }
 
     @Override
-    protected void renderTooltips(PoseStack poseStack, int mouseX, int mouseY, ItemStack stack){
+    protected void renderTooltips(WidgetRenderContext context, int mouseX, int mouseY, ItemStack stack){
         if(mouseX > 79.5f - 6 && mouseX < 79.5f + 5 && mouseY > 43 - 2 && mouseY < 43 + 9)
-            ScreenUtils.drawTooltip(poseStack, TextComponents.translation("simplemagnets.gui.magnet.items.range", this.itemRange).get(), mouseX, mouseY);
+            ScreenUtils.drawTooltip(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.items.range", this.itemRange).get(), mouseX, mouseY);
         if(mouseX > 187.5f - 6 && mouseX < 187.5f + 5 && mouseY > 43 - 2 && mouseY < 43 + 9)
-            ScreenUtils.drawTooltip(poseStack, TextComponents.translation("simplemagnets.gui.magnet.xp.range", this.xpRange).get(), mouseX, mouseY);
+            ScreenUtils.drawTooltip(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.xp.range", this.xpRange).get(), mouseX, mouseY);
 
-        super.renderTooltips(poseStack, mouseX, mouseY, stack);
+        super.renderTooltips(context, mouseX, mouseY, stack);
     }
 }

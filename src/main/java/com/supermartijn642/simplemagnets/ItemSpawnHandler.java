@@ -45,12 +45,12 @@ public class ItemSpawnHandler {
 
         ItemEntity item = (ItemEntity)spawnedEntity;
 
-        ItemSpawnHandler handler = getInstance(item.getLevel());
-        handler.blocks.putIfAbsent(item.getLevel().dimension(), new LinkedList<>());
+        ItemSpawnHandler handler = getInstance(item.level());
+        handler.blocks.putIfAbsent(item.level().dimension(), new LinkedList<>());
 
         List<WeakReference<DemagnetizationCoilBlockEntity>> toRemove = new ArrayList<>();
 
-        List<WeakReference<DemagnetizationCoilBlockEntity>> list = handler.blocks.get(item.getLevel().dimension());
+        List<WeakReference<DemagnetizationCoilBlockEntity>> list = handler.blocks.get(item.level().dimension());
         for(WeakReference<DemagnetizationCoilBlockEntity> reference : list){
             DemagnetizationCoilBlockEntity entity = reference.get();
             if(entity == null || entity.isRemoved() || !entity.hasLevel()){

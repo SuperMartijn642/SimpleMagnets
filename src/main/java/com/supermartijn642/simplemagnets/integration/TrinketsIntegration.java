@@ -17,7 +17,7 @@ public class TrinketsIntegration {
         Trinket magnetTrinket = new Trinket() {
             @Override
             public void tick(ItemStack stack, SlotReference slot, LivingEntity entity){
-                stack.inventoryTick(entity.getLevel(), entity, -1, false);
+                stack.inventoryTick(entity.level(), entity, -1, false);
             }
         };
         TrinketsApi.registerTrinket(SimpleMagnets.simple_magnet, magnetTrinket);
