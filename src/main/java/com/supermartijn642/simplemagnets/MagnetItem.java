@@ -45,7 +45,7 @@ public abstract class MagnetItem extends BaseItem {
     }
 
     public static void toggleMagnet(Player player, ItemStack stack){
-        if(!player.level.isClientSide && stack.getItem() instanceof MagnetItem){
+        if(!player.level().isClientSide && stack.getItem() instanceof MagnetItem){
             boolean active = stack.getOrCreateTag().contains("active") && stack.getOrCreateTag().getBoolean("active");
             stack.getOrCreateTag().putBoolean("active", !active);
             // let the client decide whether to show the toggle message and play a sound
@@ -95,7 +95,7 @@ public abstract class MagnetItem extends BaseItem {
      * Copied from {@link ItemEntity#playerTouch(Player)}. Use this when ItemPhysic is installed to still pick up items.
      */
     private static void playerTouch(ItemEntity itemEntity, Player player){
-        if(!itemEntity.level.isClientSide){
+        if(!itemEntity.level().isClientSide){
             if(itemEntity.hasPickUpDelay()) return;
             ItemStack itemstack = itemEntity.getItem();
             Item item = itemstack.getItem();
@@ -144,7 +144,7 @@ public abstract class MagnetItem extends BaseItem {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
-        if(!e.getEntity().level.isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).thrower != null)
+        if(!e.getEntity().level().isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).thrower != null)
             SimpleMagnets.CHANNEL.sendToPlayer(e.getEntity(), new PacketItemInfo((ItemEntity)e.getTarget()));
     }
 }

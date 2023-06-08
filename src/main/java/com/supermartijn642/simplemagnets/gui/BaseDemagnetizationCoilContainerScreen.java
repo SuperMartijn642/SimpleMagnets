@@ -1,9 +1,9 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.BlockEntityBaseContainerWidget;
+import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -40,10 +40,10 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
     protected abstract String getBackground();
 
     @Override
-    protected void renderBackground(PoseStack poseStack, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){
+    protected void renderBackground(WidgetRenderContext context, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){
         ScreenUtils.bindTexture(new ResourceLocation("simplemagnets", "textures/" + this.getBackground()));
-        ScreenUtils.drawTexture(poseStack, 0, 0, this.width(), this.height());
+        ScreenUtils.drawTexture(context.poseStack(), 0, 0, this.width(), this.height());
 
-        super.renderBackground(poseStack, mouseX, mouseY, object);
+        super.renderBackground(context, mouseX, mouseY, object);
     }
 }

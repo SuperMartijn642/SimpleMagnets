@@ -54,9 +54,9 @@ public class PacketItemInfo implements BasePacket {
     @Override
     public void handle(PacketContext context){
         Player player = ClientUtils.getPlayer();
-        if(player != null && player.level != null){
+        if(player != null && player.level() != null){
             context.queueTask(() -> {
-                Entity entity = player.level.getEntity(this.target);
+                Entity entity = player.level().getEntity(this.target);
                 if(entity instanceof ItemEntity){
                     ((ItemEntity)entity).setThrower(this.thrower);
                     ((ItemEntity)entity).setPickUpDelay(this.pickupDelay);

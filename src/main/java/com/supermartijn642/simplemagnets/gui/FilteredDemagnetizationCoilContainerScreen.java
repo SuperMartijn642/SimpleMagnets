@@ -1,9 +1,9 @@
 package com.supermartijn642.simplemagnets.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
@@ -42,17 +42,17 @@ public class FilteredDemagnetizationCoilContainerScreen extends BaseDemagnetizat
     }
 
     @Override
-    protected void renderForeground(PoseStack poseStack, int mouseX, int mouseY, DemagnetizationCoilBlockEntity entity){
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.block(entity.getBlockState().getBlock()).get(), this.width(entity) / 2f, 6);
-        ScreenUtils.drawString(poseStack, ClientUtils.getPlayer().getInventory().getName(), 32, 112);
+    protected void renderForeground(WidgetRenderContext context, int mouseX, int mouseY, DemagnetizationCoilBlockEntity entity){
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.block(entity.getBlockState().getBlock()).get(), this.width(entity) / 2f, 6);
+        ScreenUtils.drawString(context.poseStack(), ClientUtils.getPlayer().getInventory().getName(), 32, 112);
 
-        ScreenUtils.drawString(poseStack, TextComponents.translation("simplemagnets.gui.demagnetization_coil.range", (entity.rangeX - 1) * 2 + 1, (entity.rangeY - 1) * 2 + 1, (entity.rangeZ - 1) * 2 + 1).get(), 8, 26);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.string("x:").get(), 35, 51);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.number(entity.rangeX).get(), 49, 52);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.string("y:").get(), 88, 51);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.number(entity.rangeY).get(), 102, 52);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.string("z:").get(), 141, 51);
-        ScreenUtils.drawCenteredString(poseStack, TextComponents.number(entity.rangeZ).get(), 155, 52);
-        ScreenUtils.drawString(poseStack, TextComponents.translation("simplemagnets.gui.magnet.filter").get(), 8, 78);
+        ScreenUtils.drawString(context.poseStack(), TextComponents.translation("simplemagnets.gui.demagnetization_coil.range", (entity.rangeX - 1) * 2 + 1, (entity.rangeY - 1) * 2 + 1, (entity.rangeZ - 1) * 2 + 1).get(), 8, 26);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.string("x:").get(), 35, 51);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(entity.rangeX).get(), 49, 52);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.string("y:").get(), 88, 51);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(entity.rangeY).get(), 102, 52);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.string("z:").get(), 141, 51);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(entity.rangeZ).get(), 155, 52);
+        ScreenUtils.drawString(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.filter").get(), 8, 78);
     }
 }
