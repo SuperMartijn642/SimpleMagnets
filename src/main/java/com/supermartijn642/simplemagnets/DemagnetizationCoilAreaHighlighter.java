@@ -9,6 +9,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Random;
+
 /**
  * Created 2/21/2021 by SuperMartijn642
  */
@@ -26,9 +28,15 @@ public class DemagnetizationCoilAreaHighlighter {
             poseStack.translate(-playerPos.x, -playerPos.y, -playerPos.z);
 
             AABB area = ((DemagnetizationCoilBlockEntity)entity).getArea();
-            float red = Math.abs(pos.getX() % 255) / 255f, green = Math.abs(pos.getY() % 255) / 255f, blue = Math.abs(pos.getZ() % 255) / 255f;
-            RenderUtils.renderBox(poseStack, area, red, green, blue, 0.3f, true);
-            RenderUtils.renderBoxSides(poseStack, area, red, green, blue, 0.2f, true);
+
+            Random random = new Random(entity.getBlockPos().hashCode());
+            float red = random.nextFloat();
+            float green = random.nextFloat();
+            float blue = random.nextFloat();
+            float alpha = 0.3f;
+
+            RenderUtils.renderBox(poseStack, area, red, green, blue, alpha, true);
+            RenderUtils.renderBoxSides(poseStack, area, red, green, blue, alpha, true);
 
             poseStack.popPose();
         }
