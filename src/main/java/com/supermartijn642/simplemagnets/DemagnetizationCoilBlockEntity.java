@@ -39,6 +39,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
     public final List<ItemStack> filter = new ArrayList<>(9);
     public boolean filterWhitelist;
     public boolean filterDurability = true; // nbt in 1.14+
+    public boolean showRange;
 
     public DemagnetizationCoilBlockEntity(BaseBlockEntityType<?> blockEntityType, int minRange, int maxRange, int range, boolean hasFilter){
         super(blockEntityType);
@@ -118,6 +119,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
             tag.putBoolean("filterWhitelist", this.filterWhitelist);
             tag.putBoolean("filterDurability", this.filterDurability);
         }
+        tag.putBoolean("showRange", this.showRange);
         return tag;
     }
 
@@ -135,6 +137,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
             this.filterWhitelist = tag.contains("filterWhitelist") && tag.getBoolean("filterWhitelist");
             this.filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         }
+        this.showRange = tag.getBoolean("showRange");
     }
 
     @Override
