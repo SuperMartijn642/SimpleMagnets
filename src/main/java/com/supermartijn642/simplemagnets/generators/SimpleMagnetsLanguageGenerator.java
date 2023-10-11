@@ -57,6 +57,9 @@ public class SimpleMagnetsLanguageGenerator extends LanguageGenerator {
         this.translation("simplemagnets.gui.demagnetization_coil.range.increase", "Increase Range");
         this.translation("simplemagnets.gui.demagnetization_coil.range.decrease", "Decrease Range");
         this.translation("simplemagnets.gui.demagnetization_coil.range", "Range (%1$dx%1$dx%1$d Blocks)");
+        this.translation("simplemagnets.gui.demagnetization_coil.show_range", "Highlight area: %s");
+        this.translation("simplemagnets.gui.demagnetization_coil.show_range.on", "True");
+        this.translation("simplemagnets.gui.demagnetization_coil.show_range.off", "False");
 
         // Toggle key
         this.translation("simplemagnets.keys.category", "Simple Magnets");
