@@ -39,9 +39,9 @@ public class SimpleMagnets implements ModInitializer {
     public static BaseBlock advanced_demagnetization_coil;
 
     @RegistryEntryAcceptor(namespace = "simplemagnets", identifier = "basic_demagnetization_coil_tile", registry = RegistryEntryAcceptor.Registry.BLOCK_ENTITY_TYPES)
-    public static BaseBlockEntityType<?> basic_demagnetization_coil_tile;
+    public static BaseBlockEntityType<DemagnetizationCoilBlockEntity> basic_demagnetization_coil_tile;
     @RegistryEntryAcceptor(namespace = "simplemagnets", identifier = "advanced_demagnetization_coil_tile", registry = RegistryEntryAcceptor.Registry.BLOCK_ENTITY_TYPES)
-    public static BaseBlockEntityType<?> advanced_demagnetization_coil_tile;
+    public static BaseBlockEntityType<DemagnetizationCoilBlockEntity> advanced_demagnetization_coil_tile;
 
     @RegistryEntryAcceptor(namespace = "simplemagnets", identifier = "container", registry = RegistryEntryAcceptor.Registry.MENU_TYPES)
     public static BaseContainerType<MagnetContainer> magnet_container;
@@ -82,6 +82,7 @@ public class SimpleMagnets implements ModInitializer {
         CHANNEL.registerMessage(PacketIncreaseZRange.class, PacketIncreaseZRange::new, true);
         CHANNEL.registerMessage(PacketToggleDurability.class, PacketToggleDurability::new, true);
         CHANNEL.registerMessage(PacketToggleWhitelist.class, PacketToggleWhitelist::new, true);
+        CHANNEL.registerMessage(PacketToggleShowRange.class, PacketToggleShowRange::new, true);
 
         register();
         registerGenerators();
