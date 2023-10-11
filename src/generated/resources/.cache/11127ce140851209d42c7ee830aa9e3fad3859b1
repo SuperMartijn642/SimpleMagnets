@@ -1,8 +1,8 @@
-// 1.20	2023-06-08T14:54:41.9672279	Core Lib Generators
+// 1.20	2023-10-11T23:36:39.2885549	Core Lib Generators
 7fef990bd6c67da5b175d33427bc5118acb4f422 assets/minecraft/atlases/blocks.json
 6673210e78292d89f8975826e87d78fccff84017 assets/simplemagnets/blockstates/advanced_demagnetization_coil.json
 482d1b9e125643d9f72108350fe0406b0473763a assets/simplemagnets/blockstates/basic_demagnetization_coil.json
-c03d689cac7883fa3e54d0532f20ff769ab982a2 assets/simplemagnets/lang/en_us.json
+fc9f5796bfc156b878aaf357deab6b7604820adf assets/simplemagnets/lang/en_us.json
 af995f023caf0b51340be30c6915fa8fb8d428cd assets/simplemagnets/models/item/advancedmagnet.json
 1c823d9bf1a79fefaab2244f0863d125e1cd820a assets/simplemagnets/models/item/advanced_demagnetization_coil.json
 437f5b7ebf6dde1a9b9e9f2cfbfb26c8763c2cd4 assets/simplemagnets/models/item/basicmagnet.json
