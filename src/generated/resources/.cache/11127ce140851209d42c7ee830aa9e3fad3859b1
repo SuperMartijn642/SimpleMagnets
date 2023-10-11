@@ -1,4 +1,4 @@
-// this.cache.versionId	2023-06-07T22:22:48.9793152	Core Lib Generators
+// this.cache.versionId	2023-10-11T22:34:13.5083259	Core Lib Generators
 437f5b7ebf6dde1a9b9e9f2cfbfb26c8763c2cd4 assets\simplemagnets\models\item\basicmagnet.json
 2895d943ce77b0a48f53bb686e9b8927ccaaccd1 data\simplemagnets\recipes\basic_demagnetization_coil.json
 7aa78e0daf7b0a103cc2e1fced2b1ac96fbcf0f0 data\simplemagnets\loot_tables\blocks\basic_demagnetization_coil.json
@@ -9,7 +9,7 @@ a98f0d906672bef045063408e9b21516cfe3b8e6 data\simplemagnets\advancements\recipes
 464e3fd2d2c491eda1803aa310825989b6972012 data\simplemagnets\recipes\basicmagnet.json
 62867ebdf184dc3106d136bc872d2698df24c0cd data\simplemagnets\advancements\recipes\misc\basicmagnet.json
 5435cfe088035a56c6d94e66b0b659abedc42032 data\simplemagnets\advancements\recipes\misc\advanced_demagnetization_coil.json
-c03d689cac7883fa3e54d0532f20ff769ab982a2 assets\simplemagnets\lang\en_us.json
+fc9f5796bfc156b878aaf357deab6b7604820adf assets\simplemagnets\lang\en_us.json
 1c823d9bf1a79fefaab2244f0863d125e1cd820a assets\simplemagnets\models\item\advanced_demagnetization_coil.json
 baf433a06b16c0ae384a2bfa1607d7501f7cc2fc data\simplemagnets\advancements\recipes\misc\basic_demagnetization_coil.json
 bd944c4e3c77ef73fbcc53faaa42a8caa2920e86 data\simplemagnets\recipes\advancedmagnet.json
