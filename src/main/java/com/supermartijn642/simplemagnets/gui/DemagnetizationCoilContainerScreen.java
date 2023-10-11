@@ -13,12 +13,13 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
 
     @Override
     protected void addWidgets(DemagnetizationCoilBlockEntity entity){
-        this.addWidget(new UpDownArrowButton(24, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXRange(this.container.getBlockEntityPos()))));
-        this.addWidget(new UpDownArrowButton(24, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXRange(this.container.getBlockEntityPos()))));
-        this.addWidget(new UpDownArrowButton(77, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseYRange(this.container.getBlockEntityPos()))));
-        this.addWidget(new UpDownArrowButton(77, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseYRange(this.container.getBlockEntityPos()))));
-        this.addWidget(new UpDownArrowButton(130, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseZRange(this.container.getBlockEntityPos()))));
-        this.addWidget(new UpDownArrowButton(130, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseZRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new UpDownArrowButton(20, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new UpDownArrowButton(20, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new UpDownArrowButton(57, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseYRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new UpDownArrowButton(57, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseYRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new UpDownArrowButton(94, 37, false, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseZRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new UpDownArrowButton(94, 63, true, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseZRange(this.container.getBlockEntityPos()))));
+        this.addWidget(new ShowRangeButton(130, 46, () -> this.object.showRange, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleShowRange(this.container.getBlockEntityPos()))));
     }
 
     @Override
@@ -31,11 +32,11 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
         ScreenUtils.drawCenteredString(TextComponents.block(entity.getBlockState().getBlock()).get(), this.width(entity) / 2f, 6);
 
         ScreenUtils.drawString(TextComponents.translation("simplemagnets.gui.demagnetization_coil.range", (entity.rangeX - 1) * 2 + 1, (entity.rangeY - 1) * 2 + 1, (entity.rangeZ - 1) * 2 + 1).get(), 8, 26);
-        ScreenUtils.drawCenteredString(TextComponents.string("x:").get(), 19, 51);
-        ScreenUtils.drawCenteredString(TextComponents.number(entity.rangeX).get(), 33, 52);
-        ScreenUtils.drawCenteredString(TextComponents.string("y:").get(), 72, 51);
-        ScreenUtils.drawCenteredString(TextComponents.number(entity.rangeY).get(), 86, 52);
-        ScreenUtils.drawCenteredString(TextComponents.string("z:").get(), 125, 51);
-        ScreenUtils.drawCenteredString(TextComponents.number(entity.rangeZ).get(), 139, 52);
+        ScreenUtils.drawCenteredString(TextComponents.string("x:").get(), 15, 51);
+        ScreenUtils.drawCenteredString(TextComponents.number(entity.rangeX).get(), 29, 52);
+        ScreenUtils.drawCenteredString(TextComponents.string("y:").get(), 52, 51);
+        ScreenUtils.drawCenteredString(TextComponents.number(entity.rangeY).get(), 66, 52);
+        ScreenUtils.drawCenteredString(TextComponents.string("z:").get(), 89, 51);
+        ScreenUtils.drawCenteredString(TextComponents.number(entity.rangeZ).get(), 103, 52);
     }
 }

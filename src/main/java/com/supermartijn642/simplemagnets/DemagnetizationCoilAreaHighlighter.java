@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Random;
+
 /**
  * Created 2/21/2021 by SuperMartijn642
  */
@@ -33,9 +35,15 @@ public class DemagnetizationCoilAreaHighlighter {
                 GlStateManager.translate(-playerPos.x, -playerPos.y, -playerPos.z);
 
                 AxisAlignedBB area = ((DemagnetizationCoilBlockEntity)entity).getArea();
-                float red = Math.abs(pos.getX() % 255) / 255f, green = Math.abs(pos.getY() % 255) / 255f, blue = Math.abs(pos.getZ() % 255) / 255f;
-                RenderUtils.renderBox(area, red, green, blue, 0.3f, true);
-                RenderUtils.renderBoxSides(area, red, green, blue, 0.2f, true);
+
+                Random random = new Random(pos.hashCode());
+                float red = random.nextFloat();
+                float green = random.nextFloat();
+                float blue = random.nextFloat();
+                float alpha = 0.3f;
+
+                RenderUtils.renderBox(area, red, green, blue, alpha, true);
+                RenderUtils.renderBoxSides(area, red, green, blue, alpha, true);
 
                 GlStateManager.popMatrix();
             }
