@@ -49,7 +49,7 @@ public class PacketItemInfo implements BasePacket {
             context.queueTask(() -> {
                 Entity entity = player.level().getEntity(this.target);
                 if(entity instanceof ItemEntity){
-                    ((ItemEntity)entity).setThrower(this.thrower);
+                    ((ItemEntity)entity).thrower = this.thrower;
                     ((ItemEntity)entity).setPickUpDelay(this.pickupDelay);
                 }
             });
