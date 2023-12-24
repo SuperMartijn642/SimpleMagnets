@@ -9,12 +9,12 @@ import com.supermartijn642.simplemagnets.gui.MagnetContainerScreen;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -39,7 +39,7 @@ public class SimpleMagnetsClient {
     public static void registerKeyBindings(RegisterKeyMappingsEvent e){
         MAGNET_TOGGLE_KEY = new KeyMapping("simplemagnets.keys.toggle", 72/*'h'*/, "simplemagnets.keys.category");
         e.register(MAGNET_TOGGLE_KEY);
-        MinecraftForge.EVENT_BUS.addListener(SimpleMagnetsClient::onKey);
+        NeoForge.EVENT_BUS.addListener(SimpleMagnetsClient::onKey);
     }
 
     public static void onKey(InputEvent.Key e){

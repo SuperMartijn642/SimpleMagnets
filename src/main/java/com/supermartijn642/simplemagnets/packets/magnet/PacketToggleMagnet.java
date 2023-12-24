@@ -53,7 +53,7 @@ public class PacketToggleMagnet implements BasePacket {
 
     private static ItemStack findCuriosStack(Player player){
         if(CommonUtils.isModLoaded("curios")){
-            ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY).orElse(null);
+            ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY);
             if(handler != null){
                 for(IDynamicStackHandler stackHandler : handler.getCurios().values().stream().map(ICurioStacksHandler::getStacks).collect(Collectors.toSet())){
                     for(int slot = 0; slot < stackHandler.getSlots(); slot++){

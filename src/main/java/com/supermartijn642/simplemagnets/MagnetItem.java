@@ -19,10 +19,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -101,13 +101,13 @@ public abstract class MagnetItem extends BaseItem {
             Item item = itemstack.getItem();
             int i = itemstack.getCount();
 
-            int hook = net.minecraftforge.event.ForgeEventFactory.onItemPickup(itemEntity, player);
+            int hook = EventHooks.onItemPickup(itemEntity, player);
             if(hook < 0) return;
 
             ItemStack copy = itemstack.copy();
             if(!itemEntity.hasPickUpDelay() && (itemEntity.getOwner() == null || itemEntity.lifespan - itemEntity.getAge() <= 200 || itemEntity.getOwner().equals(player.getUUID())) && (hook == 1 || i <= 0 || player.getInventory().add(itemstack))){
                 copy.setCount(copy.getCount() - itemstack.getCount());
-                ForgeEventFactory.firePlayerItemPickupEvent(player, itemEntity, copy);
+                EventHooks.firePlayerItemPickupEvent(player, itemEntity, copy);
                 player.take(itemEntity, i);
                 if(itemstack.isEmpty()){
                     itemEntity.discard();

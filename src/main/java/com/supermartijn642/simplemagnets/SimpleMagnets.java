@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.block.BaseBlock;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.gui.BaseContainerType;
@@ -17,12 +18,10 @@ import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContaine
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 
 /**
@@ -56,8 +55,8 @@ public class SimpleMagnets {
 
     public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
-    public SimpleMagnets(){
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::interModEnqueue);
+    public SimpleMagnets(IEventBus eventBus){
+        eventBus.addListener(this::interModEnqueue);
 
         // magnets
         CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
@@ -84,7 +83,8 @@ public class SimpleMagnets {
         CHANNEL.registerMessage(PacketToggleShowRange.class, PacketToggleShowRange::new, true);
 
         register();
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> SimpleMagnetsClient::register);
+        if(CommonUtils.getEnvironmentSide().isClient())
+            SimpleMagnetsClient.register();
         registerGenerators();
     }
 
