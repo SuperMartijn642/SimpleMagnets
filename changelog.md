@@ -1,3 +1,8 @@
+### Simple Magnets 1.1.11
+- Updated Simplified Chinese translations (thanks to UraraChiya!)
+- Updated Russian translations (thanks to Bytegm!)
+- Fixed crash on dedicated servers
+
 ### Simple Magnets 1.1.10
 - Added a button to highlight demagnetization coil range
 
