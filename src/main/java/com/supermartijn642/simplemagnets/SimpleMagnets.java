@@ -92,7 +92,8 @@ public class SimpleMagnets {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent e){
-        SimpleMagnetsClient.registerKeyBindings();
+        if(CommonUtils.getEnvironmentSide().isClient())
+            SimpleMagnetsClient.registerKeyBindings();
     }
 
     private static void register(){
