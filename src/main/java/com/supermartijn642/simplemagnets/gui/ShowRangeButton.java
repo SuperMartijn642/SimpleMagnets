@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  */
 public class ShowRangeButton extends AbstractButtonWidget {
 
-    private static final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/visualize_button.png");
+    private static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/visualize_button.png");
 
     private final Supplier<Boolean> on;
     public boolean active = true;

@@ -17,8 +17,8 @@ public class SimpleMagnetsModelGenerator extends ModelGenerator {
     @Override
     public void generate(){
         // Magnets
-        this.itemGenerated(SimpleMagnets.simple_magnet, new ResourceLocation("simplemagnets", "basicmagnet"));
-        this.itemGenerated(SimpleMagnets.advanced_magnet, new ResourceLocation("simplemagnets", "advancedmagnet"));
+        this.itemGenerated(SimpleMagnets.simple_magnet, ResourceLocation.fromNamespaceAndPath("simplemagnets", "basicmagnet"));
+        this.itemGenerated(SimpleMagnets.advanced_magnet, ResourceLocation.fromNamespaceAndPath("simplemagnets", "advancedmagnet"));
         // Demagnetization coils
         this.model("item/basic_demagnetization_coil").parent("basic_demagnetization_coil");
         this.model("item/advanced_demagnetization_coil").parent("advanced_demagnetization_coil");
