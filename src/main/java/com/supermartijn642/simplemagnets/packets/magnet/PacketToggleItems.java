@@ -27,8 +27,10 @@ public class PacketToggleItems implements BasePacket {
         if(player != null){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
             if(stack.getItem() instanceof AdvancedMagnet){
-                stack.getOrCreateTag().putBoolean("items", !(stack.getOrCreateTag().contains("items") && stack.getOrCreateTag().getBoolean("items")));
-                player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                stack.set(AdvancedMagnet.SETTINGS, settings.collectItems(!settings.collectItems()));
             }
         }
     }

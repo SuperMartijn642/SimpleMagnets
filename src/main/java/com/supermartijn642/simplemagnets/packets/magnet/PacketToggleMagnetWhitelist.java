@@ -29,8 +29,10 @@ public class PacketToggleMagnetWhitelist implements BasePacket {
         if(player != null){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
             if(stack.getItem() instanceof AdvancedMagnet){
-                stack.getOrCreateTag().putBoolean("whitelist", !(stack.getOrCreateTag().contains("whitelist") && stack.getOrCreateTag().getBoolean("whitelist")));
-                player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                stack.set(AdvancedMagnet.SETTINGS, settings.whitelist(!settings.isWhitelist()));
             }
         }
     }

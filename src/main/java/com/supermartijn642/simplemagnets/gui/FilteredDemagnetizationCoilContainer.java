@@ -2,14 +2,11 @@ package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
+import com.supermartijn642.trashcans.screen.DummySlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
@@ -23,7 +20,12 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
     @Override
     protected void addSlots(Player player, DemagnetizationCoilBlockEntity entity){
         for(int i = 0; i < 9; i++)
-            this.addSlot(new SlotItemHandler(this.itemHandler(), i, 8 + i * 18, 90) {
+            this.addSlot(new DummySlot(i, 8 + i * 18, 90) {
+                @Override
+                public ItemStack getItem(){
+                    return FilteredDemagnetizationCoilContainer.this.validateObjectOrClose() ? FilteredDemagnetizationCoilContainer.this.object.filter.get(this.index) : ItemStack.EMPTY;
+                }
+
                 @Override
                 public boolean mayPickup(Player player){
                     return false;
@@ -65,8 +67,8 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
             boolean contains = false;
             int firstEmpty = -1;
             for(int i = 0; i < 9; i++){
-                ItemStack stack = this.itemHandler().getStackInSlot(i);
-                if(ItemStack.isSameItemSameTags(stack, this.getSlot(index).getItem())){
+                ItemStack stack = FilteredDemagnetizationCoilContainer.this.object.filter.get(i);
+                if(ItemStack.isSameItemSameComponents(stack, this.getSlot(index).getItem())){
                     contains = true;
                     break;
                 }
@@ -80,15 +82,5 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
             }
         }
         return ItemStack.EMPTY;
-    }
-
-    private ItemStackHandler itemHandler(){
-        return new ItemStackHandler(9) {
-            @Nonnull
-            @Override
-            public ItemStack getStackInSlot(int slot){
-                return FilteredDemagnetizationCoilContainer.this.validateObjectOrClose() ? FilteredDemagnetizationCoilContainer.this.object.filter.get(slot) : ItemStack.EMPTY;
-            }
-        };
     }
 }

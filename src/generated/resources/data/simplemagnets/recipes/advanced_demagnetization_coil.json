@@ -7,19 +7,19 @@
   ],
   "key": {
     "A": {
-      "tag": "forge:dusts/glowstone"
+      "tag": "c:dusts/glowstone"
     },
     "B": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "C": {
-      "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     },
     "D": {
       "item": "simplemagnets:basic_demagnetization_coil"
     }
   },
   "result": {
-    "item": "simplemagnets:advanced_demagnetization_coil"
+    "id": "simplemagnets:advanced_demagnetization_coil"
   }
 }

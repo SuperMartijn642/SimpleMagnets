@@ -99,6 +99,9 @@ public class SimpleMagnets {
         handler.registerItem("advancedmagnet", AdvancedMagnet::new);
         handler.registerItem("basic_demagnetization_coil", () -> new BaseBlockItem(basic_demagnetization_coil, ItemProperties.create().group(GROUP)));
         handler.registerItem("advanced_demagnetization_coil", () -> new BaseBlockItem(advanced_demagnetization_coil, ItemProperties.create().group(GROUP)));
+        // Data components
+        handler.registerDataComponentType("magnet_active", MagnetItem.ACTIVE);
+        handler.registerDataComponentType("magnet_settings", AdvancedMagnet.SETTINGS);
         // Blocks
         handler.registerBlock("basic_demagnetization_coil", () -> new DemagnetizationCoilBlock(SMConfig.basicCoilMaxRange, SMConfig.basicCoilFilter, () -> basic_demagnetization_coil_tile));
         handler.registerBlock("advanced_demagnetization_coil", () -> new DemagnetizationCoilBlock(SMConfig.advancedCoilMaxRange, SMConfig.advancedCoilFilter, () -> advanced_demagnetization_coil_tile));

@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "display": {
     "icon": {
-      "item": "simplemagnets:basic_demagnetization_coil"
+      "id": "simplemagnets:basic_demagnetization_coil"
     },
     "title": {
       "translate": "simplemagnets.advancement.recipes/misc/basic_demagnetization_coil.title"
@@ -27,7 +27,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/iron"
+            "items": "#c:ingots/iron"
           }
         ]
       }
