@@ -5,10 +5,10 @@ import com.supermartijn642.core.TextComponents;
 import com.supermartijn642.core.gui.ScreenUtils;
 import com.supermartijn642.core.gui.widget.ItemBaseContainerWidget;
 import com.supermartijn642.core.gui.widget.WidgetRenderContext;
+import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -31,9 +31,6 @@ public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContain
     private WhitelistButton whitelistButton;
     private DurabilityButton durabilityButton;
 
-    private int itemRange = SMConfig.advancedMagnetRange.get();
-    private int xpRange = SMConfig.advancedMagnetRange.get();
-
     public MagnetContainerScreen(){
         super(0, 0, 224, 196, (Supplier<ItemStack>)null, null);
     }
@@ -55,44 +52,43 @@ public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContain
 
     @Override
     protected void addWidgets(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateTag();
+        AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+        if(settings == null)
+            settings = AdvancedMagnet.Settings.defaultSettings();
 
         this.itemCheckbox = this.addWidget(new CheckBox(11, 38, checked -> checked ? "simplemagnets.gui.magnet.items.on" : "simplemagnets.gui.magnet.items.off", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleItems())));
-        this.itemCheckbox.update(!(tag.contains("items") && tag.getBoolean("items")));
+        this.itemCheckbox.update(settings.collectItems());
 
         this.leftItemButton = this.addWidget(new PlusMinusButton(54, 38, true, "simplemagnets.gui.magnet.items.decrease", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseItemRange())));
         this.rightItemButton = this.addWidget(new PlusMinusButton(88, 38, false, "simplemagnets.gui.magnet.items.increase", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseItemRange())));
 
         this.xpCheckbox = this.addWidget(new CheckBox(119, 38, checked -> checked ? "simplemagnets.gui.magnet.xp.on" : "simplemagnets.gui.magnet.xp.off", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleXp())));
-        this.xpCheckbox.update(!(tag.contains("xp") && tag.getBoolean("xp")));
+        this.xpCheckbox.update(settings.collectXp());
 
         this.leftXpButton = this.addWidget(new PlusMinusButton(162, 38, true, "simplemagnets.gui.magnet.xp.decrease", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketDecreaseXpRange())));
         this.rightXpButton = this.addWidget(new PlusMinusButton(196, 38, false, "simplemagnets.gui.magnet.xp.increase", () -> SimpleMagnets.CHANNEL.sendToServer(new PacketIncreaseXpRange())));
 
         this.whitelistButton = this.addWidget(new WhitelistButton(175, 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetWhitelist())));
-        this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
+        this.whitelistButton.update(settings.isWhitelist());
 
         this.durabilityButton = this.addWidget(new DurabilityButton(197, 78, () -> SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnetDurability())));
-        this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
+        this.durabilityButton.update(settings.isFilterDurability());
     }
 
     @Override
     protected void update(ItemStack stack){
-        CompoundTag tag = stack.getOrCreateTag();
+        AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+        if(settings == null)
+            settings = AdvancedMagnet.Settings.defaultSettings();
 
-        this.itemRange = tag.contains("itemRange") ? tag.getInt("itemRange") : SMConfig.advancedMagnetRange.get();
-        this.xpRange = tag.contains("xpRange") ? tag.getInt("xpRange") : SMConfig.advancedMagnetRange.get();
-
-        boolean items = !(tag.contains("items") && tag.getBoolean("items"));
-        this.itemCheckbox.update(items);
-        this.leftItemButton.active = items && this.itemRange > SMConfig.advancedMagnetMinRange.get();
-        this.rightItemButton.active = items && this.itemRange < SMConfig.advancedMagnetMaxRange.get();
-        boolean experience = !(tag.contains("xp") && tag.getBoolean("xp"));
-        this.xpCheckbox.update(experience);
-        this.leftXpButton.active = experience && this.xpRange > SMConfig.advancedMagnetMinRange.get();
-        this.rightXpButton.active = experience && this.xpRange < SMConfig.advancedMagnetMaxRange.get();
-        this.whitelistButton.update(tag.contains("whitelist") && tag.getBoolean("whitelist"));
-        this.durabilityButton.update(tag.contains("filterDurability") && tag.getBoolean("filterDurability"));
+        this.itemCheckbox.update(settings.collectItems());
+        this.leftItemButton.active = settings.collectItems() && settings.itemRange() > SMConfig.advancedMagnetMinRange.get();
+        this.rightItemButton.active = settings.collectItems() && settings.itemRange() < SMConfig.advancedMagnetMaxRange.get();
+        this.xpCheckbox.update(settings.collectXp());
+        this.leftXpButton.active = settings.collectXp() && settings.xpRange() > SMConfig.advancedMagnetMinRange.get();
+        this.rightXpButton.active = settings.collectXp() && settings.xpRange() < SMConfig.advancedMagnetMaxRange.get();
+        this.whitelistButton.update(settings.isWhitelist());
+        this.durabilityButton.update(settings.isFilterDurability());
     }
 
     @Override
@@ -112,18 +108,24 @@ public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContain
         ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.xp").get(), 166, 24);
         ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.filter").get(), 112, 68);
 
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(this.itemRange).get(), 79.5f, 43);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(this.xpRange).get(), 187.5f, 43);
+        AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+        if(settings == null)
+            settings = AdvancedMagnet.Settings.defaultSettings();
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(settings.itemRange()).get(), 79.5f, 43);
+        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(settings.xpRange()).get(), 187.5f, 43);
 
         super.renderForeground(context, mouseX, mouseY, stack);
     }
 
     @Override
     protected void renderTooltips(WidgetRenderContext context, int mouseX, int mouseY, ItemStack stack){
+        AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+        if(settings == null)
+            settings = AdvancedMagnet.Settings.defaultSettings();
         if(mouseX > 79.5f - 6 && mouseX < 79.5f + 5 && mouseY > 43 - 2 && mouseY < 43 + 9)
-            ScreenUtils.drawTooltip(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.items.range", this.itemRange).get(), mouseX, mouseY);
+            ScreenUtils.drawTooltip(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.items.range", settings.itemRange()).get(), mouseX, mouseY);
         if(mouseX > 187.5f - 6 && mouseX < 187.5f + 5 && mouseY > 43 - 2 && mouseY < 43 + 9)
-            ScreenUtils.drawTooltip(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.xp.range", this.xpRange).get(), mouseX, mouseY);
+            ScreenUtils.drawTooltip(context.poseStack(), TextComponents.translation("simplemagnets.gui.magnet.xp.range", settings.xpRange()).get(), mouseX, mouseY);
 
         super.renderTooltips(context, mouseX, mouseY, stack);
     }

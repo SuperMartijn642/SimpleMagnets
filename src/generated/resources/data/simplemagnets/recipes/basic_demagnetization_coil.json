@@ -7,16 +7,16 @@
   ],
   "key": {
     "A": {
-      "tag": "c:gold_ingots"
+      "tag": "c:ingots/gold"
     },
     "B": {
-      "tag": "c:redstone_dusts"
+      "tag": "c:dusts/redstone"
     },
     "C": {
-      "tag": "c:iron_ingots"
+      "tag": "c:ingots/iron"
     }
   },
   "result": {
-    "item": "simplemagnets:basic_demagnetization_coil"
+    "id": "simplemagnets:basic_demagnetization_coil"
   }
 }

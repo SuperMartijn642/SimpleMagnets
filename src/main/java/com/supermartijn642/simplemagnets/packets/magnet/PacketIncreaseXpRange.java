@@ -28,8 +28,10 @@ public class PacketIncreaseXpRange implements BasePacket {
         if(player != null){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
             if(stack.getItem() instanceof AdvancedMagnet){
-                stack.getOrCreateTag().putInt("xpRange", Math.min(SMConfig.advancedMagnetMaxRange.get(), (stack.getOrCreateTag().contains("xpRange") ? stack.getOrCreateTag().getInt("xpRange") : SMConfig.advancedMagnetRange.get()) + 1));
-                player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                stack.set(AdvancedMagnet.SETTINGS, settings.xpRange(Math.min(SMConfig.advancedMagnetMaxRange.get(), settings.xpRange() + 1)));
             }
         }
     }

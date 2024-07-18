@@ -7,10 +7,10 @@
   ],
   "key": {
     "A": {
-      "tag": "c:gold_ingots"
+      "tag": "c:ingots/gold"
     },
     "B": {
-      "tag": "c:lapis"
+      "tag": "c:gems/lapis"
     },
     "C": {
       "item": "simplemagnets:basicmagnet"
@@ -19,13 +19,13 @@
       "item": "minecraft:ender_eye"
     },
     "E": {
-      "tag": "c:diamonds"
+      "tag": "c:gems/diamond"
     },
     "F": {
-      "tag": "c:redstone_dusts"
+      "tag": "c:dusts/redstone"
     }
   },
   "result": {
-    "item": "simplemagnets:advancedmagnet"
+    "id": "simplemagnets:advancedmagnet"
   }
 }

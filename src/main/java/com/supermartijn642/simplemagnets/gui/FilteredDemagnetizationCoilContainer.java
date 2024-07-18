@@ -68,7 +68,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
             int firstEmpty = -1;
             for(int i = 0; i < 9; i++){
                 ItemStack stack = FilteredDemagnetizationCoilContainer.this.object.filter.get(i);
-                if(ItemStack.isSameItemSameTags(stack, this.getSlot(index).getItem())){
+                if(ItemStack.isSameItemSameComponents(stack, this.getSlot(index).getItem())){
                     contains = true;
                     break;
                 }

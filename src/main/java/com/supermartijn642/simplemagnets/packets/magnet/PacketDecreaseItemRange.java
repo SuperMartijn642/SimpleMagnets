@@ -27,9 +27,12 @@ public class PacketDecreaseItemRange implements BasePacket {
         Player player = context.getSendingPlayer();
         if(player != null){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-
-            if(stack.getItem() instanceof AdvancedMagnet)
-                stack.getOrCreateTag().putInt("itemRange", Math.max(SMConfig.advancedMagnetMinRange.get(), (stack.getOrCreateTag().contains("itemRange") ? stack.getOrCreateTag().getInt("itemRange") : SMConfig.advancedMagnetRange.get()) - 1));
+            if(stack.getItem() instanceof AdvancedMagnet){
+                AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                stack.set(AdvancedMagnet.SETTINGS, settings.itemRange(Math.max(SMConfig.advancedMagnetMinRange.get(), settings.itemRange() - 1)));
+            }
         }
     }
 }

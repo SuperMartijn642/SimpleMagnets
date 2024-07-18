@@ -7,19 +7,19 @@
   ],
   "key": {
     "A": {
-      "tag": "c:iron_ingots"
+      "tag": "c:ingots/iron"
     },
     "B": {
-      "tag": "c:lapis"
+      "tag": "c:gems/lapis"
     },
     "C": {
       "item": "minecraft:ender_pearl"
     },
     "D": {
-      "tag": "c:redstone_dusts"
+      "tag": "c:dusts/redstone"
     }
   },
   "result": {
-    "item": "simplemagnets:basicmagnet"
+    "id": "simplemagnets:basicmagnet"
   }
 }

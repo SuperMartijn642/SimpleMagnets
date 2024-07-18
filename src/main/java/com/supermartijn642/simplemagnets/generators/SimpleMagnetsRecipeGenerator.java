@@ -3,7 +3,7 @@ package com.supermartijn642.simplemagnets.generators;
 import com.supermartijn642.core.generator.RecipeGenerator;
 import com.supermartijn642.core.generator.ResourceCache;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.world.item.Items;
 
 /**
@@ -22,7 +22,7 @@ public class SimpleMagnetsRecipeGenerator extends RecipeGenerator {
             .pattern("AC ")
             .pattern("AAD")
             .input('A', ConventionalItemTags.IRON_INGOTS)
-            .input('B', ConventionalItemTags.LAPIS)
+            .input('B', ConventionalItemTags.LAPIS_GEMS)
             .input('C', Items.ENDER_PEARL)
             .input('D', ConventionalItemTags.REDSTONE_DUSTS)
             .unlockedBy(ConventionalItemTags.IRON_INGOTS);
@@ -31,10 +31,10 @@ public class SimpleMagnetsRecipeGenerator extends RecipeGenerator {
             .pattern("CDE")
             .pattern("AAF")
             .input('A', ConventionalItemTags.GOLD_INGOTS)
-            .input('B', ConventionalItemTags.LAPIS)
+            .input('B', ConventionalItemTags.LAPIS_GEMS)
             .input('C', SimpleMagnets.simple_magnet)
             .input('D', Items.ENDER_EYE)
-            .input('E', ConventionalItemTags.DIAMONDS)
+            .input('E', ConventionalItemTags.DIAMOND_GEMS)
             .input('F', ConventionalItemTags.REDSTONE_DUSTS)
             .unlockedBy(SimpleMagnets.simple_magnet);
         this.shaped(SimpleMagnets.basic_demagnetization_coil)
@@ -49,7 +49,7 @@ public class SimpleMagnetsRecipeGenerator extends RecipeGenerator {
             .pattern(" A ")
             .pattern("BCB")
             .pattern("CDC")
-            .input('A', Items.GLOWSTONE_DUST)
+            .input('A', ConventionalItemTags.GLOWSTONE_DUSTS)
             .input('B', ConventionalItemTags.REDSTONE_DUSTS)
             .input('C', ConventionalItemTags.GOLD_INGOTS)
             .input('D', SimpleMagnets.basic_demagnetization_coil)

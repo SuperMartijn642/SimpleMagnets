@@ -80,7 +80,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
         for(int i = 0; i < 9; i++){
             ItemStack filter = this.filter.get(i);
             if(ItemStack.isSameItem(filter, stack) &&
-                (!this.filterDurability || ItemStack.isSameItemSameTags(filter, stack)))
+                (!this.filterDurability || ItemStack.isSameItemSameComponents(filter, stack)))
                 return this.filterWhitelist;
         }
         return !this.filterWhitelist;
@@ -116,7 +116,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
         if(this.hasFilter){
             for(int i = 0; i < 9; i++){
                 if(!this.filter.get(i).isEmpty())
-                    tag.put("filter" + i, this.filter.get(i).save(new CompoundTag()));
+                    tag.put("filter" + i, this.filter.get(i).save(this.level.registryAccess()));
             }
             tag.putBoolean("filterWhitelist", this.filterWhitelist);
             tag.putBoolean("filterDurability", this.filterDurability);
@@ -135,7 +135,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
             this.rangeZ = tag.getInt("rangeZ");
         if(this.hasFilter){
             for(int i = 0; i < 9; i++)
-                this.filter.set(i, tag.contains("filter" + i) ? ItemStack.of(tag.getCompound("filter" + i)) : ItemStack.EMPTY);
+                this.filter.set(i, tag.contains("filter" + i) ? ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("filter" + i)) : ItemStack.EMPTY);
             this.filterWhitelist = tag.contains("filterWhitelist") && tag.getBoolean("filterWhitelist");
             this.filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         }

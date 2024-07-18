@@ -1,10 +1,10 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.core.gui.ItemBaseContainer;
+import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.trashcans.screen.DummySlot;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -20,8 +20,8 @@ public class MagnetContainer extends ItemBaseContainer {
 
     public final int slot;
     private final Function<Integer,ItemStack> itemHandler = slot -> {
-        CompoundTag tag = MagnetContainer.this.object.getTag();
-        return (tag != null && tag.contains("filter" + slot)) ? ItemStack.of(tag.getCompound("filter" + slot)) : ItemStack.EMPTY;
+        AdvancedMagnet.Settings settings = MagnetContainer.this.object.get(AdvancedMagnet.SETTINGS);
+        return settings != null && settings.itemFilter()[slot] != null ? settings.itemFilter()[slot] : ItemStack.EMPTY;
     };
 
     public MagnetContainer(Player player, int slot){
@@ -74,12 +74,16 @@ public class MagnetContainer extends ItemBaseContainer {
             return;
 
         if(slotId < 9 && slotId >= 0){
-            if(this.getCarried().isEmpty())
-                this.object.getOrCreateTag().remove("filter" + slotId);
-            else{
+            AdvancedMagnet.Settings settings = this.object.get(AdvancedMagnet.SETTINGS);
+            if(this.getCarried().isEmpty()){
+                if(settings != null)
+                    this.object.set(AdvancedMagnet.SETTINGS, settings.itemFilter(slotId, null));
+            }else{
                 ItemStack stack = this.getCarried().copy();
                 stack.setCount(1);
-                this.object.getOrCreateTag().put("filter" + slotId, stack.save(new CompoundTag()));
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                this.object.set(AdvancedMagnet.SETTINGS, settings.itemFilter(slotId, stack));
             }
             return;
         }
@@ -92,19 +96,23 @@ public class MagnetContainer extends ItemBaseContainer {
             return ItemStack.EMPTY;
 
         if(index < 9){
-            if(this.getCarried().isEmpty())
-                this.object.getOrCreateTag().remove("filter" + index);
-            else{
+            AdvancedMagnet.Settings settings = this.object.get(AdvancedMagnet.SETTINGS);
+            if(this.getCarried().isEmpty()){
+                if(settings != null)
+                    this.object.set(AdvancedMagnet.SETTINGS, settings.itemFilter(index, null));
+            }else{
                 ItemStack stack = this.getCarried().copy();
                 stack.setCount(1);
-                this.object.getOrCreateTag().put("filter" + index, stack.save(new CompoundTag()));
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                this.object.set(AdvancedMagnet.SETTINGS, settings.itemFilter(index, stack));
             }
         }else if(!this.getSlot(index).getItem().isEmpty()){
             boolean contains = false;
             int firstEmpty = -1;
             for(int i = 0; i < 9; i++){
                 ItemStack stack = this.itemHandler.apply(i);
-                if(ItemStack.isSameItemSameTags(stack, this.getSlot(index).getItem())){
+                if(ItemStack.isSameItemSameComponents(stack, this.getSlot(index).getItem())){
                     contains = true;
                     break;
                 }
@@ -114,7 +122,10 @@ public class MagnetContainer extends ItemBaseContainer {
             if(!contains && firstEmpty != -1){
                 ItemStack stack = this.getSlot(index).getItem().copy();
                 stack.setCount(1);
-                this.object.getOrCreateTag().put("filter" + firstEmpty, stack.save(new CompoundTag()));
+                AdvancedMagnet.Settings settings = this.object.get(AdvancedMagnet.SETTINGS);
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                this.object.set(AdvancedMagnet.SETTINGS, settings.itemFilter(firstEmpty, stack));
             }
         }
         return ItemStack.EMPTY;
