@@ -27,8 +27,10 @@ public class PacketToggleXp implements BasePacket {
         if(player != null){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
             if(stack.getItem() instanceof AdvancedMagnet){
-                stack.getOrCreateTag().putBoolean("xp", !(stack.getOrCreateTag().contains("xp") && stack.getOrCreateTag().getBoolean("xp")));
-                player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                AdvancedMagnet.Settings settings = stack.get(AdvancedMagnet.SETTINGS);
+                if(settings == null)
+                    settings = AdvancedMagnet.Settings.defaultSettings();
+                stack.set(AdvancedMagnet.SETTINGS, settings.collectXp(!settings.collectXp()));
             }
         }
     }

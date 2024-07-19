@@ -10,8 +10,8 @@
       ],
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "simplemagnets:basic_demagnetization_coil"
+          "name": "simplemagnets:basic_demagnetization_coil",
+          "type": "minecraft:item"
         }
       ]
     }

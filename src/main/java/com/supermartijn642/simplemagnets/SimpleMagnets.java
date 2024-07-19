@@ -1,5 +1,6 @@
 package com.supermartijn642.simplemagnets;
 
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.block.BaseBlock;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.gui.BaseContainerType;
@@ -17,8 +18,6 @@ import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContaine
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -84,7 +83,8 @@ public class SimpleMagnets {
         CHANNEL.registerMessage(PacketToggleShowRange.class, PacketToggleShowRange::new, true);
 
         register();
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> SimpleMagnetsClient::register);
+        if(CommonUtils.getEnvironmentSide().isClient())
+            SimpleMagnetsClient.register();
         registerGenerators();
     }
 
@@ -99,6 +99,9 @@ public class SimpleMagnets {
         handler.registerItem("advancedmagnet", AdvancedMagnet::new);
         handler.registerItem("basic_demagnetization_coil", () -> new BaseBlockItem(basic_demagnetization_coil, ItemProperties.create().group(GROUP)));
         handler.registerItem("advanced_demagnetization_coil", () -> new BaseBlockItem(advanced_demagnetization_coil, ItemProperties.create().group(GROUP)));
+        // Data components
+        handler.registerDataComponentType("magnet_active", MagnetItem.ACTIVE);
+        handler.registerDataComponentType("magnet_settings", AdvancedMagnet.SETTINGS);
         // Blocks
         handler.registerBlock("basic_demagnetization_coil", () -> new DemagnetizationCoilBlock(SMConfig.basicCoilMaxRange, SMConfig.basicCoilFilter, () -> basic_demagnetization_coil_tile));
         handler.registerBlock("advanced_demagnetization_coil", () -> new DemagnetizationCoilBlock(SMConfig.advancedCoilMaxRange, SMConfig.advancedCoilFilter, () -> advanced_demagnetization_coil_tile));

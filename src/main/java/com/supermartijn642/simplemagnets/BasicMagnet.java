@@ -2,7 +2,6 @@ package com.supermartijn642.simplemagnets;
 
 import com.supermartijn642.core.TextComponents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,27 +11,27 @@ import net.minecraft.world.item.ItemStack;
 public class BasicMagnet extends MagnetItem {
 
     @Override
-    protected boolean canPickupItems(CompoundTag tag){
+    protected boolean canPickupItems(ItemStack magnet){
         return true;
     }
 
     @Override
-    protected boolean canPickupStack(CompoundTag tag, ItemStack stack){
+    protected boolean canPickupStack(ItemStack magnet, ItemStack stack){
         return true;
     }
 
     @Override
-    protected boolean canPickupXp(CompoundTag tag){
+    protected boolean canPickupXp(ItemStack magnet){
         return true;
     }
 
     @Override
-    protected int getRangeItems(CompoundTag tag){
+    protected int getRangeItems(ItemStack magnet){
         return SMConfig.basicMagnetRange.get();
     }
 
     @Override
-    protected int getRangeXp(CompoundTag tag){
+    protected int getRangeXp(ItemStack magnet){
         return SMConfig.basicMagnetRange.get();
     }
 
