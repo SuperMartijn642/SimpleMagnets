@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 public class UpDownArrowButton extends AbstractButtonWidget {
 
-    private static final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/up_down_arrow_buttons.png");
+    private static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/up_down_arrow_buttons.png");
 
     private final boolean down;
     public boolean active = true;

@@ -16,7 +16,7 @@ import java.util.function.Function;
  */
 public class CheckBox extends AbstractButtonWidget {
 
-    private static final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/checkmarkbox.png");
+    private static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/checkmarkbox.png");
 
     private final Function<Boolean,String> translationKey;
     public boolean checked;

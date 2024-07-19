@@ -35,12 +35,12 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // Core library
-    implementation "com.supermartijn642.core:supermartijn642corelib:1.1.17-forge-mc1.20.6" // TODO
+    implementation "com.supermartijn642.core:supermartijn642corelib:1.1.17-forge-mc1.21" // TODO
     // Config library
-    implementation "com.supermartijn642.config:supermartijn642configlib:1.1.8-forge-mc1.20.6" //TODO
+    implementation "com.supermartijn642.config:supermartijn642configlib:1.1.8-forge-mc1.21" //TODO
 
     // Curios
-    implementation "curse.maven:curios-309927:${curios_file}"
+    compileOnly "curse.maven:curios-309927:${curios_file}"
 
     // Just Enough Items
 //    runtimeOnly "curse.maven:jei-238222:${just_enough_items_file}"

@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  */
 public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContainer> {
 
-    private static final ResourceLocation BACKGROUND = new ResourceLocation("simplemagnets", "textures/screen.png");
+    private static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/screen.png");
 
     private CheckBox itemCheckbox;
     private PlusMinusButton leftItemButton;

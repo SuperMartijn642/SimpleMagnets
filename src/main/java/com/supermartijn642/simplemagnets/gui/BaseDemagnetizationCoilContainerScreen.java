@@ -41,7 +41,7 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
 
     @Override
     protected void renderBackground(WidgetRenderContext context, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){
-        ScreenUtils.bindTexture(new ResourceLocation("simplemagnets", "textures/" + this.getBackground()));
+        ScreenUtils.bindTexture(ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/" + this.getBackground()));
         ScreenUtils.drawTexture(context.poseStack(), 0, 0, this.width(), this.height());
 
         super.renderBackground(context, mouseX, mouseY, object);

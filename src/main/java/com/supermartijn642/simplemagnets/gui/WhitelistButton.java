@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 public class WhitelistButton extends AbstractButtonWidget {
 
-    private static final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/blacklist_button.png");
+    private static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/blacklist_button.png");
 
     public boolean white = true;
     public boolean active = true;

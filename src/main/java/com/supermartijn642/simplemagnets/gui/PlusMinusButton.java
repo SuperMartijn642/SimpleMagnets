@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 public class PlusMinusButton extends AbstractButtonWidget {
 
-    private static final ResourceLocation BUTTONS = new ResourceLocation("simplemagnets", "textures/plus_minus_buttons.png");
+    private static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/plus_minus_buttons.png");
 
     private final boolean left;
     private final String translationKey;
