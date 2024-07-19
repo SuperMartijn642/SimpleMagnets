@@ -1,6 +1,2 @@
 ### Simple Magnets 1.1.11
-- Updated Simplified Chinese translations (thanks to UraraChiya!)
-- Updated Russian translations (thanks to Bytegm!)
-
-### Simple Magnets 1.1.10
-- Initial release of Simple Magnets for NeoForge
+- Initial release of Simple Magnets for Minecraft 1.20.5 & 1.20.6
