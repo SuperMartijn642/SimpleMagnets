@@ -1,2 +1,5 @@
+### Simple Magnets 1.1.11a
+- Fixed crash on startup
+
 ### Simple Magnets 1.1.11
 - Initial release of Simple Magnets for Minecraft 1.20.5 & 1.20.6
