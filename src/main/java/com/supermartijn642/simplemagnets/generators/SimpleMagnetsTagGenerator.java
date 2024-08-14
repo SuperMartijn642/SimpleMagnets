@@ -16,5 +16,13 @@ public class SimpleMagnetsTagGenerator extends TagGenerator {
     @Override
     public void generate(){
         this.blockMineableWithPickaxe().add(SimpleMagnets.basic_demagnetization_coil).add(SimpleMagnets.advanced_demagnetization_coil);
+
+        // Add the magnets to Trinkets' tags
+        this.itemTag("trinkets", "hand/ring")
+            .add(SimpleMagnets.simple_magnet)
+            .add(SimpleMagnets.advanced_magnet);
+        this.itemTag("trinkets", "offhand/ring")
+            .add(SimpleMagnets.simple_magnet)
+            .add(SimpleMagnets.advanced_magnet);
     }
 }
