@@ -1,3 +1,6 @@
+### Simple Magnets 1.1.11b
+- Fixed magnets not going in Curios slots
+
 ### Simple Magnets 1.1.11a
 - Fixed crash on startup
 
