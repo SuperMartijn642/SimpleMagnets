@@ -1,4 +1,4 @@
-// 1.21	2024-07-19T03:21:01.7399287	Core Lib Generators
+// 1.21	2024-08-14T08:40:46.8115909	Core Lib Generators
 7fef990bd6c67da5b175d33427bc5118acb4f422 assets/minecraft/atlases/blocks.json
 6673210e78292d89f8975826e87d78fccff84017 assets/simplemagnets/blockstates/advanced_demagnetization_coil.json
 482d1b9e125643d9f72108350fe0406b0473763a assets/simplemagnets/blockstates/basic_demagnetization_coil.json
@@ -7,6 +7,7 @@ af995f023caf0b51340be30c6915fa8fb8d428cd assets/simplemagnets/models/item/advanc
 1c823d9bf1a79fefaab2244f0863d125e1cd820a assets/simplemagnets/models/item/advanced_demagnetization_coil.json
 437f5b7ebf6dde1a9b9e9f2cfbfb26c8763c2cd4 assets/simplemagnets/models/item/basicmagnet.json
 3745e5dccc3ed4f7d27ab58a1b97257580d06b4a assets/simplemagnets/models/item/basic_demagnetization_coil.json
+6cccc516e58aebcd7cf653316df6e0f07420c883 data/curios/tags/item/charm.json
 e111da4a17d542e8a887c36dd47a948ecf2be92f data/minecraft/tags/block/mineable/pickaxe.json
 a3130573da2db4bccb16f16e34fb6503f790922c data/simplemagnets/advancement/recipes/misc/advancedmagnet.json
 f732146ac9f05b9f2928ba19189d12c686f293cd data/simplemagnets/advancement/recipes/misc/advanced_demagnetization_coil.json
