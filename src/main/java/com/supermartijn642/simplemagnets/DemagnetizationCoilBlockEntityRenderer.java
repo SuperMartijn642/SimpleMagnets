@@ -14,7 +14,7 @@ public class DemagnetizationCoilBlockEntityRenderer implements CustomBlockEntity
 
     @Override
     public void render(DemagnetizationCoilBlockEntity entity, float partialTicks, int combinedOverlay){
-        if(entity.showRange){
+        if(entity.getShowRange()){
             GlStateManager.pushMatrix();
             GlStateManager.translated(-entity.getBlockPos().getX(), -entity.getBlockPos().getY(), -entity.getBlockPos().getZ());
 
