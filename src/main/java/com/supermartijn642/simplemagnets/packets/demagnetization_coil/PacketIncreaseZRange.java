@@ -19,6 +19,6 @@ public class PacketIncreaseZRange extends BlockEntityBasePacket<DemagnetizationC
 
     @Override
     protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
-        entity.setRangeZ(entity.rangeZ + 1);
+        entity.setRangeZ(entity.getRangeZ() + 1);
     }
 }
