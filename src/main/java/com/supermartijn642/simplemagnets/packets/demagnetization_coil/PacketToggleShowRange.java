@@ -19,7 +19,6 @@ public class PacketToggleShowRange extends BlockEntityBasePacket<Demagnetization
 
     @Override
     protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
-        entity.showRange = !entity.showRange;
-        entity.dataChanged();
+        entity.toggleShowRange();
     }
 }
