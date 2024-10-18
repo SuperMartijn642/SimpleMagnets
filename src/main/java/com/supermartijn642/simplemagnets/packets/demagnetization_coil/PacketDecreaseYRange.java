@@ -19,6 +19,6 @@ public class PacketDecreaseYRange extends BlockEntityBasePacket<DemagnetizationC
 
     @Override
     protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
-        entity.setRangeY(entity.rangeY - 1);
+        entity.setRangeY(entity.getRangeY() - 1);
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,11 +35,11 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
     private final int maxRange;
     private final boolean hasFilter;
 
-    public int rangeX, rangeY, rangeZ;
-    public final List<ItemStack> filter = new ArrayList<>(9);
-    public boolean filterWhitelist;
-    public boolean filterDurability = true; // nbt in 1.14+
-    public boolean showRange;
+    private int rangeX, rangeY, rangeZ;
+    private final List<ItemStack> filter = new ArrayList<>(9), filterView = Collections.unmodifiableList(this.filter);
+    private boolean filterWhitelist;
+    private boolean filterDurability = true; // nbt in 1.14+
+    private boolean showRange;
 
     public DemagnetizationCoilBlockEntity(BaseBlockEntityType<?> blockEntityType, int minRange, int maxRange, int range, boolean hasFilter){
         super(blockEntityType);
@@ -83,11 +84,19 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
         return !this.filterWhitelist;
     }
 
+    public int getRangeX(){
+        return this.rangeX;
+    }
+
     public void setRangeX(int range){
         int old = this.rangeX;
         this.rangeX = Math.min(Math.max(range, this.minRange), this.maxRange);
         if(this.rangeX != old)
             this.dataChanged();
+    }
+
+    public int getRangeY(){
+        return this.rangeY;
     }
 
     public void setRangeY(int range){
@@ -97,11 +106,51 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
             this.dataChanged();
     }
 
+    public int getRangeZ(){
+        return this.rangeZ;
+    }
+
     public void setRangeZ(int range){
         int old = this.rangeZ;
         this.rangeZ = Math.min(Math.max(range, this.minRange), this.maxRange);
         if(this.rangeZ != old)
             this.dataChanged();
+    }
+
+    public List<ItemStack> getFilter(){
+        return this.filterView;
+    }
+
+    public void updateFilter(int index, ItemStack stack){
+        this.filter.set(index, stack);
+        this.dataChanged();
+    }
+
+    public boolean getFilterWhitelist(){
+        return this.filterWhitelist;
+    }
+
+    public void toggleFilterWhitelist(){
+        this.filterWhitelist = !this.filterWhitelist;
+        this.dataChanged();
+    }
+
+    public boolean getFilterDurability(){
+        return this.filterDurability;
+    }
+
+    public void toggleFilterDurability(){
+        this.filterDurability = !this.filterDurability;
+        this.dataChanged();
+    }
+
+    public boolean getShowRange(){
+        return this.showRange;
+    }
+
+    public void toggleShowRange(){
+        this.showRange = !this.showRange;
+        this.dataChanged();
     }
 
     @Override
