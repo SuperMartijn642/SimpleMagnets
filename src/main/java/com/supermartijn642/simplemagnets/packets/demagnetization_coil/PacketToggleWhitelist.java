@@ -19,7 +19,6 @@ public class PacketToggleWhitelist extends BlockEntityBasePacket<Demagnetization
 
     @Override
     protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
-        entity.filterWhitelist = !entity.filterWhitelist;
-        entity.dataChanged();
+        entity.toggleFilterWhitelist();
     }
 }
