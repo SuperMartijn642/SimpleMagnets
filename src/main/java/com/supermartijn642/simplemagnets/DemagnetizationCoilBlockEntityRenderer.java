@@ -15,7 +15,7 @@ public class DemagnetizationCoilBlockEntityRenderer implements CustomBlockEntity
 
     @Override
     public void render(DemagnetizationCoilBlockEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay){
-        if(entity.showRange){
+        if(entity.getShowRange()){
             poseStack.pushPose();
             poseStack.translate(-entity.getBlockPos().getX(), -entity.getBlockPos().getY(), -entity.getBlockPos().getZ());
 

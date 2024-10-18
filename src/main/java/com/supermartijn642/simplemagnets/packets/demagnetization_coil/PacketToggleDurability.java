@@ -19,7 +19,6 @@ public class PacketToggleDurability extends BlockEntityBasePacket<Demagnetizatio
 
     @Override
     protected void handle(DemagnetizationCoilBlockEntity entity, PacketContext context){
-        entity.filterDurability = !entity.filterDurability;
-        entity.dataChanged();
+        entity.toggleFilterDurability();
     }
 }
