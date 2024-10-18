@@ -38,11 +38,11 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
 
         if(slotId >= 0 && slotId < 9){
             if(this.getCarried().isEmpty())
-                this.object.filter.set(slotId, ItemStack.EMPTY);
+                this.object.updateFilter(slotId, ItemStack.EMPTY);
             else{
                 ItemStack stack = this.getCarried().copy();
                 stack.setCount(1);
-                this.object.filter.set(slotId, stack);
+                this.object.updateFilter(slotId, stack);
             }
         }
         super.clicked(slotId, dragType, clickType, player);
@@ -55,11 +55,11 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
 
         if(index >= 0 && index < 9){
             if(this.getCarried().isEmpty())
-                this.object.filter.set(index, ItemStack.EMPTY);
+                this.object.updateFilter(index, ItemStack.EMPTY);
             else{
                 ItemStack stack = this.getCarried().copy();
                 stack.setCount(1);
-                this.object.filter.set(index, stack);
+                this.object.updateFilter(index, stack);
             }
         }else if(!this.getSlot(index).getItem().isEmpty()){
             boolean contains = false;
@@ -76,7 +76,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
             if(!contains && firstEmpty != -1){
                 ItemStack stack = this.getSlot(index).getItem().copy();
                 stack.setCount(1);
-                this.object.filter.set(firstEmpty, stack);
+                this.object.updateFilter(firstEmpty, stack);
             }
         }
         return ItemStack.EMPTY;
@@ -87,7 +87,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
             @Nonnull
             @Override
             public ItemStack getStackInSlot(int slot){
-                return FilteredDemagnetizationCoilContainer.this.validateObjectOrClose() ? FilteredDemagnetizationCoilContainer.this.object.filter.get(slot) : ItemStack.EMPTY;
+                return FilteredDemagnetizationCoilContainer.this.validateObjectOrClose() ? FilteredDemagnetizationCoilContainer.this.object.getFilter().get(slot) : ItemStack.EMPTY;
             }
         };
     }
