@@ -1,3 +1,6 @@
+### Simple Magnets 1.1.12
+- Fixed demagnetization coil option changes not always getting saved
+
 ### Simple Magnets 1.1.11b
 - Fixed magnets not going in Trinkets slots
 
