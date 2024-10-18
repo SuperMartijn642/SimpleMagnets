@@ -135,7 +135,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
             this.rangeZ = tag.getInt("rangeZ");
         if(this.hasFilter){
             for(int i = 0; i < 9; i++)
-                this.filter.set(i, tag.contains("filter" + i) ? ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("filter" + i)) : ItemStack.EMPTY);
+                this.filter.set(i, tag.contains("filter" + i) ? ItemStack.parseOptional(CommonUtils.getRegistryAccess(), tag.getCompound("filter" + i)) : ItemStack.EMPTY);
             this.filterWhitelist = tag.contains("filterWhitelist") && tag.getBoolean("filterWhitelist");
             this.filterDurability = tag.contains("filterDurability") && tag.getBoolean("filterDurability");
         }
