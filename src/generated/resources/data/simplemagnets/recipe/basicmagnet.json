@@ -6,18 +6,10 @@
     "AAD"
   ],
   "key": {
-    "A": {
-      "tag": "c:ingots/iron"
-    },
-    "B": {
-      "tag": "c:gems/lapis"
-    },
-    "C": {
-      "item": "minecraft:ender_pearl"
-    },
-    "D": {
-      "tag": "c:dusts/redstone"
-    }
+    "A": "#c:ingots/iron",
+    "B": "#c:gems/lapis",
+    "C": "minecraft:ender_pearl",
+    "D": "#c:dusts/redstone"
   },
   "result": {
     "id": "simplemagnets:basicmagnet"

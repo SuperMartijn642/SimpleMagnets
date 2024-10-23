@@ -6,18 +6,10 @@
     "CDC"
   ],
   "key": {
-    "A": {
-      "tag": "c:dusts/glowstone"
-    },
-    "B": {
-      "tag": "c:dusts/redstone"
-    },
-    "C": {
-      "tag": "c:ingots/gold"
-    },
-    "D": {
-      "item": "simplemagnets:basic_demagnetization_coil"
-    }
+    "A": "#c:dusts/glowstone",
+    "B": "#c:dusts/redstone",
+    "C": "#c:ingots/gold",
+    "D": "simplemagnets:basic_demagnetization_coil"
   },
   "result": {
     "id": "simplemagnets:advanced_demagnetization_coil"
