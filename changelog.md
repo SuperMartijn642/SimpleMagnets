@@ -1,3 +1,6 @@
+### Simple Magnets 1.1.12a
+- Fixed advanced magnet data component not being comparable
+
 ### Simple Magnets 1.1.12
 - Fixed demagnetization coil option changes not always getting saved
 
