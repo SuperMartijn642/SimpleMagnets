@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,8 +33,8 @@ public class AdvancedMagnet extends MagnetItem {
             ExtraCodecs.POSITIVE_INT.fieldOf("xpRange").forGetter(Settings::xpRange),
             Codec.BOOL.fieldOf("whitelist").forGetter(Settings::isWhitelist),
             Codec.BOOL.fieldOf("filterDurability").forGetter(Settings::isFilterDurability),
-            ExtraCodecs.optionalEmptyMap(ItemStack.SINGLE_ITEM_CODEC).listOf(9, 9).fieldOf("itemFilter").forGetter(s -> Arrays.stream(s.itemFilter).map(Optional::ofNullable).toList())
-        ).apply(instance, (a, b, c, d, e, f, filter) -> new Settings(a, b, c, d, e, f, filter.stream().map(o -> o.orElse(null)).toArray(ItemStack[]::new)))))
+            ExtraCodecs.optionalEmptyMap(ItemStack.SINGLE_ITEM_CODEC).listOf(9, 9).fieldOf("itemFilter").forGetter(s -> s.itemFilter.stream().map(Optional::ofNullable).toList())
+        ).apply(instance, (a, b, c, d, e, f, filter) -> new Settings(a, b, c, d, e, f, filter.stream().map(o -> o.orElse(null)).toList()))))
         .networkSynchronized(new StreamCodec<>() {
             @Override
             public void encode(RegistryFriendlyByteBuf buffer, Settings settings){
@@ -58,10 +59,10 @@ public class AdvancedMagnet extends MagnetItem {
                 int xpRange = buffer.readInt();
                 boolean isWhitelist = buffer.readBoolean();
                 boolean isFilterDurability = buffer.readBoolean();
-                ItemStack[] itemFilter = new ItemStack[9];
-                for(int i = 0; i < itemFilter.length; i++){
+                List<ItemStack> itemFilter = Arrays.asList(new ItemStack[9]);
+                for(int i = 0; i < itemFilter.size(); i++){
                     if(buffer.readBoolean())
-                        itemFilter[i] = ItemStack.STREAM_CODEC.decode(buffer);
+                        itemFilter.set(i, ItemStack.STREAM_CODEC.decode(buffer));
                 }
                 return new Settings(collectItems, itemRange, collectXp, xpRange, isWhitelist, isFilterDurability, itemFilter);
             }
@@ -91,8 +92,8 @@ public class AdvancedMagnet extends MagnetItem {
         Settings settings = magnet.get(SETTINGS);
         for(int slot = 0; slot < 9; slot++){
             //noinspection DataFlowIssue
-            if(settings.itemFilter[slot] != null){
-                ItemStack filterStack = settings.itemFilter[slot];
+            if(settings.itemFilter.get(slot) != null){
+                ItemStack filterStack = settings.itemFilter.get(slot);
                 // Check whether the stack and the filter match
                 if(ItemStack.isSameItem(stack, filterStack)
                     && (!settings.isFilterDurability || ItemStack.isSameItemSameComponents(stack, filterStack)))
@@ -126,10 +127,10 @@ public class AdvancedMagnet extends MagnetItem {
     }
 
     public record Settings(boolean collectItems, int itemRange, boolean collectXp, int xpRange, boolean isWhitelist,
-                           boolean isFilterDurability, ItemStack[] itemFilter) {
+                           boolean isFilterDurability, List<ItemStack> itemFilter) {
 
         public static Settings defaultSettings(){
-            return new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, new ItemStack[9]);
+            return new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, List.of(new ItemStack[9]));
         }
 
         public Settings collectItems(boolean value){
@@ -169,11 +170,11 @@ public class AdvancedMagnet extends MagnetItem {
         }
 
         public Settings itemFilter(int index, ItemStack stack){
-            if(this.itemFilter[index] == null ? stack == null : stack != null && ItemStack.isSameItemSameComponents(this.itemFilter[index], stack))
+            if(this.itemFilter.get(index) == null ? stack == null : stack != null && ItemStack.isSameItemSameComponents(this.itemFilter.get(index), stack))
                 return this;
-            ItemStack[] filter = Arrays.copyOf(this.itemFilter, this.itemFilter.length);
+            ItemStack[] filter = Arrays.copyOf(this.itemFilter.toArray(ItemStack[]::new), this.itemFilter.size());
             filter[index] = stack;
-            return new Settings(this.collectItems, this.itemRange, this.collectXp, this.xpRange, this.isWhitelist, this.isFilterDurability, filter);
+            return new Settings(this.collectItems, this.itemRange, this.collectXp, this.xpRange, this.isWhitelist, this.isFilterDurability, List.of(filter));
         }
     }
 }
