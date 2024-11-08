@@ -20,7 +20,7 @@ public class MagnetContainer extends ItemBaseContainer {
     public final int slot;
     private final Function<Integer,ItemStack> itemHandler = slot -> {
         AdvancedMagnet.Settings settings = MagnetContainer.this.object.get(AdvancedMagnet.SETTINGS);
-        return settings != null && settings.itemFilter()[slot] != null ? settings.itemFilter()[slot] : ItemStack.EMPTY;
+        return settings != null && settings.itemFilter().get(slot) != null ? settings.itemFilter().get(slot) : ItemStack.EMPTY;
     };
 
     public MagnetContainer(Player player, int slot){
