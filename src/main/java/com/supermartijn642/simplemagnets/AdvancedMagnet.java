@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,7 +131,8 @@ public class AdvancedMagnet extends MagnetItem {
                            boolean isFilterDurability, List<ItemStack> itemFilter) {
 
         public static Settings defaultSettings(){
-            return new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, List.of(new ItemStack[9]));
+            //noinspection Java9CollectionFactory
+            return new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, Collections.unmodifiableList(Arrays.asList(new ItemStack[9])));
         }
 
         public Settings collectItems(boolean value){
@@ -174,7 +176,8 @@ public class AdvancedMagnet extends MagnetItem {
                 return this;
             ItemStack[] filter = Arrays.copyOf(this.itemFilter.toArray(ItemStack[]::new), this.itemFilter.size());
             filter[index] = stack;
-            return new Settings(this.collectItems, this.itemRange, this.collectXp, this.xpRange, this.isWhitelist, this.isFilterDurability, List.of(filter));
+            //noinspection Java9CollectionFactory
+            return new Settings(this.collectItems, this.itemRange, this.collectXp, this.xpRange, this.isWhitelist, this.isFilterDurability, Collections.unmodifiableList(Arrays.asList(filter)));
         }
     }
 }
