@@ -1,14 +1,2 @@
-### Simple Magnets 1.1.12b
-- Fixed crash when changing advanced magnet options
-
-### Simple Magnets 1.1.12a
-- Fixed advanced magnet data component not being comparable
-
 ### Simple Magnets 1.1.12
-- Fixed demagnetization coil option changes not always getting saved
-
-### Simple Magnets 1.1.11a
-- Fixed magnets not going in Curios slots
-
-### Simple Magnets 1.1.11
-- Initial release of Simple Magnets for Minecraft 1.21
+- Initial release of Simple Magnets for Forge 1.21.2 & 1.21.3

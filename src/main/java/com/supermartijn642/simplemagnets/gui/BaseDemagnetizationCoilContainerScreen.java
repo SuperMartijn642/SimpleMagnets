@@ -13,6 +13,8 @@ import net.minecraft.resources.ResourceLocation;
  */
 public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemagnetizationCoilContainer> extends BlockEntityBaseContainerWidget<DemagnetizationCoilBlockEntity,T> {
 
+    private final ResourceLocation background = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/" + this.getBackground());
+
     public BaseDemagnetizationCoilContainerScreen(){
         super(0, 0, 0, 0, null, null);
     }
@@ -41,9 +43,7 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
 
     @Override
     protected void renderBackground(WidgetRenderContext context, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){
-        ScreenUtils.bindTexture(ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/" + this.getBackground()));
-        ScreenUtils.drawTexture(context.poseStack(), 0, 0, this.width(), this.height());
-
+        ScreenUtils.drawTexture(this.background, context.poseStack(), 0, 0, this.width(), this.height());
         super.renderBackground(context, mouseX, mouseY, object);
     }
 }

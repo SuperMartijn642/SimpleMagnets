@@ -93,9 +93,7 @@ public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContain
 
     @Override
     protected void renderBackground(WidgetRenderContext context, int mouseX, int mouseY, ItemStack stack){
-        ScreenUtils.bindTexture(BACKGROUND);
-        ScreenUtils.drawTexture(context.poseStack(), 0, 0, this.width(), this.height());
-
+        ScreenUtils.drawTexture(BACKGROUND, context.poseStack(), 0, 0, this.width(), this.height());
         super.renderBackground(context, mouseX, mouseY, stack);
     }
 

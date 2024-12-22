@@ -6,18 +6,10 @@
     "AAD"
   ],
   "key": {
-    "A": {
-      "tag": "forge:ingots/iron"
-    },
-    "B": {
-      "tag": "forge:gems/lapis"
-    },
-    "C": {
-      "tag": "forge:ender_pearls"
-    },
-    "D": {
-      "tag": "forge:dusts/redstone"
-    }
+    "A": "#c:ingots/iron",
+    "B": "#c:gems/lapis",
+    "C": "#c:ender_pearls",
+    "D": "#c:dusts/redstone"
   },
   "result": {
     "id": "simplemagnets:basicmagnet"

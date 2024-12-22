@@ -6,15 +6,9 @@
     "CCC"
   ],
   "key": {
-    "A": {
-      "tag": "forge:ingots/gold"
-    },
-    "B": {
-      "tag": "forge:dusts/redstone"
-    },
-    "C": {
-      "tag": "forge:ingots/iron"
-    }
+    "A": "#c:ingots/gold",
+    "B": "#c:dusts/redstone",
+    "C": "#c:ingots/iron"
   },
   "result": {
     "id": "simplemagnets:basic_demagnetization_coil"
