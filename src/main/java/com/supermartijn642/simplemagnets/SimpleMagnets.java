@@ -118,6 +118,7 @@ public class SimpleMagnets {
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get("simplemagnets");
         handler.addGenerator(SimpleMagnetsModelGenerator::new);
         handler.addGenerator(SimpleMagnetsBlockStateGenerator::new);
+        handler.addGenerator(SimpleMagnetsItemInfoGenerator::new);
         handler.addGenerator(SimpleMagnetsLanguageGenerator::new);
         handler.addGenerator(SimpleMagnetsLootTableGenerator::new);
         handler.addGenerator(SimpleMagnetsRecipeGenerator::new);
