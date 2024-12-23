@@ -18,11 +18,7 @@ import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContaine
 import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -56,8 +52,6 @@ public class SimpleMagnets {
     public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
     public SimpleMagnets(){
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::interModEnqueue);
-
         // magnets
         CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
         CHANNEL.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange::new, true);
@@ -88,10 +82,6 @@ public class SimpleMagnets {
         registerGenerators();
     }
 
-    public void interModEnqueue(InterModEnqueueEvent e){
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
-    }
-
     private static void register(){
         RegistrationHandler handler = RegistrationHandler.get("simplemagnets");
         // Items
@@ -118,6 +108,7 @@ public class SimpleMagnets {
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get("simplemagnets");
         handler.addGenerator(SimpleMagnetsModelGenerator::new);
         handler.addGenerator(SimpleMagnetsBlockStateGenerator::new);
+        handler.addGenerator(SimpleMagnetsItemInfoGenerator::new);
         handler.addGenerator(SimpleMagnetsLanguageGenerator::new);
         handler.addGenerator(SimpleMagnetsLootTableGenerator::new);
         handler.addGenerator(SimpleMagnetsRecipeGenerator::new);
