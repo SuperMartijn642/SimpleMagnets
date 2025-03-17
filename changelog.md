@@ -1,3 +1,6 @@
+### Simple Magnets 1.1.12c
+- Fixed integration with Curios
+
 ### Simple Magnets 1.1.12b
 - Fixed crash when changing advanced magnet options
 
