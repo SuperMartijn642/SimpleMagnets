@@ -19,10 +19,10 @@ import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-import top.theillusivec4.curios.api.SlotTypeMessage;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+
+import java.util.function.Consumer;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -56,8 +56,6 @@ public class SimpleMagnets {
     public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
     public SimpleMagnets(IEventBus eventBus){
-        eventBus.addListener(this::interModEnqueue);
-
         // magnets
         CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
         CHANNEL.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange::new, true);
@@ -85,11 +83,7 @@ public class SimpleMagnets {
         register();
         if(CommonUtils.getEnvironmentSide().isClient())
             SimpleMagnetsClient.register();
-        registerGenerators();
-    }
-
-    public void interModEnqueue(InterModEnqueueEvent e){
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
+        registerGenerators(eventBus);
     }
 
     private static void register(){
@@ -114,7 +108,7 @@ public class SimpleMagnets {
         handler.registerMenuType("filtered_demagnetization_coil_container", BaseContainerType.create((container, data) -> data.writeBlockPos(container.getBlockEntityPos()), (player, data) -> new FilteredDemagnetizationCoilContainer(player, data.readBlockPos())));
     }
 
-    private static void registerGenerators(){
+    private static void registerGenerators(IEventBus eventBus){
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get("simplemagnets");
         handler.addGenerator(SimpleMagnetsModelGenerator::new);
         handler.addGenerator(SimpleMagnetsBlockStateGenerator::new);
@@ -122,5 +116,13 @@ public class SimpleMagnets {
         handler.addGenerator(SimpleMagnetsLootTableGenerator::new);
         handler.addGenerator(SimpleMagnetsRecipeGenerator::new);
         handler.addGenerator(SimpleMagnetsTagGenerator::new);
+
+        eventBus.addListener((Consumer<GatherDataEvent>)e -> {
+            e.getGenerator().addProvider(e.includeServer(), new SimpleMagnetsCuriosDataProvider(
+                e.getGenerator().getPackOutput(),
+                e.getExistingFileHelper(),
+                e.getLookupProvider()
+            ));
+        });
     }
 }
