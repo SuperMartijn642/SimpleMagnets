@@ -74,7 +74,7 @@ public class AdvancedMagnet extends MagnetItem {
         if(!player.isShiftKeyDown())
             return super.interact(stack, player, hand, level);
 
-        int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().selected : 40;
+        int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().getSelectedSlot() : 40;
         if(!level.isClientSide)
             CommonUtils.openContainer(new MagnetContainer(player, slot));
         return ItemUseResult.success(stack);

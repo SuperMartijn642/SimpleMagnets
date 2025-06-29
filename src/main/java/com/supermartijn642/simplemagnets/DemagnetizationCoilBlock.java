@@ -87,7 +87,7 @@ public class DemagnetizationCoilBlock extends BaseBlock implements EntityHolding
     }
 
     @Override
-    protected void appendItemInformation(ItemStack stack, Consumer<Component> info, boolean advanced){
+    public void appendItemInformation(ItemStack stack, Consumer<Component> info, boolean advanced){
         if(this.hasFilter.get())
             info.accept(TextComponents.translation("simplemagnets.demagnetization_coil.info.filtered", TextComponents.number(this.maxRange.get()).color(ChatFormatting.GOLD).get()).color(ChatFormatting.GRAY).get());
         else
