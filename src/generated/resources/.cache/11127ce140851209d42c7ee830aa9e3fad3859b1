@@ -1,5 +1,6 @@
 // this.cache.versionId	-999999999-01-01T00:00:00	Core Lib Generators
 7fef990bd6c67da5b175d33427bc5118acb4f422 assets/minecraft/atlases/blocks.json
+26d34f493ee1473e5cd254ab8ba710e1579e6b7f assets/minecraft/atlases/gui.json
 6673210e78292d89f8975826e87d78fccff84017 assets/simplemagnets/blockstates/advanced_demagnetization_coil.json
 482d1b9e125643d9f72108350fe0406b0473763a assets/simplemagnets/blockstates/basic_demagnetization_coil.json
 fc22544bda6ed0a14f0e0220837cfb3fa96dd4fd assets/simplemagnets/items/advanced_demagnetization_coil.json
@@ -23,4 +24,4 @@ d09beb261177bb5cd4bbdf6bccf8bf7b4a627834 data/simplemagnets/loot_table/blocks/ba
 58fecdc05b902dd3b0cbd61c79bbf871db6be1c9 data/simplemagnets/recipe/basic_demagnetization_coil.json
 bfbbc0a0ee2b303a9241458cc8951cd8784f1536 data/simplemagnets/recipe/basicmagnet.json
 6cccc516e58aebcd7cf653316df6e0f07420c883 data/trinkets/tags/item/hand/ring.json
-6cccc516e58aebcd7cf653316df6e0f07420c883 data/trinkets/tags/item/offhand/ring.json
+0fcd3aa06a0c9e3e9ad26e18af669d93f7b436e1 data/trinkets/tags/item/offhand/ring.json

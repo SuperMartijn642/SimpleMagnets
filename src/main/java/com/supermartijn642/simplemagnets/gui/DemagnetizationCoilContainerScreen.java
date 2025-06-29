@@ -1,16 +1,19 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.core.TextComponents;
-import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.GuiGraphicsHelper;
 import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
  */
 public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilContainerScreen<DemagnetizationCoilContainer> {
+
+    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath("simplemagnets", "demagnetization_coil_screen");
 
     @Override
     protected void addWidgets(DemagnetizationCoilBlockEntity entity){
@@ -24,21 +27,22 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     }
 
     @Override
-    protected String getBackground(){
-        return "demagnetization_coil_screen.png";
+    protected ResourceLocation getBackground(){
+        return BACKGROUND;
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Override
-    protected void renderForeground(WidgetRenderContext context, int mouseX, int mouseY, DemagnetizationCoilBlockEntity entity){
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.block(entity.getBlockState().getBlock()).get(), this.width(entity) / 2f, 6);
+    protected void renderForeground(WidgetRenderContext context, GuiGraphicsHelper graphics, int mouseX, int mouseY, DemagnetizationCoilBlockEntity entity){
+        graphics.submitText(TextComponents.block(entity.getBlockState().getBlock()).get(), this.width(entity) / 2f, 6, p -> p.centerHorizontally());
 
         int rangeX = entity.getRangeX(), rangeY = entity.getRangeY(), rangeZ = entity.getRangeZ();
-        ScreenUtils.drawString(context.poseStack(), TextComponents.translation("simplemagnets.gui.demagnetization_coil.range", (rangeX - 1) * 2 + 1, (rangeY - 1) * 2 + 1, (rangeZ - 1) * 2 + 1).get(), 8, 26);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.string("x:").get(), 15, 51);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(rangeX).get(), 29, 52);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.string("y:").get(), 52, 51);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(rangeY).get(), 66, 52);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.string("z:").get(), 89, 51);
-        ScreenUtils.drawCenteredString(context.poseStack(), TextComponents.number(rangeZ).get(), 103, 52);
+        graphics.submitText(TextComponents.translation("simplemagnets.gui.demagnetization_coil.range", (rangeX - 1) * 2 + 1, (rangeY - 1) * 2 + 1, (rangeZ - 1) * 2 + 1).get(), 8, 26);
+        graphics.submitText(TextComponents.string("x:").get(), 15, 51, p -> p.centerHorizontally());
+        graphics.submitText(TextComponents.number(rangeX).get(), 29, 52, p -> p.centerHorizontally());
+        graphics.submitText(TextComponents.string("y:").get(), 52, 51, p -> p.centerHorizontally());
+        graphics.submitText(TextComponents.number(rangeY).get(), 66, 52, p -> p.centerHorizontally());
+        graphics.submitText(TextComponents.string("z:").get(), 89, 51, p -> p.centerHorizontally());
+        graphics.submitText(TextComponents.number(rangeZ).get(), 103, 52, p -> p.centerHorizontally());
     }
 }

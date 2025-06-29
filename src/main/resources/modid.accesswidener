@@ -2,4 +2,4 @@ accessWidener v1 named
 
 # ItemEntity
 accessible field net/minecraft/world/entity/item/ItemEntity pickupDelay I
-accessible field net/minecraft/world/entity/item/ItemEntity thrower Ljava/util/UUID;
+accessible field net/minecraft/world/entity/item/ItemEntity thrower Lnet/minecraft/world/entity/EntityReference;
