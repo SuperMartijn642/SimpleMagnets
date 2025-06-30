@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "simplemagnets:advancedmagnet",
-    "simplemagnets:basicmagnet"
+    "simplemagnets:basicmagnet",
+    "simplemagnets:advancedmagnet"
   ]
 }
