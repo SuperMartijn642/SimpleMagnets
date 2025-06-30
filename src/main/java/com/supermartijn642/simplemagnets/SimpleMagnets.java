@@ -108,6 +108,7 @@ public class SimpleMagnets {
     private static void registerGenerators(){
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get("simplemagnets");
         handler.addGenerator(SimpleMagnetsModelGenerator::new);
+        handler.addGenerator(SimpleMagnetsAtlasSourceGenerator::new);
         handler.addGenerator(SimpleMagnetsBlockStateGenerator::new);
         handler.addGenerator(SimpleMagnetsItemInfoGenerator::new);
         handler.addGenerator(SimpleMagnetsLanguageGenerator::new);

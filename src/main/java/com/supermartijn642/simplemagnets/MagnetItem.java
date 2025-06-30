@@ -72,7 +72,7 @@ public abstract class MagnetItem extends BaseItem {
 
                 List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
                     item -> item.isAlive() && (!level.isClientSide || item.tickCount > 1) &&
-                        (item.thrower == null || !item.thrower.equals(entity.getUUID()) || !item.hasPickUpDelay()) &&
+                        (item.thrower == null || !item.thrower.matches(entity) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(stack, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entity.getX(), entity.getY(), entity.getZ()));

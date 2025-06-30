@@ -130,9 +130,11 @@ public class AdvancedMagnet extends MagnetItem {
     public record Settings(boolean collectItems, int itemRange, boolean collectXp, int xpRange, boolean isWhitelist,
                            boolean isFilterDurability, List<ItemStack> itemFilter) {
 
+        @SuppressWarnings("Java9CollectionFactory")
+        private static final Settings DEFAULT = new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, Collections.unmodifiableList(Arrays.asList(new ItemStack[9])));
+
         public static Settings defaultSettings(){
-            //noinspection Java9CollectionFactory
-            return new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, Collections.unmodifiableList(Arrays.asList(new ItemStack[9])));
+            return DEFAULT;
         }
 
         public Settings collectItems(boolean value){

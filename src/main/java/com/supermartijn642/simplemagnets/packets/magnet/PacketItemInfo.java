@@ -5,10 +5,9 @@ import com.supermartijn642.core.network.BasePacket;
 import com.supermartijn642.core.network.PacketContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.UUID;
 
 /**
  * Created 1/8/2021 by SuperMartijn642
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class PacketItemInfo implements BasePacket {
 
     private int target;
-    private UUID thrower;
+    private EntityReference<Entity> thrower;
     private int pickupDelay;
 
     public PacketItemInfo(ItemEntity itemEntity){
@@ -31,14 +30,14 @@ public class PacketItemInfo implements BasePacket {
     @Override
     public void write(FriendlyByteBuf buffer){
         buffer.writeInt(this.target);
-        buffer.writeUUID(this.thrower);
+        EntityReference.<Entity>streamCodec().encode(buffer, this.thrower);
         buffer.writeInt(this.pickupDelay);
     }
 
     @Override
     public void read(FriendlyByteBuf buffer){
         this.target = buffer.readInt();
-        this.thrower = buffer.readUUID();
+        this.thrower = EntityReference.<Entity>streamCodec().decode(buffer);
         this.pickupDelay = buffer.readInt();
     }
 

@@ -1,0 +1,40 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:durability_button"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:blacklist_button"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:checkmarkbox"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:screen"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:demagnetization_coil_screen"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:filtered_demagnetization_coil_screen"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:plus_minus_buttons"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:visualize_button"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "simplemagnets:up_down_arrow_buttons"
+    }
+  ]
+}
