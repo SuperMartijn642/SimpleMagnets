@@ -1,7 +1,7 @@
 package com.supermartijn642.simplemagnets.gui;
 
 import com.supermartijn642.core.TextComponents;
-import com.supermartijn642.core.gui.ScreenUtils;
+import com.supermartijn642.core.gui.GuiGraphicsHelper;
 import com.supermartijn642.core.gui.widget.BlockEntityBaseContainerWidget;
 import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
@@ -12,8 +12,6 @@ import net.minecraft.resources.ResourceLocation;
  * Created 7/7/2020 by SuperMartijn642
  */
 public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemagnetizationCoilContainer> extends BlockEntityBaseContainerWidget<DemagnetizationCoilBlockEntity,T> {
-
-    private final ResourceLocation background = ResourceLocation.fromNamespaceAndPath("simplemagnets", "textures/" + this.getBackground());
 
     public BaseDemagnetizationCoilContainerScreen(){
         super(0, 0, 0, 0, null, null);
@@ -39,11 +37,11 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
         return this.container.getObject(oldObject);
     }
 
-    protected abstract String getBackground();
+    protected abstract ResourceLocation getBackground();
 
     @Override
-    protected void renderBackground(WidgetRenderContext context, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){
-        ScreenUtils.drawTexture(this.background, context.poseStack(), 0, 0, this.width(), this.height());
-        super.renderBackground(context, mouseX, mouseY, object);
+    protected void renderBackground(WidgetRenderContext context, GuiGraphicsHelper graphics, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){
+        graphics.submitSprite(this.getBackground(), 0, 0, this.width(), this.height());
+        super.renderBackground(context, graphics, mouseX, mouseY, object);
     }
 }

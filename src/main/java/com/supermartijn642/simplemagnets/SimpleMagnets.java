@@ -19,6 +19,7 @@ import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -51,7 +52,7 @@ public class SimpleMagnets {
 
     public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
-    public SimpleMagnets(){
+    public SimpleMagnets(FMLJavaModLoadingContext context){
         // magnets
         CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
         CHANNEL.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange::new, true);
@@ -78,7 +79,7 @@ public class SimpleMagnets {
 
         register();
         if(CommonUtils.getEnvironmentSide().isClient())
-            SimpleMagnetsClient.register();
+            SimpleMagnetsClient.register(context);
         registerGenerators();
     }
 
@@ -107,6 +108,7 @@ public class SimpleMagnets {
     private static void registerGenerators(){
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get("simplemagnets");
         handler.addGenerator(SimpleMagnetsModelGenerator::new);
+        handler.addGenerator(SimpleMagnetsAtlasSourceGenerator::new);
         handler.addGenerator(SimpleMagnetsBlockStateGenerator::new);
         handler.addGenerator(SimpleMagnetsItemInfoGenerator::new);
         handler.addGenerator(SimpleMagnetsLanguageGenerator::new);

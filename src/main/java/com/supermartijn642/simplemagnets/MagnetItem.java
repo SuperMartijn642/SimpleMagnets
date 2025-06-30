@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber
 public abstract class MagnetItem extends BaseItem {
 
     public static final DataComponentType<Boolean> ACTIVE = DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build();
@@ -72,7 +72,7 @@ public abstract class MagnetItem extends BaseItem {
 
                 List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
                     item -> item.isAlive() && (!level.isClientSide || item.tickCount > 1) &&
-                        (item.thrower == null || !item.thrower.equals(entity.getUUID()) || !item.hasPickUpDelay()) &&
+                        (item.thrower == null || !item.thrower.matches(entity) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(stack, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entity.getX(), entity.getY(), entity.getZ()));
