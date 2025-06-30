@@ -13,6 +13,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -22,9 +23,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,7 +33,7 @@ import java.util.function.Consumer;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public abstract class MagnetItem extends BaseItem {
 
     public static final DataComponentType<Boolean> ACTIVE = DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build();
@@ -58,7 +59,7 @@ public abstract class MagnetItem extends BaseItem {
     }
 
     @Override
-    public void inventoryUpdate(ItemStack stack, Level level, Entity entity, int itemSlot, boolean isSelected){
+    public void inventoryUpdate(ItemStack stack, Level level, Entity entity, @Nullable EquipmentSlot slot){
         // Prevent spectators from picking up items
         if(entity.isSpectator())
             return;
@@ -105,7 +106,7 @@ public abstract class MagnetItem extends BaseItem {
             Item item = itemstack.getItem();
             int i = itemstack.getCount();
 
-            TriState result = EventHooks.fireItemPickupPre(itemEntity, player).canPickup();
+            var result = EventHooks.fireItemPickupPre(itemEntity, player).canPickup();
             if(result.isFalse()) return;
 
             ItemStack copy = itemstack.copy();

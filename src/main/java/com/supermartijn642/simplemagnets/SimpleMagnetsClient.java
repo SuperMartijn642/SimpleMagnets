@@ -19,7 +19,7 @@ import net.neoforged.neoforge.common.NeoForge;
 /**
  * Created 7/7/2020 by SuperMartijn642
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class SimpleMagnetsClient {
 
     private static KeyMapping MAGNET_TOGGLE_KEY;

@@ -19,10 +19,7 @@ import com.supermartijn642.simplemagnets.gui.MagnetContainer;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-import top.theillusivec4.curios.api.SlotTypeMessage;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -56,8 +53,6 @@ public class SimpleMagnets {
     public static final CreativeItemGroup GROUP = CreativeItemGroup.create("simplemagnets", () -> simple_magnet);
 
     public SimpleMagnets(IEventBus eventBus){
-        eventBus.addListener(this::interModEnqueue);
-
         // magnets
         CHANNEL.registerMessage(PacketToggleItems.class, PacketToggleItems::new, true);
         CHANNEL.registerMessage(PacketIncreaseItemRange.class, PacketIncreaseItemRange::new, true);
@@ -86,10 +81,6 @@ public class SimpleMagnets {
         if(CommonUtils.getEnvironmentSide().isClient())
             SimpleMagnetsClient.register();
         registerGenerators();
-    }
-
-    public void interModEnqueue(InterModEnqueueEvent e){
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("charm").size(1).build());
     }
 
     private static void register(){

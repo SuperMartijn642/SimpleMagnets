@@ -17,7 +17,7 @@ import java.util.Random;
 /**
  * Created 2/21/2021 by SuperMartijn642
  */
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class DemagnetizationCoilAreaHighlighter {
 
     @SubscribeEvent

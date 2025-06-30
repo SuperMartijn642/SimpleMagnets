@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created 2/21/2021 by SuperMartijn642
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class ItemSpawnHandler {
 
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
