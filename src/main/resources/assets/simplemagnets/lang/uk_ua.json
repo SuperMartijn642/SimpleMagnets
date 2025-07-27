@@ -36,5 +36,5 @@
   "simplemagnets.gui.demagnetization_coil.show_range.on": "Так",
   "simplemagnets.gui.demagnetization_coil.show_range.off": "Ні",
   "keys.category.simplemagnets": "Simple Magnets",
-  "keys.simplemagnets.toggle": "Перемкнути магніт",
+  "keys.simplemagnets.toggle": "Перемкнути магніт"
 }
