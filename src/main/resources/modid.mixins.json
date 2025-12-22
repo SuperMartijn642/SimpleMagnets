@@ -9,7 +9,7 @@
     "ServerEntityMixin"
   ],
   "client": [
-    "LevelRendererMixin"
+    "KeyMappingCategoryMixin"
   ],
   "server": [],
   "injectors": {

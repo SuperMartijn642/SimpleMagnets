@@ -21,7 +21,7 @@ public class ItemSpawnHandler {
     private static final ItemSpawnHandler SERVER = new ItemSpawnHandler(), CLIENT = new ItemSpawnHandler();
 
     private static ItemSpawnHandler getInstance(Level level){
-        return level.isClientSide ? CLIENT : SERVER;
+        return level.isClientSide() ? CLIENT : SERVER;
     }
 
     public static void registerEventListeners(){
