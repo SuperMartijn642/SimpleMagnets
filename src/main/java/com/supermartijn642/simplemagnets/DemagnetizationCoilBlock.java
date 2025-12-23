@@ -78,7 +78,7 @@ public class DemagnetizationCoilBlock extends BaseBlock implements EntityHolding
 
     @Override
     protected InteractionFeedback interact(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, Direction hitSide, Vec3 hitLocation){
-        if(!level.isClientSide)
+        if(!level.isClientSide())
             CommonUtils.openContainer(this.hasFilter.get() ?
                 new FilteredDemagnetizationCoilContainer(player, pos) :
                 new DemagnetizationCoilContainer(player, pos)
