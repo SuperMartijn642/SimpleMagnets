@@ -49,7 +49,7 @@ public abstract class MagnetItem extends BaseItem {
     }
 
     public static void toggleMagnet(Player player, ItemStack stack){
-        if(!player.level().isClientSide && stack.getItem() instanceof MagnetItem){
+        if(!player.level().isClientSide() && stack.getItem() instanceof MagnetItem){
             //noinspection DataFlowIssue
             boolean active = stack.has(ACTIVE) && stack.get(ACTIVE);
             stack.set(ACTIVE, !active);
@@ -71,17 +71,17 @@ public abstract class MagnetItem extends BaseItem {
                 AABB area = new AABB(entity.position().add(-r, -r, -r), entity.position().add(r, r, r));
 
                 List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
-                    item -> item.isAlive() && (!level.isClientSide || item.tickCount > 1) &&
+                    item -> item.isAlive() && (!level.isClientSide() || item.tickCount > 1) &&
                         (item.thrower == null || !item.thrower.matches(entity) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(stack, item.getItem())
                 );
                 items.forEach(item -> item.setPos(entity.getX(), entity.getY(), entity.getZ()));
                 // Directly add items to the player's inventory when ItemPhysic is installed
-                if(!level.isClientSide && entity instanceof Player && CommonUtils.isModLoaded("itemphysic"))
+                if(!level.isClientSide() && entity instanceof Player && CommonUtils.isModLoaded("itemphysic"))
                     items.forEach(item -> playerTouch(item, (Player)entity));
             }
 
-            if(!level.isClientSide && this.canPickupXp(stack) && entity instanceof Player){
+            if(!level.isClientSide() && this.canPickupXp(stack) && entity instanceof Player){
                 int r = this.getRangeXp(stack);
                 AABB area = new AABB(entity.position().add(-r, -r, -r), entity.position().add(r, r, r));
 
@@ -100,7 +100,7 @@ public abstract class MagnetItem extends BaseItem {
      * Copied from {@link ItemEntity#playerTouch(Player)}. Use this when ItemPhysic is installed to still pick up items.
      */
     private static void playerTouch(ItemEntity itemEntity, Player player){
-        if(!itemEntity.level().isClientSide){
+        if(!itemEntity.level().isClientSide()){
             if(itemEntity.hasPickUpDelay()) return;
             ItemStack itemstack = itemEntity.getItem();
             Item item = itemstack.getItem();
@@ -150,7 +150,7 @@ public abstract class MagnetItem extends BaseItem {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking e){
-        if(!e.getEntity().level().isClientSide && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).thrower != null)
+        if(!e.getEntity().level().isClientSide() && e.getTarget() instanceof ItemEntity && ((ItemEntity)e.getTarget()).thrower != null)
             SimpleMagnets.CHANNEL.sendToPlayer(e.getEntity(), new PacketItemInfo((ItemEntity)e.getTarget()));
     }
 }

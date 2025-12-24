@@ -3,12 +3,15 @@ package com.supermartijn642.simplemagnets;
 import com.supermartijn642.core.ClientUtils;
 import com.supermartijn642.core.gui.WidgetContainerScreen;
 import com.supermartijn642.core.registry.ClientRegistrationHandler;
+import com.supermartijn642.simplemagnets.extensions.SimpleMagnetsKeyMappingCategory;
 import com.supermartijn642.simplemagnets.gui.DemagnetizationCoilContainerScreen;
 import com.supermartijn642.simplemagnets.gui.FilteredDemagnetizationCoilContainerScreen;
 import com.supermartijn642.simplemagnets.gui.MagnetContainerScreen;
 import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -21,7 +24,7 @@ public class SimpleMagnetsClient {
     private static KeyMapping MAGNET_TOGGLE_KEY;
 
     public static void register(FMLJavaModLoadingContext context){
-        RegisterKeyMappingsEvent.getBus(context.getModBusGroup()).addListener(SimpleMagnetsClient::registerKeyBindings);
+        RegisterKeyMappingsEvent.BUS.addListener(SimpleMagnetsClient::registerKeyBindings);
         InputEvent.Key.BUS.addListener(SimpleMagnetsClient::onKey);
 
         ClientRegistrationHandler handler = ClientRegistrationHandler.get("simplemagnets");
@@ -35,7 +38,10 @@ public class SimpleMagnetsClient {
     }
 
     public static void registerKeyBindings(RegisterKeyMappingsEvent e){
-        MAGNET_TOGGLE_KEY = new KeyMapping("simplemagnets.keys.toggle", 72/*'h'*/, "simplemagnets.keys.category");
+        KeyMapping.Category keyCategory = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("simplemagnets", "keys"));
+        //noinspection DataFlowIssue
+        ((SimpleMagnetsKeyMappingCategory)(Object)keyCategory).simplemagnetsOverwriteLabel(Component.translatable("simplemagnets.keys.category"));
+        MAGNET_TOGGLE_KEY = new KeyMapping("simplemagnets.keys.toggle", 72/*'h'*/, keyCategory);
         e.register(MAGNET_TOGGLE_KEY);
     }
 
