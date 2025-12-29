@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -35,7 +35,7 @@ public class SimpleMagnetsClient implements ClientModInitializer {
         handler.registerCustomBlockEntityRenderer(() -> SimpleMagnets.advanced_demagnetization_coil_tile, DemagnetizationCoilBlockEntityRenderer::new);
 
         DemagnetizationCoilAreaHighlighter.registerEventListeners();
-        KeyMapping.Category keyCategory = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("simplemagnets", "keys"));
+        KeyMapping.Category keyCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("simplemagnets", "keys"));
         //noinspection DataFlowIssue
         ((SimpleMagnetsKeyMappingCategory)(Object)keyCategory).simplemagnetsOverwriteLabel(Component.translatable("simplemagnets.keys.category"));
         MAGNET_TOGGLE_KEY = new KeyMapping("simplemagnets.keys.toggle", 72/*'h'*/, keyCategory);

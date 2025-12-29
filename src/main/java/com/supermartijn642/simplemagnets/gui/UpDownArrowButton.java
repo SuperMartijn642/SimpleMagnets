@@ -6,7 +6,7 @@ import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.core.gui.widget.premade.AbstractButtonWidget;
 import com.supermartijn642.core.util.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Consumer;
 
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 public class UpDownArrowButton extends AbstractButtonWidget {
 
-    public static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "up_down_arrow_buttons");
+    public static final Identifier BUTTONS = Identifier.fromNamespaceAndPath("simplemagnets", "up_down_arrow_buttons");
 
     private final boolean down;
     public boolean active = true;

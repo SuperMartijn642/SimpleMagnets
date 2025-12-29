@@ -6,7 +6,7 @@ import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.core.gui.widget.premade.AbstractButtonWidget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  */
 public class ShowRangeButton extends AbstractButtonWidget {
 
-    public static final ResourceLocation BUTTONS = ResourceLocation.fromNamespaceAndPath("simplemagnets", "visualize_button");
+    public static final Identifier BUTTONS = Identifier.fromNamespaceAndPath("simplemagnets", "visualize_button");
 
     private final Supplier<Boolean> on;
     public boolean active = true;
