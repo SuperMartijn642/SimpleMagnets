@@ -11,7 +11,7 @@ import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -40,7 +40,7 @@ public class SimpleMagnetsClient {
 
     @SubscribeEvent
     public static void registerKeyBindings(RegisterKeyMappingsEvent e){
-        KeyMapping.Category keyCategory = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("simplemagnets", "keys"));
+        KeyMapping.Category keyCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("simplemagnets", "keys"));
         //noinspection DataFlowIssue
         ((SimpleMagnetsKeyMappingCategory)(Object)keyCategory).simplemagnetsOverwriteLabel(Component.translatable("simplemagnets.keys.category"));
         e.registerCategory(keyCategory);

@@ -6,14 +6,14 @@ import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.demagnetization_coil.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Created 7/15/2020 by SuperMartijn642
  */
 public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilContainerScreen<DemagnetizationCoilContainer> {
 
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath("simplemagnets", "demagnetization_coil_screen");
+    public static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath("simplemagnets", "demagnetization_coil_screen");
 
     @Override
     protected void addWidgets(DemagnetizationCoilBlockEntity entity){
@@ -27,7 +27,7 @@ public class DemagnetizationCoilContainerScreen extends BaseDemagnetizationCoilC
     }
 
     @Override
-    protected ResourceLocation getBackground(){
+    protected Identifier getBackground(){
         return BACKGROUND;
     }
 

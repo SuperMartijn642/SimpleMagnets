@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.state.BlockOutlineRenderState;
 import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -24,7 +24,7 @@ import java.util.Random;
 @EventBusSubscriber(Dist.CLIENT)
 public class DemagnetizationCoilAreaHighlighter {
 
-    private static final ContextKey<AreaHighlightState> HIGHLIGHT_DATA = new ContextKey<>(ResourceLocation.fromNamespaceAndPath("simplemagnets", "demagnetization_coil_area_highlight"));
+    private static final ContextKey<AreaHighlightState> HIGHLIGHT_DATA = new ContextKey<>(Identifier.fromNamespaceAndPath("simplemagnets", "demagnetization_coil_area_highlight"));
     private static final PoseStack POSE_STACK = new PoseStack();
 
     @SubscribeEvent
