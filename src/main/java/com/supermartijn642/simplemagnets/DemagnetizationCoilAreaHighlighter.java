@@ -49,7 +49,7 @@ public class DemagnetizationCoilAreaHighlighter {
                 pos,
                 ItemBlockRenderTypes.getChunkRenderType(blockState).sortOnUpload(),
                 ClientUtils.getMinecraft().options.highContrastBlockOutline().get(),
-                blockState.getShape(level, pos, CollisionContext.of(event.getCamera().getEntity()))
+                blockState.getShape(level, pos, CollisionContext.of(event.getCamera().entity()))
             );
             LevelRenderer levelRenderer = event.getLevelRenderer();
             event.setCustomRenderer((source, stack, translucent, levelRenderState) -> onRenderBlockOutline(outlineRenderState, source, stack, translucent, levelRenderState, levelRenderer, state));

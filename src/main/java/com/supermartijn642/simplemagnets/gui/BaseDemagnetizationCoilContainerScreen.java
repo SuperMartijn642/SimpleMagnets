@@ -6,7 +6,7 @@ import com.supermartijn642.core.gui.widget.BlockEntityBaseContainerWidget;
 import com.supermartijn642.core.gui.widget.WidgetRenderContext;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Created 7/7/2020 by SuperMartijn642
@@ -37,7 +37,7 @@ public abstract class BaseDemagnetizationCoilContainerScreen<T extends BaseDemag
         return this.container.getObject(oldObject);
     }
 
-    protected abstract ResourceLocation getBackground();
+    protected abstract Identifier getBackground();
 
     @Override
     protected void renderBackground(WidgetRenderContext context, GuiGraphicsHelper graphics, int mouseX, int mouseY, DemagnetizationCoilBlockEntity object){

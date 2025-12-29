@@ -10,7 +10,7 @@ import com.supermartijn642.simplemagnets.SMConfig;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import com.supermartijn642.simplemagnets.packets.magnet.*;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  */
 public class MagnetContainerScreen extends ItemBaseContainerWidget<MagnetContainer> {
 
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath("simplemagnets", "screen");
+    public static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath("simplemagnets", "screen");
 
     private CheckBox itemCheckbox;
     private PlusMinusButton leftItemButton;

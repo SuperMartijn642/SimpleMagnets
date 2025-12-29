@@ -11,7 +11,7 @@ import com.supermartijn642.simplemagnets.packets.magnet.PacketToggleMagnet;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -38,7 +38,7 @@ public class SimpleMagnetsClient {
     }
 
     public static void registerKeyBindings(RegisterKeyMappingsEvent e){
-        KeyMapping.Category keyCategory = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("simplemagnets", "keys"));
+        KeyMapping.Category keyCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("simplemagnets", "keys"));
         //noinspection DataFlowIssue
         ((SimpleMagnetsKeyMappingCategory)(Object)keyCategory).simplemagnetsOverwriteLabel(Component.translatable("simplemagnets.keys.category"));
         MAGNET_TOGGLE_KEY = new KeyMapping("simplemagnets.keys.toggle", 72/*'h'*/, keyCategory);
