@@ -3,7 +3,7 @@ package com.supermartijn642.simplemagnets;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.render.RenderUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -22,11 +22,11 @@ public class DemagnetizationCoilAreaHighlighter {
 
     public static void registerEventListeners(){
         // Extract state
-        WorldRenderEvents.AFTER_BLOCK_OUTLINE_EXTRACTION.register((context, result) -> {
-            AreaHighlightState state = context.worldState().getData(HIGHLIGHT_DATA);
+        LevelRenderEvents.AFTER_BLOCK_OUTLINE_EXTRACTION.register((context, result) -> {
+            AreaHighlightState state = context.levelState().getData(HIGHLIGHT_DATA);
             if(state == null){
                 state = new AreaHighlightState();
-                context.worldState().setData(HIGHLIGHT_DATA, state);
+                context.levelState().setData(HIGHLIGHT_DATA, state);
             }
             state.shouldRender = false;
             if(!SMConfig.showDemagnetizationArea.get())
@@ -34,7 +34,7 @@ public class DemagnetizationCoilAreaHighlighter {
 
             if(result instanceof BlockHitResult){
                 BlockPos pos = ((BlockHitResult)result).getBlockPos();
-                BlockEntity entity = context.world().getBlockEntity(pos);
+                BlockEntity entity = context.level().getBlockEntity(pos);
                 if(entity instanceof DemagnetizationCoilBlockEntity){
                     state.shouldRender = true;
                     state.pos = pos;
@@ -44,13 +44,13 @@ public class DemagnetizationCoilAreaHighlighter {
         });
 
         // Render highlight
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register((context, outlineRenderState) -> {
-            AreaHighlightState state = context.worldState().getData(HIGHLIGHT_DATA);
+        LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register((context, outlineRenderState) -> {
+            AreaHighlightState state = context.levelState().getData(HIGHLIGHT_DATA);
             if(state == null || !state.shouldRender)
                 return true;
 
             POSE_STACK.pushPose();
-            Vec3 playerPos = context.worldState().cameraRenderState.pos;
+            Vec3 playerPos = context.levelState().cameraRenderState.pos;
             POSE_STACK.translate(-playerPos.x, -playerPos.y, -playerPos.z);
 
             Random random = new Random(state.pos.hashCode());

@@ -4,13 +4,14 @@ import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.network.BasePacket;
 import com.supermartijn642.core.network.PacketContext;
 import com.supermartijn642.simplemagnets.MagnetItem;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketsApi;
+import com.supermartijn642.simplemagnets.integration.TrinketsIntegration;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Created 7/8/2020 by SuperMartijn642
@@ -27,40 +28,32 @@ public class PacketToggleMagnet implements BasePacket {
 
     @Override
     public void handle(PacketContext context){
-        Player player = context.getSendingPlayer();
+        Player player = context.getPlayer();
         if(player != null){
-            ItemStack stack = findStack(player);
-            if(stack != null && !stack.isEmpty())
-                MagnetItem.toggleMagnet(player, stack);
-        }
-    }
-
-    private static ItemStack findStack(Player player){
-        ItemStack stack = findCuriosStack(player);
-        if(stack != null && !stack.isEmpty() && stack.getItem() instanceof MagnetItem)
-            return stack;
-
-        for(int slot = 0; slot < player.getInventory().getContainerSize(); slot++){
-            stack = player.getInventory().getItem(slot);
-            if(!stack.isEmpty() && stack.getItem() instanceof MagnetItem)
-                return stack;
-        }
-
-        return null;
-    }
-
-    private static ItemStack findCuriosStack(Player player){
-        if(CommonUtils.isModLoaded("trinkets")){
-            TrinketComponent handler = TrinketsApi.getTrinketComponent(player).orElse(null);
-            if(handler != null){
-                for(Tuple<SlotReference,ItemStack> slot : handler.getAllEquipped()){
-                    ItemStack stack = slot.getB();
-                    if(stack.getItem() instanceof MagnetItem)
-                        return stack;
-                }
+            Consumer<Function<ItemStack,ItemStack>> access = findStack(player);
+            if(access != null){
+                access.accept(stack -> {
+                    MagnetItem.toggleMagnet(player, stack);
+                    return stack;
+                });
             }
         }
+    }
 
+    private static Consumer<Function<ItemStack,ItemStack>> findStack(Player player){
+        if(CommonUtils.isModLoaded("trinkets")){
+            Consumer<Function<ItemStack,ItemStack>> access = TrinketsIntegration.findMagnet(player);
+            if(access != null)
+                return access;
+        }
+        Inventory inventory = player.getInventory();
+        for(int slot = 0; slot < inventory.getContainerSize(); slot++){
+            ItemStack stack = inventory.getItem(slot);
+            if(!stack.isEmpty() && stack.getItem() instanceof MagnetItem){
+                int finalSlot = slot;
+                return updater -> inventory.setItem(finalSlot, updater.apply(stack.copy()));
+            }
+        }
         return null;
     }
 }

@@ -2,13 +2,13 @@
   "parent": "minecraft:recipes/root",
   "display": {
     "icon": {
-      "id": "simplemagnets:basicmagnet"
+      "id": "simplemagnets:advancedmagnet"
     },
     "title": {
-      "translate": "simplemagnets.advancement.recipes/misc/basicmagnet.title"
+      "translate": "simplemagnets.advancement.recipes/advancedmagnet.title"
     },
     "description": {
-      "translate": "simplemagnets.advancement.recipes/misc/basicmagnet.description"
+      "translate": "simplemagnets.advancement.recipes/advancedmagnet.description"
     },
     "frame": "task",
     "show_toast": false,
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "simplemagnets:basicmagnet"
+        "recipe": "simplemagnets:advancedmagnet"
       }
     },
     "recipe_condition": {
@@ -27,7 +27,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#c:ingots/iron"
+            "items": "simplemagnets:basicmagnet"
           }
         ]
       }
@@ -41,7 +41,7 @@
   ],
   "rewards": {
     "recipes": [
-      "simplemagnets:basicmagnet"
+      "simplemagnets:advancedmagnet"
     ]
   }
 }

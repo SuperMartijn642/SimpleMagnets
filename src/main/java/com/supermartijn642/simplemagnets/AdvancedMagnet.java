@@ -14,6 +14,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
@@ -34,7 +35,7 @@ public class AdvancedMagnet extends MagnetItem {
             ExtraCodecs.POSITIVE_INT.fieldOf("xpRange").forGetter(Settings::xpRange),
             Codec.BOOL.fieldOf("whitelist").forGetter(Settings::isWhitelist),
             Codec.BOOL.fieldOf("filterDurability").forGetter(Settings::isFilterDurability),
-            ExtraCodecs.optionalEmptyMap(ItemStack.SINGLE_ITEM_CODEC).listOf(9, 9).fieldOf("itemFilter").forGetter(s -> s.itemFilter.stream().map(Optional::ofNullable).toList())
+            ExtraCodecs.optionalEmptyMap(ItemStackTemplate.CODEC).listOf(9, 9).fieldOf("itemFilter").forGetter(s -> s.itemFilter.stream().map(Optional::ofNullable).toList())
         ).apply(instance, (a, b, c, d, e, f, filter) -> new Settings(a, b, c, d, e, f, filter.stream().map(o -> o.orElse(null)).toList()))))
         .networkSynchronized(new StreamCodec<>() {
             @Override
@@ -45,10 +46,10 @@ public class AdvancedMagnet extends MagnetItem {
                 buffer.writeInt(settings.xpRange);
                 buffer.writeBoolean(settings.isWhitelist);
                 buffer.writeBoolean(settings.isFilterDurability);
-                for(ItemStack stack : settings.itemFilter){
+                for(ItemStackTemplate stack : settings.itemFilter){
                     buffer.writeBoolean(stack != null);
                     if(stack != null)
-                        ItemStack.STREAM_CODEC.encode(buffer, stack);
+                        ItemStackTemplate.STREAM_CODEC.encode(buffer, stack);
                 }
             }
 
@@ -60,10 +61,10 @@ public class AdvancedMagnet extends MagnetItem {
                 int xpRange = buffer.readInt();
                 boolean isWhitelist = buffer.readBoolean();
                 boolean isFilterDurability = buffer.readBoolean();
-                List<ItemStack> itemFilter = Arrays.asList(new ItemStack[9]);
+                List<ItemStackTemplate> itemFilter = Arrays.asList(new ItemStackTemplate[9]);
                 for(int i = 0; i < itemFilter.size(); i++){
                     if(buffer.readBoolean())
-                        itemFilter.set(i, ItemStack.STREAM_CODEC.decode(buffer));
+                        itemFilter.set(i, ItemStackTemplate.STREAM_CODEC.decode(buffer));
                 }
                 return new Settings(collectItems, itemRange, collectXp, xpRange, isWhitelist, isFilterDurability, itemFilter);
             }
@@ -94,10 +95,10 @@ public class AdvancedMagnet extends MagnetItem {
         for(int slot = 0; slot < 9; slot++){
             //noinspection DataFlowIssue
             if(settings.itemFilter.get(slot) != null){
-                ItemStack filterStack = settings.itemFilter.get(slot);
+                ItemStackTemplate filter = settings.itemFilter.get(slot);
                 // Check whether the stack and the filter match
-                if(ItemStack.isSameItem(stack, filterStack)
-                    && (!settings.isFilterDurability || ItemStack.isSameItemSameComponents(stack, filterStack)))
+                if(stack.getItem() == filter.item()
+                    && (!settings.isFilterDurability || filter.components().equals(stack.getComponentsPatch())))
                     return settings.isWhitelist;
             }
         }
@@ -128,10 +129,10 @@ public class AdvancedMagnet extends MagnetItem {
     }
 
     public record Settings(boolean collectItems, int itemRange, boolean collectXp, int xpRange, boolean isWhitelist,
-                           boolean isFilterDurability, List<ItemStack> itemFilter) {
+                           boolean isFilterDurability, List<ItemStackTemplate> itemFilter) {
 
         @SuppressWarnings("Java9CollectionFactory")
-        private static final Settings DEFAULT = new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, Collections.unmodifiableList(Arrays.asList(new ItemStack[9])));
+        private static final Settings DEFAULT = new Settings(true, SMConfig.advancedMagnetRange.get(), true, SMConfig.advancedMagnetRange.get(), false, false, Collections.unmodifiableList(Arrays.asList(new ItemStackTemplate[9])));
 
         public static Settings defaultSettings(){
             return DEFAULT;
@@ -174,10 +175,13 @@ public class AdvancedMagnet extends MagnetItem {
         }
 
         public Settings itemFilter(int index, ItemStack stack){
-            if(this.itemFilter.get(index) == null ? stack == null : stack != null && ItemStack.isSameItemSameComponents(this.itemFilter.get(index), stack))
+            ItemStackTemplate current = this.itemFilter.get(index);
+            if(current == null ?
+                stack == null :
+                stack != null && current.item() == stack.getItem() && current.components().equals(stack.getComponentsPatch()))
                 return this;
-            ItemStack[] filter = Arrays.copyOf(this.itemFilter.toArray(ItemStack[]::new), this.itemFilter.size());
-            filter[index] = stack;
+            ItemStackTemplate[] filter = Arrays.copyOf(this.itemFilter.toArray(ItemStackTemplate[]::new), this.itemFilter.size());
+            filter[index] = stack == null ? null : ItemStackTemplate.fromNonEmptyStack(stack);
             //noinspection Java9CollectionFactory
             return new Settings(this.collectItems, this.itemRange, this.collectXp, this.xpRange, this.isWhitelist, this.isFilterDurability, Collections.unmodifiableList(Arrays.asList(filter)));
         }
