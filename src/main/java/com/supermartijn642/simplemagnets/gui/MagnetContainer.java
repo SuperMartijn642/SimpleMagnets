@@ -1,12 +1,13 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.gui.CustomSlot;
 import com.supermartijn642.core.gui.ItemBaseContainer;
 import com.supermartijn642.simplemagnets.AdvancedMagnet;
 import com.supermartijn642.simplemagnets.MagnetItem;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -18,9 +19,9 @@ import java.util.function.Function;
 public class MagnetContainer extends ItemBaseContainer {
 
     public final int slot;
-    private final Function<Integer,ItemStack> itemHandler = slot -> {
+    private final Function<Integer,ItemStack> filter = slot -> {
         AdvancedMagnet.Settings settings = MagnetContainer.this.object.get(AdvancedMagnet.SETTINGS);
-        return settings != null && settings.itemFilter().get(slot) != null ? settings.itemFilter().get(slot) : ItemStack.EMPTY;
+        return settings != null && settings.itemFilter().get(slot) != null ? settings.itemFilter().get(slot).create() : ItemStack.EMPTY;
     };
 
     public MagnetContainer(Player player, int slot){
@@ -34,18 +35,16 @@ public class MagnetContainer extends ItemBaseContainer {
     protected void addSlots(Player player, ItemStack stack){
         Inventory inventory = player.getInventory();
 
-        for(int column = 0; column < 9; column++)
-            this.addSlot(new DummySlot(column, 8 + column * 18, 80) {
-                @Override
-                public ItemStack getItem(){
-                    return MagnetContainer.this.itemHandler.apply(this.index);
-                }
-
-                @Override
-                public boolean mayPickup(Player player){
-                    return false;
-                }
-            });
+        for(int column = 0; column < 9; column++){
+            int finalColumn = column;
+            this.addSlot(
+                CustomSlot.builder()
+                    .position(8 + column * 18, 80)
+                    .getter(() -> this.filter.apply(finalColumn))
+                    .canInsertExtract(false)
+                    .build().getVanillaSlot()
+            );
+        }
 
         // player
         for(int row = 0; row < 3; row++){
@@ -56,8 +55,7 @@ public class MagnetContainer extends ItemBaseContainer {
 
         // hot bar
         for(int column = 0; column < 9; column++){
-            int index = column;
-            this.addSlot(new Slot(inventory, index, 32 + 18 * column, 172) {
+            this.addSlot(new Slot(inventory, column, 32 + 18 * column, 172) {
                 public boolean mayPickup(Player player){
                     return this.index != MagnetContainer.this.slot;
                 }
@@ -66,10 +64,10 @@ public class MagnetContainer extends ItemBaseContainer {
     }
 
     @Override
-    public void clicked(int slotId, int dragType, ClickType clickType, Player player){
+    public void clicked(int slotId, int dragType, ContainerInput input, Player player){
         if(!this.validateObjectOrClose())
             return;
-        if(clickType == ClickType.SWAP && dragType == this.slot)
+        if(input == ContainerInput.SWAP && dragType == this.slot)
             return;
 
         if(slotId < 9 && slotId >= 0){
@@ -86,7 +84,7 @@ public class MagnetContainer extends ItemBaseContainer {
             }
             return;
         }
-        super.clicked(slotId, dragType, clickType, player);
+        super.clicked(slotId, dragType, input, player);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class MagnetContainer extends ItemBaseContainer {
             boolean contains = false;
             int firstEmpty = -1;
             for(int i = 0; i < 9; i++){
-                ItemStack stack = this.itemHandler.apply(i);
+                ItemStack stack = this.filter.apply(i);
                 if(ItemStack.isSameItemSameComponents(stack, this.getSlot(index).getItem())){
                     contains = true;
                     break;
