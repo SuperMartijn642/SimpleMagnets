@@ -1,10 +1,11 @@
 package com.supermartijn642.simplemagnets.gui;
 
+import com.supermartijn642.core.gui.CustomSlot;
 import com.supermartijn642.simplemagnets.DemagnetizationCoilBlockEntity;
 import com.supermartijn642.simplemagnets.SimpleMagnets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -18,22 +19,20 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
 
     @Override
     protected void addSlots(Player player, DemagnetizationCoilBlockEntity entity){
-        for(int i = 0; i < 9; i++)
-            this.addSlot(new DummySlot(i, 8 + i * 18, 90) {
-                @Override
-                public ItemStack getItem(){
-                    return FilteredDemagnetizationCoilContainer.this.validateObjectOrClose() ? FilteredDemagnetizationCoilContainer.this.object.getFilter().get(this.index) : ItemStack.EMPTY;
-                }
-
-                @Override
-                public boolean mayPickup(Player player){
-                    return false;
-                }
-            });
+        for(int i = 0; i < 9; i++){
+            int index = i;
+            this.addSlot(
+                CustomSlot.builder()
+                    .position(8 + i * 18, 90)
+                    .getter(() -> FilteredDemagnetizationCoilContainer.this.validateObjectOrClose() ? FilteredDemagnetizationCoilContainer.this.object.getFilter().get(index) : ItemStack.EMPTY)
+                    .canInsertExtract(false)
+                    .build().getVanillaSlot()
+            );
+        }
     }
 
     @Override
-    public void clicked(int slotId, int dragType, ClickType clickType, Player player){
+    public void clicked(int slotId, int dragType, ContainerInput input, Player player){
         if(!this.validateObjectOrClose())
             return;
 
@@ -46,7 +45,7 @@ public class FilteredDemagnetizationCoilContainer extends BaseDemagnetizationCoi
                 this.object.updateFilter(slotId, stack);
             }
         }
-        super.clicked(slotId, dragType, clickType, player);
+        super.clicked(slotId, dragType, input, player);
     }
 
     @Override
