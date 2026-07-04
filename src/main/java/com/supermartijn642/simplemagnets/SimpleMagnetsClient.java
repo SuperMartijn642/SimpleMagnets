@@ -46,7 +46,7 @@ public class SimpleMagnetsClient {
     }
 
     public static void onKey(InputEvent.Key e){
-        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.consumeClick() && ClientUtils.getWorld() != null && Minecraft.getInstance().screen == null)
+        if(MAGNET_TOGGLE_KEY != null && MAGNET_TOGGLE_KEY.consumeClick() && ClientUtils.getWorld() != null && Minecraft.getInstance().gui.screen() == null)
             SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnet());
     }
 }

@@ -12,7 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -70,7 +70,7 @@ public abstract class MagnetItem extends BaseItem {
                 int r = this.getRangeItems(stack);
                 AABB area = new AABB(entity.position().add(-r, -r, -r), entity.position().add(r, r, r));
 
-                List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
+                List<ItemEntity> items = level.getEntities(EntityTypes.ITEM, area,
                     item -> item.isAlive() && (!level.isClientSide() || item.tickCount > 1) &&
                         (item.thrower == null || !item.thrower.matches(entity) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && !item.getPersistentData().contains("PreventRemoteMovement") && this.canPickupStack(stack, item.getItem())

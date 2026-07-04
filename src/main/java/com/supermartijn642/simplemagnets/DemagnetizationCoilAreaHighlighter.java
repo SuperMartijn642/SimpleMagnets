@@ -2,9 +2,9 @@ package com.supermartijn642.simplemagnets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.supermartijn642.core.ClientUtils;
+import com.supermartijn642.core.block.BlockShape;
 import com.supermartijn642.core.render.RenderUtils;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.BlockOutlineRenderState;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,21 +41,19 @@ public class DemagnetizationCoilAreaHighlighter {
             AreaHighlightState state = new AreaHighlightState();
             state.shouldRender = true;
             state.pos = pos;
-            state.area = ((DemagnetizationCoilBlockEntity)entity).getArea();
+            state.area = BlockShape.create(((DemagnetizationCoilBlockEntity)entity).getArea());
             BlockState blockState = level.getBlockState(pos);
-            //noinspection deprecation
             BlockOutlineRenderState outlineRenderState = new BlockOutlineRenderState(
                 pos,
                 ClientUtils.getMinecraft().getModelManager().getBlockStateModelSet().get(blockState).hasMaterialFlag(BakedQuad.FLAG_TRANSLUCENT),
                 ClientUtils.getMinecraft().options.highContrastBlockOutline().get(),
                 blockState.getShape(level, pos, CollisionContext.of(event.getCamera().entity()))
             );
-            LevelRenderer levelRenderer = event.getLevelRenderer();
-            event.setCustomRenderer((source, stack, translucent, levelRenderState) -> onRenderBlockOutline(outlineRenderState, source, stack, translucent, levelRenderState, levelRenderer, state));
+            event.setCustomRenderer((output, poseStack, levelRenderState) -> onRenderBlockOutline(outlineRenderState, output, poseStack, levelRenderState, state));
         }
     }
 
-    private static boolean onRenderBlockOutline(BlockOutlineRenderState outlineRenderState, MultiBufferSource.BufferSource bufferSource, PoseStack poseStack, boolean translucentPass, LevelRenderState levelRenderState, LevelRenderer levelRenderer, AreaHighlightState state){
+    private static boolean onRenderBlockOutline(BlockOutlineRenderState outlineRenderState, SubmitNodeCollector output, PoseStack poseStack, LevelRenderState levelRenderState, AreaHighlightState state){
         if(state == null || !state.shouldRender)
             return false;
 
@@ -70,15 +67,15 @@ public class DemagnetizationCoilAreaHighlighter {
         float blue = random.nextFloat();
         float alpha = 0.3f;
 
-        RenderUtils.renderBox(POSE_STACK, state.area, red, green, blue, alpha, true);
-        RenderUtils.renderBoxSides(POSE_STACK, state.area, red, green, blue, alpha, true);
+        RenderUtils.submitShape(output, POSE_STACK, state.area, red, green, blue, alpha, true);
+        RenderUtils.submitShapeSides(output, POSE_STACK, state.area, red, green, blue, alpha, true);
 
         POSE_STACK.popPose();
 
         // Render original outline
         BlockOutlineRenderState temp = levelRenderState.blockOutlineRenderState;
         levelRenderState.blockOutlineRenderState = outlineRenderState;
-        levelRenderer.renderBlockOutline(bufferSource, poseStack, translucentPass, levelRenderState);
+        ClientUtils.getMinecraft().levelRenderer.submitBlockOutline(poseStack, output, levelRenderState);
         levelRenderState.blockOutlineRenderState = temp;
         return false;
     }
@@ -86,6 +83,6 @@ public class DemagnetizationCoilAreaHighlighter {
     private static class AreaHighlightState {
         boolean shouldRender;
         BlockPos pos;
-        AABB area;
+        BlockShape area;
     }
 }
