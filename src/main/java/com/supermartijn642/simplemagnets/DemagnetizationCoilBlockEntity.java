@@ -4,7 +4,7 @@ import com.supermartijn642.core.block.BaseBlockEntity;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.block.TickableBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -59,7 +59,7 @@ public class DemagnetizationCoilBlockEntity extends BaseBlockEntity implements T
     public void update(){
         AABB area = this.getArea();
 
-        List<ItemEntity> affectedItems = this.level.getEntities(EntityType.ITEM, area,
+        List<ItemEntity> affectedItems = this.level.getEntities(EntityTypes.ITEM, area,
             item -> item.isAlive() && this.shouldEffectItem(item.getItem())
         );
 
