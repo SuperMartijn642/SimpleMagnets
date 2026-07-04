@@ -47,7 +47,7 @@ public class SimpleMagnetsClient implements ClientModInitializer {
     }
 
     public static void onKey(){
-        if(MAGNET_TOGGLE_KEY != null && ClientUtils.getWorld() != null && Minecraft.getInstance().screen == null)
+        if(MAGNET_TOGGLE_KEY != null && ClientUtils.getWorld() != null && Minecraft.getInstance().gui.screen() == null)
             SimpleMagnets.CHANNEL.sendToServer(new PacketToggleMagnet());
     }
 }

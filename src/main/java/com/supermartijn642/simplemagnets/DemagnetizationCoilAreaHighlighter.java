@@ -1,12 +1,13 @@
 package com.supermartijn642.simplemagnets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.supermartijn642.core.block.BlockShape;
 import com.supermartijn642.core.render.RenderUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -38,7 +39,7 @@ public class DemagnetizationCoilAreaHighlighter {
                 if(entity instanceof DemagnetizationCoilBlockEntity){
                     state.shouldRender = true;
                     state.pos = pos;
-                    state.area = ((DemagnetizationCoilBlockEntity)entity).getArea();
+                    state.area = BlockShape.create(((DemagnetizationCoilBlockEntity)entity).getArea());
                 }
             }
         });
@@ -59,8 +60,9 @@ public class DemagnetizationCoilAreaHighlighter {
             float blue = random.nextFloat();
             float alpha = 0.3f;
 
-            RenderUtils.renderBox(POSE_STACK, state.area, red, green, blue, alpha, true);
-            RenderUtils.renderBoxSides(POSE_STACK, state.area, red, green, blue, alpha, true);
+            SubmitNodeCollector output = context.submitNodeCollector();
+            RenderUtils.submitShape(output, POSE_STACK, state.area, red, green, blue, alpha, true);
+            RenderUtils.submitShapeSides(output, POSE_STACK, state.area, red, green, blue, alpha, true);
 
             POSE_STACK.popPose();
             return true;
@@ -70,6 +72,6 @@ public class DemagnetizationCoilAreaHighlighter {
     private static class AreaHighlightState {
         boolean shouldRender;
         BlockPos pos;
-        AABB area;
+        BlockShape area;
     }
 }

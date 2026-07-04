@@ -13,7 +13,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -68,7 +68,7 @@ public abstract class MagnetItem extends BaseItem {
 
                 // TODO look for alternative to 'PreventRemoteMovement' tag on Fabric
 
-                List<ItemEntity> items = level.getEntities(EntityType.ITEM, area,
+                List<ItemEntity> items = level.getEntities(EntityTypes.ITEM, area,
                     item -> item.isAlive() && (!level.isClientSide() || item.tickCount > 1) &&
                         (item.thrower == null || !item.thrower.matches(entity) || !item.hasPickUpDelay()) &&
                         !item.getItem().isEmpty() && ((SimpleMagnetsItemEntity)item).simplemagnetsCanBePickedUp() && this.canPickupStack(stack, item.getItem())

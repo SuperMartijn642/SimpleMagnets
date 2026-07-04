@@ -97,7 +97,7 @@ public class AdvancedMagnet extends MagnetItem {
             if(settings.itemFilter.get(slot) != null){
                 ItemStackTemplate filter = settings.itemFilter.get(slot);
                 // Check whether the stack and the filter match
-                if(stack.getItem() == filter.item()
+                if(stack.getItem() == filter.item().value()
                     && (!settings.isFilterDurability || filter.components().equals(stack.getComponentsPatch())))
                     return settings.isWhitelist;
             }
@@ -178,7 +178,7 @@ public class AdvancedMagnet extends MagnetItem {
             ItemStackTemplate current = this.itemFilter.get(index);
             if(current == null ?
                 stack == null :
-                stack != null && current.item() == stack.getItem() && current.components().equals(stack.getComponentsPatch()))
+                stack != null && current.item().value() == stack.getItem() && current.components().equals(stack.getComponentsPatch()))
                 return this;
             ItemStackTemplate[] filter = Arrays.copyOf(this.itemFilter.toArray(ItemStackTemplate[]::new), this.itemFilter.size());
             filter[index] = stack == null ? null : ItemStackTemplate.fromNonEmptyStack(stack);
